@@ -1,4 +1,4 @@
-UF ShopEase
+**UF ShopEase**
 A smart and reliable e-commerce platform.
 
 **Contributors:**
