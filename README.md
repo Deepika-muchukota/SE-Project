@@ -1,5 +1,4 @@
-**UF ShopEase**
-A smart and reliable e-commerce platform.
+**UF ShopEase** - A smart and reliable e-commerce platform.
 
 **Contributors:**
 Front End: Praneeth Buchepalli, Deepika Muchukota
