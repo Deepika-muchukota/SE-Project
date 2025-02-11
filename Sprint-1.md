@@ -1,4 +1,4 @@
-# Sprint 1 Report - UFShopEase
+# Sprint-1 Report - UFShopEase
 
 ## Visual Demo Links
 - [Backend](https://drive.google.com/file/d/1ocYPjI7_u7srw211Vg_39NBTVe5N6HEE/view?usp=sharing)
