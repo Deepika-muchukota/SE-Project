@@ -45,6 +45,7 @@
 - Frontend-Backend Integration: APIs are ready but not fully connected to the frontend.
 - Restaurant Details API: Deferred to Sprint 2 to ensure smooth implementation.
 - Bug Fixes & UI Enhancements: Some minor UI bugs need to be resolved.
+
 These tasks will be addressed in Sprint 2.
 
 ## Github Link:
