@@ -1,8 +1,8 @@
 # Sprint 1 Report - UFShopEase
 
 ## Visual Demo Links
-- [Backend](https://drive.google.com/file/d/1mvyAsoDB-G8Q18BeUQ6RyxGObqOEsEzm/view?usp=sharing)
-- [Frontend](https://drive.google.com/file/d/1C-kxx1GvPgYLM_zwEHxqc3hZRTgTqw5I/view?usp=sharing)
+- [Backend](https://drive.google.com/file/d/1ocYPjI7_u7srw211Vg_39NBTVe5N6HEE/view?usp=sharing)
+- [Frontend](https://drive.google.com/file/d/1K1THOMTSAePOHD5iagWYo6AYbrynN4AR/view?usp=sharing)
 
 ## User Stories:
 - Created 25 user stories spanning the features/user requirements of the UFShopEase platform. 
