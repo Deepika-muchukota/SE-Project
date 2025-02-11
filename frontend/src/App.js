@@ -9,7 +9,7 @@ function App() {
   // Dummy user data
   const dummyUser = {
     email: 'user@example.com',
-    password: 'password123',
+    password: 'Password123',
   };
 
   // State variables for authentication and sign-up form
