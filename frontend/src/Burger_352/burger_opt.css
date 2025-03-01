@@ -1,0 +1,117 @@
+
+.burger-opt-container {
+    position: relative;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+
+
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 700px;
+}
+
+
+.category-button {
+    background-color: #ffcc00;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 230px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+.category-button:nth-child(1) { background-color: #d35400; }
+.category-button:nth-child(2) { background-color: #c0392b; } 
+.category-button:nth-child(3) { background-color: #8e44ad; } 
+.category-button:nth-child(4) { background-color: #27ae60; } 
+.category-button:nth-child(5) { background-color: #2980b9; }
+
+
+.category-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.7);
+}
+
+
+.category-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+
+.category-name {
+    margin-top: 10px;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+}
+
+
+.category-grid > :nth-child(1),
+.category-grid > :nth-child(2),
+.category-grid > :nth-child(3) {
+    flex: 1 1 calc(33.33% - 20px);
+}
+
+.category-grid > :nth-child(4),
+.category-grid > :nth-child(5) {
+    flex: 1 1 calc(50% - 20px);
+}
+
+
+
+@media (max-width: 768px) {
+    .category-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category-button {
+        width: 180px;
+        height: 220px;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .category-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category-button {
+        width: 160px;
+        height: 200px;
+    }
+}
