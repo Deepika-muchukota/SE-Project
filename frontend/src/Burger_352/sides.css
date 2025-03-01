@@ -1,0 +1,102 @@
+/* Container for Sides Page */
+.sides-opt-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #3e2723, #1b0e0a); /* Dark brown steak-themed */
+    flex-direction: column;
+    padding: 40px 20px;
+}
+
+/* Overlay effect */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Darker overlay */
+    z-index: -1;
+}
+
+/* Grid layout for categories */
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px; /* Proper spacing */
+    width: 100%;
+    max-width: 700px;
+}
+
+/* Category button styling */
+.category-button {
+    background-color: #6d4c41; /* Dark brown */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 250px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* Different background shades for variety */
+.category-button:nth-child(1) { background-color: #795548; } /* Darker Brown */
+.category-button:nth-child(2) { background-color: #8d6e63; } /* Medium Brown */
+.category-button:nth-child(3) { background-color: #a1887f; } /* Lighter Brown */
+
+/* Hover effect */
+.category-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Image styling - Uniform size */
+.category-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Text Styling */
+.category-name {
+    margin-top: 10px;
+    font-weight: bold;
+    color: white;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .category-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category-button {
+        width: 180px;
+        height: 230px;
+    }
+}
+
+/* One item per row for very small screens */
+@media (max-width: 500px) {
+    .category-button {
+        width: 160px;
+        height: 210px;
+    }
+
+    .category-name {
+        font-size: 16px;
+    }
+}
