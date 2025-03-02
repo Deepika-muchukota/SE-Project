@@ -14,7 +14,7 @@ const categories = [
   { name: "Drinks", image: drinks },
 ];
 
-function Panda() {
+function PandaExpress() {
   return (
     <div className="panda-container">
       <div className="overlay"></div> 
@@ -30,4 +30,4 @@ function Panda() {
   );
 }
 
-export default Panda;
+export default PandaExpress;

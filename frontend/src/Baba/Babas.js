@@ -8,7 +8,7 @@ const categories = [
   { name: "Non-Veg Options", image:non_veg  },
 ];
 
-function baba() {
+function Babas() {
   return (
     <div className="baba-container">
       <div className="overlay"></div> 
@@ -24,4 +24,4 @@ function baba() {
   );
 }
 
-export default baba;
+export default Babas;

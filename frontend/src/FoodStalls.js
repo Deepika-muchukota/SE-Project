@@ -1,5 +1,6 @@
 import React from "react";
 import "./FoodStalls.css";
+import { useNavigate } from "react-router-dom";
 import starbucks from "./assets/starbucks.jpg";
 import burger352 from "./assets/Burger 352.png";
 import pandaExpress from "./assets/Panda.jpg";
@@ -18,6 +19,7 @@ const stalls = [
   ];
 
   function FoodStalls() {
+    const navigate = useNavigate();
     return (
       <div className="stalls-container">
         {stalls.map((stall, index) => (
@@ -25,6 +27,7 @@ const stalls = [
             key={index}
             className="stall-button"
             style={{ backgroundColor: stall.color }} 
+            onClick={() => navigate(stall.path)}
           >
             <img src={stall.image} alt={stall.name} className="stall-image" />
             <p className="stall-name">{stall.name}</p>
