@@ -8,6 +8,7 @@
     background: linear-gradient(to bottom, #3e2723, #1b0e0a); /* Dark brown steak-themed */
     flex-direction: column;
     padding: 40px 20px;
+    width: 100vw;
 }
 
 /* Overlay effect */

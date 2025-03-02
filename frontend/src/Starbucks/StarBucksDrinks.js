@@ -22,37 +22,38 @@ import vanilla_oatmilk from "./starbucks_images/vanilla_oatmilk.jpeg";
 import double_choco_chip from "./starbucks_images/double_choco_chip.jpeg";
 
 const categories = [
-  { name: "Vanilla Sweet Cream Nitro", image:vanilla_nitro  },
-  { name: "Vanilla Oat Milk", image:vanilla_oatmilk },
-  { name: "Iced Caffe Latte", image: latte },
-  { name: "Iced Caffe Mocha", image: mocha },
-  { name: "Iced Matcha Latte", image: matcha_latte },
-  { name: "Cold Brew With Milk", image: brew_milk },
-  { name: "Iced Coffee With Milk", image: ice_coffee },
-  { name: "Iced Flat White", image: flat_white },
-  { name: "Pumpkin Spice Latte", image: pumpkin_latte },
-  { name: "Iced Shaken Expresso", image: ice_shake },
-  { name: "Coffee frappuccino", image: coffee_frappacino },
-  { name: "Salted Cramel Brew", image: salted_caramel },
-  { name: "Honey Almond milk", image: honey_almondmilk },
-  { name: "Caramel Frappuccino", image: caramel },
-  { name: "Caramel Macchiato", image: caramel_macchito },
-  { name: "Refreshers", image: refreshers },
-  { name: "Pumpkin Spice Frappuccino", image: pumpkin_frappacino },
-  { name: "Double Choco Chip", image: double_choco_chip },
-  { name: "Mango Expresso", image: mango },
-  { name: "Java Chip", image: java }
+  { name: "Vanilla Sweet Cream Nitro", image: vanilla_nitro , price:"$7.89"  },
+  { name: "Vanilla Oat Milk", image: vanilla_oatmilk, price: "$6.49" },
+  { name: "Iced Caffe Latte", image: latte, price: "$5.29" },
+  { name: "Iced Caffe Mocha", image: mocha, price: "$5.79" },
+  { name: "Iced Matcha Latte", image: matcha_latte, price: "$6.59" },
+  { name: "Cold Brew With Milk", image: brew_milk, price: "$5.99" },
+  { name: "Iced Coffee With Milk", image: ice_coffee, price: "$4.99" },
+  { name: "Iced Flat White", image: flat_white, price: "$5.89" },
+  { name: "Pumpkin Spice Latte", image: pumpkin_latte, price: "$6.29" },
+  { name: "Iced Shaken Espresso", image: ice_shake, price: "$5.49" },
+  { name: "Coffee Frappuccino", image: coffee_frappacino, price: "$5.99" },
+  { name: "Salted Caramel Brew", image: salted_caramel, price: "$6.19" },
+  { name: "Honey Almond Milk", image: honey_almondmilk, price: "$5.79" },
+  { name: "Caramel Frappuccino", image: caramel, price: "$5.89" },
+  { name: "Caramel Macchiato", image: caramel_macchito, price: "$5.69" },
+  { name: "Refreshers", image: refreshers, price: "$4.89" },
+  { name: "Pumpkin Spice Frappuccino", image: pumpkin_frappacino, price: "$6.49" },
+  { name: "Double Choco Chip", image: double_choco_chip, price: "$5.99" },
+  { name: "Mango Espresso", image: mango, price: "$5.69" },
+  { name: "Java Chip", image: java, price: "$6.29" }
 ];
+
 
 function StarBucksDrinks() {
   return (
     <div className="drinks-opt-container">
-      <div className="overlay"></div> 
-      <div className="category-grid">
+      <div className="star-overlay"></div> 
+      <div className="star-category-grid">
         {categories.map((category, index) => (
           <button key={index} className="category-button">
             <img src={category.image} alt={category.name} className="category-image" />
-            <p className="category-name">{category.name}</p>
+            <p className="star-category-name">{category.name}<br/>{category.price}</p>
           </button>
         ))}
       </div>

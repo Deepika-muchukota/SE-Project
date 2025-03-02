@@ -5,8 +5,8 @@ import chicken_philly from "./burger352_images/chicken_philly.jpeg";
 
 
 const categories = [
-  { name: "Philly", image: philly },
-  { name: "Chicken Philly", image:chicken_philly  }
+  { name: "Philly", image: philly , price: "$10.99" },
+  { name: "Chicken Philly", image:chicken_philly , price: "$10.99"  }
 ];
 
 function Steaks() {
@@ -17,7 +17,7 @@ function Steaks() {
         {categories.map((category, index) => (
           <button key={index} className="category-button">
             <img src={category.image} alt={category.name} className="category-image" />
-            <p className="category-name">{category.name}</p>
+            <p className="category-name">{category.name} <br/> {category.price}</p>
           </button>
         ))}
       </div>

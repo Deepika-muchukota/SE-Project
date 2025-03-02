@@ -7,6 +7,7 @@
     background: linear-gradient(to bottom, #df4f16, #1b0e0a);
     flex-direction: column;
     padding: 40px 20px;
+    width: 100vw;
 }
 
 

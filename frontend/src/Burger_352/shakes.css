@@ -8,6 +8,7 @@
     background: linear-gradient(to bottom, #2b1a1a, #4e342e); /* Dark chocolate shake theme */
     flex-direction: column;
     padding: 40px 20px;
+    width: 100vw;
 }
 
 /* Overlay effect */

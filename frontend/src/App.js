@@ -8,6 +8,12 @@ import Burger352 from './Burger_352/Burger352';
 import Babas from './Baba/Babas';
 import StarBucksDrinks from './Starbucks/StarBucksDrinks';
 import PandaExpress from './Panda_Exp/PandaExpress';
+import Burger from './Burger_352/Burger';
+import Chicken from './Burger_352/Chicken'
+import Shakes from './Burger_352/Shakes'
+import Sides from './Burger_352/Sides'
+import Steaks from './Burger_352/Steaks.'
+import Vegeterian from './Baba/Vegeterian';
 
 function App() {
   // Dummy user data
@@ -98,6 +104,12 @@ function App() {
           <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
           <Route path="/foodstalls/starbucks" element={<StarBucksDrinks />} />
           <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
+          <Route path="/foodstalls/burger352/burger" element={<Burger />} />
+          <Route path="/foodstalls/burger352/chicken" element={<Chicken />} />
+          <Route path="/foodstalls/burger352/shakes" element={<Shakes />} />
+          <Route path="/foodstalls/burger352/sides" element={<Sides />} />
+          <Route path="/foodstalls/burger352/steaks" element={<Steaks />} />
+          <Route path="/foodstalls/Babas/ve" element={<Vegeterian />} />
         </Routes>
       </div>
     </Router>

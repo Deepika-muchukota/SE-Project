@@ -7,11 +7,11 @@ import mushroom from "./burger352_images/mushroomswiss.jpeg";
 import pizza from "./burger352_images/pizzaburger.jpg";
 
 const categories = [
-  { name: "The Classic", image: classic },
-  { name: "The Bacon Jam", image:bacon  },
-  { name: "The CowBoy", image:cowboy },
-  { name: "The Mushroom Swiss", image: mushroom },
-  { name: "The Pizza burger", image: pizza },
+  { name: "The Classic", image: classic, price:"$8.99" },
+  { name: "The Bacon Jam", image:bacon, price:"$9.29"  },
+  { name: "The CowBoy", image:cowboy, price:"$9.99" },
+  { name: "The Mushroom Swiss", image: mushroom, price:"$8.59" },
+  { name: "The Pizza burger", image: pizza, price:"$9.49" },
 ];
 
 function Burger() {
@@ -22,7 +22,7 @@ function Burger() {
         {categories.map((category, index) => (
           <button key={index} className="category-button">
             <img src={category.image} alt={category.name} className="category-image" />
-            <p className="category-name">{category.name}</p>
+            <p className="category-name">{category.name}<br/> {category.price}</p>
           </button>
         ))}
       </div>

@@ -1,32 +1,24 @@
-/* Ensure full-screen layout */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
-/* Panda container should fill screen properly */
+/* Panda container with themed background */
 .panda-container {
   position: relative;
-  height: 100vh; /* Full height */
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom, #b92b27, #f55123); /* Panda Express-themed red gradient */
-  width: 100vw; /* Full width */
+  background: linear-gradient(to bottom, #b92b27, #f55123);
+  width: 100vw;
   overflow: hidden;
 }
 
-/* Overlay behind the content */
+/* Overlay effect */
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2); 
-  z-index: -1; 
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: -1;
 }
 
 /* Flex container for categories */
@@ -36,114 +28,94 @@ html, body {
   justify-content: center;
   gap: 25px;
   width: 100%;
-  max-width: 900px; /* Max width for large screens */
+  height: 80%;
+  max-width: 1000px;
   padding: 20px;
-  margin: 0 auto;
 }
 
-/* Category Button */
+/* Uniform category buttons */
 .category-button {
-  background-color: transparent;
+  flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
+  max-width: calc(33.33% - 30px);
+  height: 40vh; /* Adjust height to balance the layout */
+  background-color: #34495e;
   border: none;
-  cursor: pointer;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px; /* Fixed width for all buttons */
-  height: 220px;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
 }
 
-/* Different background colors for each button */
-.category-button:nth-child(1) { background-color: #ffcc00; }  
-.category-button:nth-child(2) { background-color: #ff6600; }  
-.category-button:nth-child(3) { background-color: #ff4444; } 
-.category-button:nth-child(4) { background-color: #cc0000; }  
-.category-button:nth-child(5) { background-color: #990000; } 
+/* Background colors */
+.category-button:nth-child(1) { background-color: #ffcc00; }
+.category-button:nth-child(2) { background-color: #ff6600; }
+.category-button:nth-child(3) { background-color: #ff4444; }
+.category-button:nth-child(4) { background-color: #cc0000; }
+.category-button:nth-child(5) { background-color: #990000; }
 
 .category-button:hover {
   transform: scale(1.05);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Ensures all images fit perfectly inside buttons */
+/* Image styling */
 .category-image {
   width: 100%;
   height: 130px;
-  object-fit: cover; /* Ensures image fills space without overflowing */
+  object-fit: cover;
   border-radius: 12px 12px 0 0;
 }
 
-/* Category name styling */
+/* Category text */
 .category-name {
   margin-top: 10px;
   font-weight: bold;
-  color: white;
   font-size: 16px;
   text-align: center;
+  color: white;
 }
 
-/* Flex layout adjustments */
-.category-grid .category-button:nth-child(1),
-.category-grid .category-button:nth-child(2),
-.category-grid .category-button:nth-child(3) {
-  flex: 0 0 30%; /* 3 items per row on large screens */
+/* Hide extra items beyond 6 */
+.category-grid > .category-button:nth-child(n + 6) {
+  display: none;
 }
 
-.category-grid .category-button:nth-child(4),
-.category-grid .category-button:nth-child(5) {
-  flex: 0 0 45%; /* 2 items per row on smaller screens */
-}
-
-/* 🔥 Responsive Flex Fixes */
+/* Responsive Design */
 @media (max-width: 1024px) {
-  /* Adjusting for tablet screens */
-  .category-grid .category-button {
-    flex: 0 0 45%; /* 2 items per row */
+  .category-button {
+    flex: 1 1 calc(50% - 30px); /* 2 per row */
+    max-width: calc(50% - 30px);
   }
 }
 
 @media (max-width: 768px) {
-  /* 2 per row on tablets */
-  .category-grid {
-      justify-content: center;
-  }
-
   .category-button {
-      width: 160px;
-      height: 200px;
+    flex: 1 1 100%; /* 1 per row */
+    max-width: 100%;
+    height: 200px;
   }
 
   .category-name {
-      font-size: 14px;
-  }
-
-  .category-grid .category-button {
-      flex: 0 0 45%;
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
-  /* 1 per row on mobile */
   .category-grid {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .category-button {
-      width: 140px;
-      height: 190px;
+    width: 80%;
+    height: 180px;
   }
 
   .category-name {
-      font-size: 13px;
-  }
-
-  .category-grid .category-button {
-      flex: 0 0 100%; /* 1 item per row */
+    font-size: 13px;
   }
 }

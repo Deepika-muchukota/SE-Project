@@ -1,6 +1,7 @@
 import React from 'react';
 import cafeteriaBg from "./cafeteria-bg.jpg";
 import "./SignUp.css";
+import axios from "axios";
 
 const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword,confirmPassword,confirmSetPassword,errors,setErrors,passwordFocused,setPasswordFocused}) => {
 
@@ -33,6 +34,21 @@ const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  const createUser = () => {
+    axios.post('http://localhost:3500/items', {
+      "Name": name,
+      "Email": email,
+      "Phone Number": phone,
+      "Password": password,
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   return (
     <div className='sign-up-page'
@@ -109,7 +125,7 @@ const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword
       </label>
       </div>
 
-      <button className='signup-btn' type="submit" disabled={Object.keys(errors).length > 0}>Sign Up</button>
+      <button className='signup-btn' type="submit" disabled={Object.keys(errors).length > 0} onClick={createUser}>Sign Up</button>
 
       </form>
     </div>

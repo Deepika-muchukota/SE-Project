@@ -1,14 +1,8 @@
-/* Ensure full-screen layout */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+
 
 /* Main container should fill screen properly */
 .burger-container {
   position: relative;
-  height: 100vh; /* Full height */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,66 +10,38 @@ html, body {
   background-color: #2c3e50;
   width: 100vw;
 }
-
-/* Grid for categories */
 .category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Auto-adjusting grid */
-  gap: 30px;
-  width: 80%;
-  max-width: 1000px;
-  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  height: 50%;
+  padding: 20px;
 }
 
-/* Button styles */
+/* Ensuring uniform button sizes */
 .category-button {
-  background-color: transparent;
+  flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
+  max-width: calc(33.33% - 30px);
+  height: 20vh; /* Adjust height as needed */
+  background-color: #34495e;
   border: none;
-  cursor: pointer;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 250px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
 }
 
 .category-button:hover {
   transform: scale(1.05);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Image styling */
-.category-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
-}
+/* Ensuring exactly 2 rows */
 
-/* Category name styling */
-.category-name {
-  margin-top: 10px;
-  font-weight: bold;
-  color: white;
-  font-size: 18px;
-  text-align: center;
-}
-
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .category-grid {
-      grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .category-grid {
-      grid-template-columns: 1fr;
-  }
-}
