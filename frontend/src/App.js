@@ -4,6 +4,10 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import FoodStalls from './FoodStalls'; 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Burger352 from './Burger_352/Burger'; 
+import baba from './Baba/baba';
+import Drinks from './Starbucks/StarBucksDrinks';
+import Panda from './Panda_Exp/PandaExpress';
 
 function App() {
   // Dummy user data

@@ -44,7 +44,7 @@ const categories = [
   { name: "Java Chip", image: java }
 ];
 
-function Starbucks_drinks() {
+function Drinks() {
   return (
     <div className="drinks-opt-container">
       <div className="overlay"></div> 
@@ -60,4 +60,4 @@ function Starbucks_drinks() {
   );
 }
 
-export default Starbucks_drinks;
+export default Drinks;
