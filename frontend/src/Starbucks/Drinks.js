@@ -1,5 +1,5 @@
 import React from "react";
-import "./drink.css";
+import "./star.css";
 import brew_milk from "./starbucks_images/bew&milk.jpeg";
 import caramel_macchito from "./starbucks_images/caramel_macchito.jpeg";
 import caramel from "./starbucks_images/caramel.jpeg";
