@@ -12,8 +12,8 @@ import PandaExpress from './Panda_Exp/PandaExpress';
 function App() {
   // Dummy user data
   const dummyUser = {
-    email: 'user@example.com',
-    password: 'Password123',
+    email: 'user@ex.com',
+    password: 'p',
   };
 
   // State variables for authentication and sign-up form
@@ -81,7 +81,7 @@ function App() {
 
           {/* Food Stalls Route */}
           <Route
-            path="/foodstalls"
+           exact path="/foodstalls"
             element={
               isLoggedIn ? (
                 <FoodStalls onLogout={handleLogout} />
@@ -94,10 +94,10 @@ function App() {
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/signin" />} />
 
-          <Route path="/burger352" element={<Burger352 />} />
-          <Route path="/baba-pizza" element={<Babas/>} />
-          <Route path="/starbucks" element={<StarBucksDrinks />} />
-          <Route path="/panda-express" element={<PandaExpress />} />
+          <Route path="/foodstalls/burger352" element={<Burger352 />} />
+          <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
+          <Route path="/foodstalls/starbucks" element={<StarBucksDrinks />} />
+          <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
         </Routes>
       </div>
     </Router>

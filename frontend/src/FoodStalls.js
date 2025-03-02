@@ -10,12 +10,12 @@ import Baba from "./assets/Baba's Pizza.png";
 
 
 const stalls = [
-    { name: "Starbucks", image: starbucks, color:"#0D7377"},
-    { name: "Burger 352", image: burger352, color:"#FFA500" },
-    { name: "Panda Express", image: pandaExpress, color:"#FF0000" },
-    { name: "Subway", image: subway, color:"#5F8D4E" },
-    { name: "Halal Shack" , image: halal, color:"#FEFFDE" },
-    { name: "Baba's Pizza" , image: Baba, color:"#FFD4D4"}
+    { name: "Starbucks", image: starbucks, color:"#0D7377", path: "/foodstalls/starbucks"},
+    { name: "Burger 352", image: burger352, color:"#FFA500", path: "/foodstalls/burger352"  },
+    { name: "Panda Express", image: pandaExpress, color:"#FF0000", path: "/foodstalls/panda-express" },
+    { name: "Subway", image: subway, color:"#5F8D4E", path: "/subway" },
+    { name: "Halal Shack" , image: halal, color:"#FEFFDE", path: "/halal-shack" },
+    { name: "Baba's Pizza" , image: Baba, color:"#FFD4D4", path: "/foodstalls/baba-pizza"}
   ];
 
   function FoodStalls() {
