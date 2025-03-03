@@ -14,32 +14,26 @@ const categories = [
   { name: "The Pizza burger", image: pizza, price:"$9.49" },
 ];
 
-function Burger({cart, addItemToCart }) {
-  // To store multiple selected items
+function Burger({ cart, addItemToCart }) {
   const [selectedItems, setSelectedItems] = useState([]);
 
-  // Effect to update cart when selected items change
+  // This useEffect can be used to log or trigger side effects
   useEffect(() => {
-    selectedItems.forEach(item => {
-      addItemToCart(item, "add"); // Add each selected item to cart
-    });
-
-    // Cleanup: remove items from cart when they are deselected
-    return () => {
-      selectedItems.forEach(item => {
-        addItemToCart(item, "remove");
-      });
-    };
+    // Here we could perform actions whenever selectedItems change
+    console.log("Burger selection updated:", selectedItems);
+    // Note: Do NOT include a cleanup that removes items on unmount
   }, [selectedItems]);
 
-  // Update the selection logic for adding/removing items
   const handleItemClick = (item) => {
-    setSelectedItems(prevItems => {
-      // If item is already selected, remove it, otherwise add it
-      return prevItems.includes(item)
-        ? prevItems.filter(i => i !== item)  // Remove item
-        : [...prevItems, item];  // Add item
-    });
+    if (selectedItems.some(i => i.name === item.name)) {
+      // Remove from local state and global cart
+      setSelectedItems(prev => prev.filter(i => i.name !== item.name));
+      addItemToCart(item, "remove");
+    } else {
+      // Add to both local state and global cart
+      setSelectedItems(prev => [...prev, item]);
+      addItemToCart(item, "add");
+    }
   };
 
   return (
@@ -49,7 +43,7 @@ function Burger({cart, addItemToCart }) {
         {categories.map((category, index) => (
           <button
             key={index}
-            className={`category-button ${selectedItems.includes(category) ? 'selected' : ''}`}
+            className={`category-button ${cart.some(cartItem => cartItem.name === category.name) ? 'selected' : ''}`}
             onClick={() => handleItemClick(category)}
           >
             <img src={category.image} alt={category.name} className="category-image" />
@@ -57,7 +51,7 @@ function Burger({cart, addItemToCart }) {
           </button>
         ))}
       </div>
-      <button className="confirm-order-btn" onClick={() => {console.log({cart})}}>Confirm Order</button>
+      <button className="confirm-order-btn" onClick={() => console.log(cart)}>Confirm Order</button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -32,20 +32,36 @@ function App() {
   const [confirmPassword, confirmSetPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [passwordFocused, setPasswordFocused] = useState(false);
-  const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
+  const [cart, setCart] = useState(() => {
+    const savedCart = sessionStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Persist cart changes (or trigger any side-effect) with useEffect
+  useEffect(() => {
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Global function to add or remove an item
   const addItemToCart = (item, action = "add") => {
-    setCart((prevCart) => {
+    setCart(prevCart => {
       if (action === "add") {
-        // Add item to cart if it's not already in the cart
-        return [...prevCart, item];
+        // Add the item only if it's not already in the cart
+        return prevCart.some(cartItem => cartItem.name === item.name)
+          ? prevCart
+          : [...prevCart, item];
       } else if (action === "remove") {
-        // Remove item from cart
-        return prevCart.filter(cartItem => cartItem !== item);
+        return prevCart.filter(cartItem => cartItem.name !== item.name);
       }
       return prevCart;
     });
   };
+
   
   // Function to handle logout
   const handleLogout = () => {
@@ -111,7 +127,7 @@ function App() {
           <Route path="/foodstalls/starbucks" element={<StarBucksDrinks />} />
           <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
           <Route path="/foodstalls/burger352/burger"  element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/chicken" element={<Chicken />} />
+          <Route path="/foodstalls/burger352/chicken" element={<Chicken cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/shakes" element={<Shakes />} />
           <Route path="/foodstalls/burger352/sides" element={<Sides />} />
           <Route path="/foodstalls/burger352/steaks" element={<Steaks />} />
