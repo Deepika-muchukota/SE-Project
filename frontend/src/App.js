@@ -14,6 +14,7 @@ import Shakes from './Burger_352/Shakes'
 import Sides from './Burger_352/Sides'
 import Steaks from './Burger_352/Steaks.'
 import Vegeterian from './Baba/Vegeterian';
+import Nvegeterian from './Baba/Nvegeterian';
 
 function App() {
   // Dummy user data
@@ -110,6 +111,7 @@ function App() {
           <Route path="/foodstalls/burger352/sides" element={<Sides />} />
           <Route path="/foodstalls/burger352/steaks" element={<Steaks />} />
           <Route path="/foodstalls/Babas/ve" element={<Vegeterian />} />
+          <Route path="/foodstalls/Babas/nve" element={<Nvegeterian />} />
         </Routes>
       </div>
     </Router>

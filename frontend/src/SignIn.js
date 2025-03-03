@@ -1,14 +1,34 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import cafeteriaBg from "./cafeteria-bg.jpg"; // Import background image
+import { Link } from "react-router-dom";
+import axios from "axios"; // Import Axios for API requests
+import cafeteriaBg from "./cafeteria-bg.jpg";
 
 const SignIn = ({ onSignIn }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // State to store error messages
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSignIn(email, password); // Call the parent function to authenticate
+    setError(""); // Clear previous errors
+
+    try {
+      const response = await axios.post("http://localhost:3500/items", { 
+        email, 
+        password 
+      });
+
+      console.log("Login successful:", response.data);
+
+      // Store authentication token in localStorage or sessionStorage
+      localStorage.setItem("authToken", response.data.token); 
+
+      // Pass user data to parent component (optional)
+      onSignIn(response.data.user);
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Invalid email or password");
+    }
   };
 
   return (
@@ -26,6 +46,7 @@ const SignIn = ({ onSignIn }) => {
     >
       <div className="signin-container">
         <h2>Sign In</h2>
+        {error && <p className="error-message">{error}</p>} {/* Display error message */}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Email</label>
@@ -50,7 +71,6 @@ const SignIn = ({ onSignIn }) => {
           <button type="submit" className="signin-btn">Sign In</button>
         </form>
         <div className="signin-links">
-          {/* Add a link to navigate to the Sign Up page */}
           Don't have an account? <Link to="/signup">Sign up here</Link>
         </div>
       </div>

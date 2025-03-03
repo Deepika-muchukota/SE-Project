@@ -1,21 +1,22 @@
 import React from "react";
 import "./vegp.css"; 
 import pepperoni from "./Baba_images/pepperoni.jpeg";
-import margherita from "./Baba_images/margherita.jpeg";
-import med_veg from "./Baba_images/med_veg.jpeg";
-import mushroom from "./Baba_images/mushroom.jpeg";
-import supreme from "./Baba_images/supreme.jpeg";
-import veggie_lovers from "./Baba_images/veggie_lovers.jpeg"
+import tikka from "./Baba_images/tikka.jpeg";
+import bbq from "./Baba_images/bbq.jpeg";
+import hawaian from "./Baba_images/hawaian.jpeg";
+import meat_feast from "./Baba_images/meat_feast.jpeg";
+import bacon from "./Baba_images/bacon.jpeg"
 
 
 const categories = [
-    { name: "Pepperoni", image: pepperoni, price:"$12.99" },
-    { name: "Margherita", image: margherita, price:"$11.99" },
-    { name: "Veggie Supreme", image: supreme, price:"$13.49" },
-    { name: "Mushroom & Spinach", image: mushroom, price:"$12.49" },
-    { name: "Mediterranean Veggie", image: med_veg, price:"$13.29" },
-    { name: "Veggie Lovers", image: veggie_lovers, price:"$13.99" }
+    { name: "Pepperoni", image: pepperoni, price: "$12.99" },
+    { name: "Chicken Tikka", image: tikka, price: "$11.99" },
+    { name: "BBQ Chicken", image: bbq, price: "$13.49" },
+    { name: "Hawaiian", image: hawaian, price: "$12.49" },
+    { name: "Meat Feast", image: meat_feast, price: "$13.29" },
+    { name: "Sausage & Bacon", image: bacon, price: "$13.99" }
   ];
+  
   
 
 function Nvegeterian() {

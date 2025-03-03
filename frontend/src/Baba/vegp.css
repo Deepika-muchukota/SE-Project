@@ -3,7 +3,7 @@
     position: relative;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #0a7d47, #8b4513); /* Warm brown pizza theme */
+    background: linear-gradient(to bottom, #7d770a, #8b4513); /* Warm brown pizza theme */
     padding: 40px 20px;
     box-sizing: border-box;
     display: flex;
