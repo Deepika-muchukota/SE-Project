@@ -49,7 +49,7 @@ function App() {
               isLoggedIn ? (
                 <Navigate to="/foodstalls" />
               ) : (
-                <SignIn onSignIn={handleSignIn} />
+                <SignIn/>
               )
             }
           />

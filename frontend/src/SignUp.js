@@ -2,13 +2,17 @@ import React from 'react';
 import cafeteriaBg from "./cafeteria-bg.jpg";
 import "./SignUp.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword,confirmPassword,confirmSetPassword,errors,setErrors,passwordFocused,setPasswordFocused}) => {
+
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) { 
       console.log('Submitted:', { name, email, password });
+      navigate("/")
     }
   };
 
