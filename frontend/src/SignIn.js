@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Import Axios for API requests
+import axios from "axios";
 import cafeteriaBg from "./cafeteria-bg.jpg";
 
-const SignIn = ({ onSignIn }) => {
+const SignIn = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // State to store error messages
@@ -13,19 +13,18 @@ const SignIn = ({ onSignIn }) => {
     setError(""); // Clear previous errors
 
     try {
-      const response = await axios.post("http://localhost:3500/items", { 
+      const response = await axios.post("http://localhost:3500/auth/login", { 
         email, 
         password 
       });
 
-      console.log("Login successful:", response.data);
-
-      // Store authentication token in localStorage or sessionStorage
-      localStorage.setItem("authToken", response.data.token); 
-
-      // Pass user data to parent component (optional)
-      onSignIn(response.data.user);
-
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token); // Store auth token
+        setIsLoggedIn(true); // Update login state
+      } else {
+        setError("Login failed. Please try again.");
+      }
+      
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
     }
