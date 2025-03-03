@@ -128,7 +128,7 @@ function App() {
           <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
           <Route path="/foodstalls/burger352/burger"  element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/chicken" element={<Chicken cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/shakes" element={<Shakes />} />
+          <Route path="/foodstalls/burger352/shakes" element={<Shakes cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/sides" element={<Sides />} />
           <Route path="/foodstalls/burger352/steaks" element={<Steaks />} />
           <Route path="/foodstalls/Babas/ve" element={<Vegeterian />} />

@@ -117,6 +117,13 @@
     transform: scale(1.05);
 }
 
+.category-button.selected {
+    background-color: #f39c12; /* Lighter yellow when selected */
+    border: 2px solid #ffcc00; /* Bright border when highlighted */
+    transform: scale(1.05); /* Slight scaling effect */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Stronger shadow for emphasis */
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
