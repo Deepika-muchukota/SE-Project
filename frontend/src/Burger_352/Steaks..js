@@ -14,7 +14,7 @@ function Steaks({ cart, addItemToCart }) {
   const [selectedItems, setSelectedItems] = useState([]);
       
         useEffect(() => {
-          console.log("Sides selection updated:", selectedItems);
+          console.log("Steaks selection updated:", selectedItems);
         }, [selectedItems]);
       
         const handleItemClick = (item) => {
