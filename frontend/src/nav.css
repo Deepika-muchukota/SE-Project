@@ -1,0 +1,74 @@
+/* NavBar Container */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #4b79a1, #283e51);
+    padding: 10px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  /* Logo styling */
+  .navbar-logo {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  /* Content inside the NavBar */
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Finalize Order Button styling */
+  .finalize-order-btn {
+    background-color: #ff6600;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .finalize-order-btn:hover {
+    background-color: #e65c00;
+    transform: scale(1.05);
+  }
+  
+  /* Cart information styling */
+  .navbar-cart {
+    color: #fff;
+    font-size: 1rem;
+  }
+  
+  /* Optional: badge style for cart count */
+  .cart-count {
+    background-color: #e74c3c;
+    border-radius: 50%;
+    padding: 2px 8px;
+    margin-right: 5px;
+    font-weight: bold;
+  }
+  
+  .logout-btn {
+    background-color: #c0392b;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .logout-btn:hover {
+    background-color: #a93226;
+    transform: scale(1.05);
+  }

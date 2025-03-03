@@ -15,13 +15,9 @@ import Sides from './Burger_352/Sides'
 import Steaks from './Burger_352/Steaks.'
 import Vegeterian from './Baba/Vegeterian';
 import Nvegeterian from './Baba/Nvegeterian';
+import Layout from './Layout';
 
 function App() {
-  // Dummy user data
-  const dummyUser = {
-    email: 'user@ex.com',
-    password: 'p',
-  };
 
   // State variables for authentication and sign-up form
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -112,7 +108,9 @@ function App() {
            exact path="/foodstalls"
             element={
               isLoggedIn ? (
-                <FoodStalls onLogout={handleLogout} />
+                <Layout cart={cart} setCart={setCart} onLogout={handleLogout}>
+                  <FoodStalls onLogout={handleLogout} />
+                </Layout>
               ) : (
                 <Navigate to="/signin" />
               )

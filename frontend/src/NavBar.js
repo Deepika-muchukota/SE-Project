@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './nav.css'; 
 
-function NavBar({ cart, setCart }) {
+function NavBar({ cart, setCart, onLogout  }) {
   const navigate = useNavigate();
 
   const finalizeOrder = async () => {
@@ -17,29 +18,31 @@ function NavBar({ cart, setCart }) {
       });
 
       if (response.ok) {
-        // Optionally clear the cart after order is placed
+        // Clear the cart after order is placed and navigate to confirmation
         setCart([]);
-        // Navigate to an order confirmation page or display a success message
         navigate('/order-success');
-        console.log("order placed");
+        console.log("Order placed successfully");
       } else {
         console.error('Order failed');
-        // Handle error case (show error message, etc.)
       }
     } catch (error) {
       console.error('Error finalizing order:', error);
-      // Handle error case
     }
   };
 
   return (
     <nav className="navbar">
+      <div className="navbar-logo">Welcome to Reitz</div>
       <div className="navbar-content">
-        {/* You can add more navigation links or branding here */}
         <button onClick={finalizeOrder} className="finalize-order-btn">
           Finalize Order
         </button>
-        <span>{cart.length} Items</span>
+        <div className="navbar-cart">
+          <span className="cart-count">{cart.length}</span> Items
+        </div>
+        <button onClick={onLogout} className="logout-btn">
+          Logout
+        </button>
       </div>
     </nav>
   );
