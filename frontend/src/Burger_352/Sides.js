@@ -15,7 +15,7 @@ function Sides({ cart, addItemToCart }) {
   const [selectedItems, setSelectedItems] = useState([]);
     
       useEffect(() => {
-        console.log("Chicken selection updated:", selectedItems);
+        console.log("Sides selection updated:", selectedItems);
       }, [selectedItems]);
     
       const handleItemClick = (item) => {

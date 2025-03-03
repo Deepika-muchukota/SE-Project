@@ -124,15 +124,15 @@ function App() {
 
           <Route path="/foodstalls/burger352" element={<Burger352 />} />
           <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
-          <Route path="/foodstalls/starbucks" element={<StarBucksDrinks />} />
+          <Route path="/foodstalls/starbucks" element={<StarBucksDrinks cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
           <Route path="/foodstalls/burger352/burger"  element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/chicken" element={<Chicken cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/shakes" element={<Shakes cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/sides" element={<Sides cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/steaks" element={<Steaks />} />
-          <Route path="/foodstalls/Babas/ve" element={<Vegeterian />} />
-          <Route path="/foodstalls/Babas/nve" element={<Nvegeterian />} />
+          <Route path="/foodstalls/burger352/steaks" element={<Steaks cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/Babas/ve" element={<Vegeterian cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/Babas/nve" element={<Nvegeterian cart={cart} addItemToCart={addItemToCart} />} />
         </Routes>
       </div>
     </Router>

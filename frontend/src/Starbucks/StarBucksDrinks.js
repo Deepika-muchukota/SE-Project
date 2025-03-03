@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./star.css";
 import brew_milk from "./starbucks_images/bew&milk.jpeg";
 import caramel_macchito from "./starbucks_images/caramel_macchito.jpeg";
@@ -45,19 +45,40 @@ const categories = [
 ];
 
 
-function StarBucksDrinks() {
+function StarBucksDrinks({ cart, addItemToCart }) {
+
+   const [selectedItems, setSelectedItems] = useState([]);
+      
+        useEffect(() => {
+          console.log("Starbucks selection updated:", selectedItems);
+        }, [selectedItems]);
+      
+        const handleItemClick = (item) => {
+          if (selectedItems.some(i => i.name === item.name)) {
+            setSelectedItems(prev => prev.filter(i => i.name !== item.name));
+            addItemToCart(item, "remove");
+          } else {
+            setSelectedItems(prev => [...prev, item]);
+            addItemToCart(item, "add");
+          }
+        };
+      
   return (
     <div className="drinks-opt-container">
       <div className="star-overlay"></div> 
       <div className="star-category-grid">
         {categories.map((category, index) => (
-          <button key={index} className="category-button">
+          <button
+            key={index}
+            className={`category-button ${cart.some(cartItem => cartItem.name === category.name) ? 'selected' : ''}`}
+            onClick={() => handleItemClick(category)}
+          >
             <img src={category.image} alt={category.name} className="category-image" />
             <p className="star-category-name">{category.name}<br/>{category.price}</p>
           </button>
         ))}
       </div>
-      <button className="confirm-order-btn">Confirm Order</button>
+      <button className="confirm-order-btn" onClick={() => console.log(cart)}>Confirm Order</button>
     </div>
   );
 }
