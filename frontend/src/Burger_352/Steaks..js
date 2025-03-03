@@ -21,6 +21,7 @@ function Steaks() {
           </button>
         ))}
       </div>
+      <button className="confirm-order-btn">Confirm Order</button>
     </div>
   );
 }
