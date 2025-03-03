@@ -16,9 +16,9 @@
 .vcategory-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Reduced width */
-    gap: 15px;
-    width: 80%;
-    max-width: 900px; /* Adjusted max width */
+    gap: 5px;
+    width: 100%;
+    max-width: 2900px; /* Adjusted max width */
     margin: 0 auto;
 }
 
@@ -86,6 +86,13 @@
 .confirm-order-btn:hover {
     background-color: #e65c00;
     transform: scale(1.05);
+}
+
+.category-button.selected {
+    background-color: #f39c12; /* Lighter yellow when selected */
+    border: 2px solid #ffcc00; /* Bright border when highlighted */
+    transform: scale(1.05); /* Slight scaling effect */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Stronger shadow for emphasis */
 }
 
 /* Responsive Design */
