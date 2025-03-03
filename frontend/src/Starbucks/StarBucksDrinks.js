@@ -57,6 +57,7 @@ function StarBucksDrinks() {
           </button>
         ))}
       </div>
+      <button className="confirm-order-btn">Confirm Order</button>
     </div>
   );
 }

@@ -32,7 +32,21 @@ function App() {
   const [confirmPassword, confirmSetPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const [cart, setCart] = useState([]);
 
+  const addItemToCart = (item, action = "add") => {
+    setCart((prevCart) => {
+      if (action === "add") {
+        // Add item to cart if it's not already in the cart
+        return [...prevCart, item];
+      } else if (action === "remove") {
+        // Remove item from cart
+        return prevCart.filter(cartItem => cartItem !== item);
+      }
+      return prevCart;
+    });
+  };
+  
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -96,7 +110,7 @@ function App() {
           <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
           <Route path="/foodstalls/starbucks" element={<StarBucksDrinks />} />
           <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
-          <Route path="/foodstalls/burger352/burger" element={<Burger />} />
+          <Route path="/foodstalls/burger352/burger"  element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/chicken" element={<Chicken />} />
           <Route path="/foodstalls/burger352/shakes" element={<Shakes />} />
           <Route path="/foodstalls/burger352/sides" element={<Sides />} />

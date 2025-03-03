@@ -3,7 +3,7 @@
     position: relative;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #7d770a, #8b4513); /* Warm brown pizza theme */
+    background: linear-gradient(to bottom, #7d770a, #8b4513);
     padding: 40px 20px;
     box-sizing: border-box;
     display: flex;
@@ -15,10 +15,10 @@
 /* Grid layout for categories */
 .vcategory-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(280px, 1fr)); /* 3 buttons per row */
-    gap: 20px;
-    width: 90%;
-    max-width: 1100px; /* Adjusted max width */
+    grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Reduced width */
+    gap: 15px;
+    width: 80%;
+    max-width: 900px; /* Adjusted max width */
     margin: 0 auto;
 }
 
@@ -32,26 +32,26 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
     overflow: hidden;
-    width: 100%; /* Full width within grid */
-    height: 280px; /* Adjusted height */
+    width: 100%;
+    height: 200px; /* Reduced height */
 }
 
 /* Hover effect */
 .vcategory-button:hover {
     transform: scale(1.05);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
 }
 
-/* Category Images - Ensuring full image fits */
+/* Category Images - Adjusted for reduced button size */
 .vcategory-image {
     width: 100%;
-    height: 160px; /* Increased image height */
-    object-fit: contain; /* Ensures full image fits without cropping */
-    border-radius: 12px 12px 0 0;
+    height: 120px; /* Reduced image height */
+    object-fit: contain;
+    border-radius: 10px 10px 0 0;
     display: block;
 }
 
@@ -59,22 +59,44 @@
 .vcategory-name {
     font-weight: bold;
     color: white;
-    font-size: 20px;
+    font-size: 16px; /* Slightly smaller font */
     text-transform: capitalize;
     text-align: center;
-    padding: 10px;
+    padding: 6px;
     width: 100%;
+}
+
+/* Confirm Order Button */
+.confirm-order-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-order-btn:hover {
+    background-color: #e65c00;
+    transform: scale(1.05);
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
     .vcategory-grid {
-        grid-template-columns: repeat(2, minmax(280px, 1fr)); /* 2 per row */
+        grid-template-columns: repeat(2, minmax(180px, 1fr)); /* 2 per row */
     }
 }
 
 @media (max-width: 768px) {
     .vcategory-grid {
-        grid-template-columns: repeat(1, minmax(280px, 1fr)); /* 1 per row for mobile */
+        grid-template-columns: repeat(1, minmax(180px, 1fr)); /* 1 per row for mobile */
     }
 }
