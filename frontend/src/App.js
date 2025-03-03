@@ -33,15 +33,6 @@ function App() {
   const [errors, setErrors] = useState({});
   const [passwordFocused, setPasswordFocused] = useState(false);
 
-  // Function to handle sign-in
-  const handleSignIn = (emailInput, passwordInput) => {
-    if (emailInput === dummyUser.email && passwordInput === dummyUser.password) {
-      setIsLoggedIn(true);
-    } else {
-      alert('Invalid credentials. Please try again.');
-    }
-  };
-
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
