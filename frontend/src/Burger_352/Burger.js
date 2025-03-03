@@ -26,6 +26,10 @@ function Burger() {
           </button>
         ))}
       </div>
+      
+      {/* Confirm Order Button */}
+      <button className="confirm-order-btn">Confirm Order</button>
+
     </div>
   );
 }
