@@ -24,8 +24,8 @@ function Vegeterian({ cart, addItemToCart }) {
   
     // This useEffect can be used to log or trigger side effects
     useEffect(() => {
-      // Here we could perform actions whenever selectedItems change
-      console.log("Vegeterian selection updated:", selectedItems);
+      // Here we could perform actions whenever selectedItems changedd .
+      console.log("Vegeterian Pizza selection updated:", selectedItems);
       // Note: Do NOT include a cleanup that removes items on unmount
     }, [selectedItems]);
   
