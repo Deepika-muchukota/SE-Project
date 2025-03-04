@@ -118,7 +118,7 @@ Frontend testing was conducted using **Cypress** for UI interactions and **Jest*
 | `cart.spec.js` | Adds an item to the cart and verifies it appears. |
 | `checkout.spec.js` | Ensures the checkout process works. |
 
-** Example Cypress Test (Signup)**
+### ** Example Cypress Test (Signup)**
 ```js
 describe('User Signup', () => {
   it('Should register a new user', () => {
@@ -145,3 +145,10 @@ describe('User Signup', () => {
 - Implement payment integration.
 - Enhance frontend UI/UX for a better user experience.
 - Improve unit test coverage for robustness.
+
+## API Documentation Link:
+- https://github.com/Deepika-muchukota/SE-Project/blob/branch/API%20Documentation.md
+
+## Github Link:
+- https://github.com/Deepika-muchukota/SE-Project/tree/branch
+- User Stories can be viewed in Issues tab.
