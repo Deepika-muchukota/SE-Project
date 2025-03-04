@@ -105,6 +105,7 @@ func TestSignup(t *testing.T) {
 		t.Errorf("Expected status 201 but got %d", w.Code)
 	}
 }
+```
 
 ## **Frontend Unit & Cypress Tests**
 Frontend testing was conducted using **Cypress** for UI interactions and **Jest** for component testing.
@@ -130,6 +131,7 @@ describe('User Signup', () => {
     cy.url().should('include', '/signin')
   })
 })
+```
 
 ## Challenges Faced & Solutions:
 | **Challenge** | **Solution** |
