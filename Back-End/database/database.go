@@ -1,27 +1,23 @@
 package database
 
 import (
-	"log"
-
 	"SE-Project/Back-End/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 var DB *gorm.DB
 
-func ConnectDatabase() {
-	// Define PostgreSQL connection string
-	dsn := "host=localhost user=ufshopease_user password=ufshopease_pwd dbname=ufshopease port=5432 sslmode=disable"
-
-	// Connect to PostgreSQL
+func ConnectDB() {
+	dsn := "host=localhost user=postgres password=postgres dbname=ufshopease port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to database!")
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Migrate schema
-	db.AutoMigrate(&models.User{}, &models.Restaurant{})
+	// Migrate the schema
+	db.AutoMigrate(&models.User{}, &models.FoodStall{}, &models.MenuItem{}, &models.CartItem{})
 
 	DB = db
 	log.Println("Database connected successfully!")
