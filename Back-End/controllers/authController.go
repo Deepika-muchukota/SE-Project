@@ -1,14 +1,15 @@
 package controllers
 
 import (
-	"SE-Project/Back-End/database"
-	"SE-Project/Back-End/models"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
-	"net/http"
-	"time"
+    "SE-Project/Back-End/database"
+    "SE-Project/Back-End/models"
+    "github.com/dgrijalva/jwt-go"
+    "github.com/gin-gonic/gin"
+    "golang.org/x/crypto/bcrypt"
+    "gorm.io/gorm"  
+    "net/http"
+    "time"
+    "log"
 )
 
 var SecretKey = "supersecretkey"
@@ -30,40 +31,41 @@ func Signup(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!"})
 }
 
+
 func Signin(c *gin.Context) {
-	var input struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-	var user models.User
+    var input struct {
+        Email    string `json:"email"`
+        Password string `json:"password"`
+    }
+    var user models.User
 
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    if err := c.ShouldBindJSON(&input); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	// Find user by email
-	database.DB.Where("email = ?", input.Email).First(&user)
-	if user.ID == 0 {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-		return
-	}
+    // Find user by email
+    if err := database.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
+        log.Println("User not found:", input.Email)  // ✅ Log missing user
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+        return
+    }
 
-	// Verify password
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-		return
-	}
+    // Compare hashed password with input password
+    if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+        log.Println("Password mismatch for user:", input.Email)  // ✅ Log password mismatch
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+        return
+    }
 
-	// Generate JWT token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
-		"exp":     time.Now().Add(72 * time.Hour).Unix(),
-	})
+    // Generate JWT token
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+        "user_id": user.ID,
+        "exp":     time.Now().Add(72 * time.Hour).Unix(),
+    })
+    tokenString, _ := token.SignedString([]byte(SecretKey))
 
-	tokenString, _ := token.SignedString([]byte(SecretKey))
-
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": tokenString})
+    c.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": tokenString})
 }
 
 // DeleteUser - Deletes a user by ID or Name
