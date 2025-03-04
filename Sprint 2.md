@@ -1,8 +1,8 @@
 # **Sprint 2 Report - UFShopEase**
 
 ## **Visual Demo Links**
-- [Backend]()
-- [Frontend]()
+- [Backend](https://drive.google.com/file/d/1an4aEdW3NEo3IXv7jQmRmDo3Vu33LwF_/view?usp=sharing)
+- [Frontend](https://drive.google.com/file/d/1IyY_l08q86i68Yri-E2JPyzi3Csl4UG2/view?usp=sharing)
 
 ## **Sprint 2 Objectives**
 In Sprint 2, our team aimed to:
@@ -18,7 +18,6 @@ In Sprint 2, our team aimed to:
 ## **Work Completed in Sprint 2**
 ### **Backend**
 - Implemented **additional API functionalities**:
-  - Logout API
   - Fetch all food stalls
   - Get menu for a specific food stall
   - Add items to cart
@@ -30,7 +29,6 @@ In Sprint 2, our team aimed to:
   - Inserted initial food stall and menu data.
 - **Integrated frontend and backend** using REST API.
 - **Wrote unit tests** for backend functionalities.
-- **API Documentation** added in `Sprint2.md`.
 
 ### **Frontend**
 - **Integrated backend APIs** with the React frontend.
@@ -133,8 +131,9 @@ describe('User Signup', () => {
 })
 ```
 
-## Challenges Faced & Solutions:
+### **Challenges Faced & Solutions:**
 | **Challenge** | **Solution** |
+|---------------|--------------|
 | `Database connection issues` | `Fixed by configuring PostgreSQL credentials properly.` |
 | `CORS errors between frontend and backend	` | `Implemented correct CORS settings in Gin framework.`|
 | `User signup duplicate entry` |	`Implemented unique constraint validation.` |
