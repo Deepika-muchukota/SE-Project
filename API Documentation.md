@@ -6,6 +6,12 @@
 #### 3. FetchUser API
 #### 4. EditUser API
 #### 5. DeleteUser API
+####  6. GetFoodStalls API
+#### 7. GetFoodMenu API
+#### 8. AddItemToCart API
+#### 9. FetchCartItems API
+#### 10. DeleteItemFromCart API
+#### 11. EmptyCart API
 
 ### 1. Signup API (User Registration): 
 #### Request Method:  
