@@ -68,3 +68,192 @@ DeleteUser API deletes a user account based on their name.
 ![DeleteUser API Request, Response](https://github.com/user-attachments/assets/b7838d8a-6dc8-409f-84c7-c9d0901b2abd)
 #### Users Table:
 ![DeleteUser API DB Update](https://github.com/user-attachments/assets/77d42940-9135-4786-9466-05dcc1eb2f7a)
+
+
+
+## Food Stall APIs
+
+### 6. GetFoodStalls API
+
+- **Request Method:** GET
+- **URL:** `localhost:5000/api/foodstalls`
+- **Functionality:** Retrieves a list of all available food stalls/vendors
+- **Response:**
+  ```json
+  {
+    "foodstalls": [
+      {
+        "id": 1,
+        "name": "Taco Place",
+        "location": "Student Union North"
+      },
+      {
+        "id": 2,
+        "name": "Pizza Corner",
+        "location": "Library West"
+      }
+    ]
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Successfully retrieved food stalls (returns a message if no stalls found)
+  - `500 Internal Server Error`: Server error during retrieval
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
+### 7. GetFoodMenu API
+
+- **Request Method:** GET
+- **URL:** `localhost:5000/api/foodstalls/:id/menu`
+- **Functionality:** Retrieves the menu items for a specific food stall
+- **URL Parameters:**
+  - `id`: Food stall ID
+- **Response:**
+  ```json
+  {
+    "menu": [
+      {
+        "id": 1,
+        "food_stall_id": 1,
+        "name": "Chicken Taco",
+        "price": 3.99
+      },
+      {
+        "id": 2,
+        "food_stall_id": 1,
+        "name": "Beef Burrito",
+        "price": 5.99
+      }
+    ]
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Successfully retrieved menu items
+  - `500 Internal Server Error`: Server error during retrieval
+
+
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
+## Cart APIs
+
+### 8. AddItemToCart API
+
+- **Request Method:** POST
+- **URL:** `localhost:5000/api/cart/add`
+- **Functionality:** Adds an item to a user's shopping cart
+- **Request Body:**
+  ```json
+  {
+    "user_id": 1,
+    "menu_id": 2,
+    "quantity": 3
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Item added to cart",
+    "cartItem": {
+      "id": 1,
+      "user_id": 1,
+      "menu_id": 2,
+      "quantity": 3
+    }
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Item added successfully
+  - `400 Bad Request`: Invalid input data
+  - `500 Internal Server Error`: Server error during addition
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
+### 9. FetchCartItems API
+
+- **Request Method:** GET
+- **URL:** `localhost:5000/api/cart/:userId`
+- **Functionality:** Retrieves all items in a specific user's cart
+- **URL Parameters:**
+  - `userId`: User ID whose cart items to retrieve
+- **Response:**
+  ```json
+  {
+    "cartItems": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "menu_id": 2,
+        "quantity": 3
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "menu_id": 5,
+        "quantity": 1
+      }
+    ]
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Successfully retrieved cart items
+  - `500 Internal Server Error`: Server error during retrieval
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
+### 10. DeleteItemFromCart API
+
+- **Request Method:** DELETE
+- **URL:** `localhost:5000/api/cart/delete/:id`
+- **Functionality:** Removes a specific item from a user's cart
+- **URL Parameters:**
+  - `id`: Cart item ID to delete
+- **Response:**
+  ```json
+  {
+    "message": "Item deleted from cart"
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Item deleted successfully
+  - `500 Internal Server Error`: Server error during deletion
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
+### 12. EmptyCart API
+
+- **Request Method:** DELETE
+- **URL:** `localhost:5000/api/cart/empty/:userId`
+- **Functionality:** Removes all items from a specific user's cart
+- **URL Parameters:**
+  - `userId`: User ID whose cart should be emptied
+- **Response:**
+  ```json
+  {
+    "message": "Cart emptied successfully"
+  }
+  ```
+- **Status Codes:**
+  - `200 OK`: Cart emptied successfully
+  - `500 Internal Server Error`: Server error during emptying
+
+#### Sample Request: 
+
+#### Sample Response: 
+
+
