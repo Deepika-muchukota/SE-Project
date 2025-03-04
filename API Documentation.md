@@ -100,9 +100,11 @@ DeleteUser API deletes a user account based on their name.
   - `500 Internal Server Error`: Server error during retrieval
 
 #### Sample Request: 
+![fetch_foodstallsapi](https://github.com/user-attachments/assets/655d035c-322b-4e7a-8296-21f2b79694ae)
 
 #### Sample Response: 
 
+![response fetch food](https://github.com/user-attachments/assets/504cc3bc-093e-4323-8003-5d68e0c08faf)
 
 ### 7. GetFoodMenu API
 
@@ -137,9 +139,11 @@ DeleteUser API deletes a user account based on their name.
 
 
 #### Sample Request: 
+![food menu request](https://github.com/user-attachments/assets/ddf07e71-a785-4333-a5d8-d2fe5f5f681d)
 
 #### Sample Response: 
 
+![food menu response](https://github.com/user-attachments/assets/cca1476c-2d67-440d-81f1-c2c29f8d82f2)
 
 ## Cart APIs
 
@@ -174,8 +178,10 @@ DeleteUser API deletes a user account based on their name.
   - `500 Internal Server Error`: Server error during addition
 
 #### Sample Request: 
+![add items cart request](https://github.com/user-attachments/assets/edc032c6-69ac-411d-9ea4-cfed9d0194f9)
 
 #### Sample Response: 
+![add items cart response](https://github.com/user-attachments/assets/ae53d565-599a-4fb2-9321-e3657b2196a6)
 
 
 ### 9. FetchCartItems API
@@ -209,8 +215,10 @@ DeleteUser API deletes a user account based on their name.
   - `500 Internal Server Error`: Server error during retrieval
 
 #### Sample Request: 
+![fetch cart req](https://github.com/user-attachments/assets/2c8beaac-7f4c-465f-8edb-f8e19e61b083)
 
 #### Sample Response: 
+![fetch cart respo](https://github.com/user-attachments/assets/cc4ec6c4-8724-407c-a7d2-0924487e9c19)
 
 
 ### 10. DeleteItemFromCart API
@@ -231,8 +239,10 @@ DeleteUser API deletes a user account based on their name.
   - `500 Internal Server Error`: Server error during deletion
 
 #### Sample Request: 
+![delete items req](https://github.com/user-attachments/assets/ddb62768-cde6-48b1-b4f2-551c2cfd3908)
 
 #### Sample Response: 
+![delete items respo ](https://github.com/user-attachments/assets/4ab2418e-95a3-479c-8de4-131511df0884)
 
 
 ### 12. EmptyCart API
@@ -253,7 +263,10 @@ DeleteUser API deletes a user account based on their name.
   - `500 Internal Server Error`: Server error during emptying
 
 #### Sample Request: 
+![empty cart req](https://github.com/user-attachments/assets/2212f2da-5574-4ed9-98ab-64025902ecb1)
+
 
 #### Sample Response: 
 
+![empty cart respo](https://github.com/user-attachments/assets/8dbade96-ca5f-44a9-853c-b23faf442127)
 
