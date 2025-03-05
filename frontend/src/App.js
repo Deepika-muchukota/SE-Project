@@ -20,7 +20,10 @@ import Layout from './Layout';
 function App() {
 
   // State variables for authentication and sign-up form
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("isLoggedIn") === "true";
+  });
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
