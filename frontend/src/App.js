@@ -16,7 +16,7 @@ import Steaks from './Burger_352/Steaks.'
 import Vegeterian from './Baba/Vegeterian';
 import Nvegeterian from './Baba/Nvegeterian';
 import Layout from './Layout';
-
+ 
 function App() {
 
   // State variables for authentication and sign-up form
