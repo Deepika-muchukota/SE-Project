@@ -19,11 +19,13 @@ import Layout from './Layout';
  
 function App() {
 
-  // State variables for authentication and sign-up form
+
+  const [isLoggedIn, setIsLoggedIn] = useState('true');
+  /* State variables for authentication and sign-up form
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem("isLoggedIn") === "true";
   });
-  
+  */
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -38,7 +40,7 @@ function App() {
 
   const [cart, setCart] = useState(() => {
     const savedCart = sessionStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    return savedCart ? JSON.parse(savedCart) : {};
   });
 
   // Persist cart changes (or trigger any side-effect) with useEffect
@@ -47,17 +49,19 @@ function App() {
   }, [cart]);
 
   // Global function to add or remove an item
-  const addItemToCart = (item, action = "add") => {
+  const addItemToCart = (item, action) => {
     setCart(prevCart => {
+      const updatedCart = { ...prevCart };
       if (action === "add") {
-        // Add the item only if it's not already in the cart
-        return prevCart.some(cartItem => cartItem.name === item.name)
-          ? prevCart
-          : [...prevCart, item];
+        updatedCart[item.name] = (updatedCart[item.name] || 0) + 1;
       } else if (action === "remove") {
-        return prevCart.filter(cartItem => cartItem.name !== item.name);
+        if (updatedCart[item.name] > 1) {
+          updatedCart[item.name] -= 1;
+        } else {
+          delete updatedCart[item.name];
+        }
       }
-      return prevCart;
+      return updatedCart;
     });
   };
 
