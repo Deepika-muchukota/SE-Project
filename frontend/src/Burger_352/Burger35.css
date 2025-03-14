@@ -10,6 +10,7 @@
   background-color: #2c3e50;
   width: 100vw;
 }
+
 .category-grid {
   display: flex;
   flex-wrap: wrap;
@@ -43,5 +44,5 @@
   transform: scale(1.05);
 }
 
-/* Ensuring exactly 2 rows */
+
 
