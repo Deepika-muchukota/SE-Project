@@ -8,7 +8,7 @@ const categories = [
   { name: "Chicken Wings", image: wings, price: "$10.99" },
 ];
 
-function Chicken({ cart = {}, addItemToCart }) {
+function Chicken({ cart={}, addItemToCart }) {
 
  const [selectedItems, setSelectedItems] = useState({});
 
@@ -19,7 +19,7 @@ useEffect(() => {
   }
 }, [cart, selectedItems]);
 
-const prevSelectedRef = useRef({}); // Ensure ref starts as an empty object
+const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
 
    useEffect(() => {
       setTimeout(() => {
