@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f8f8f8;
+    background-color: #ec7a0f76;
     min-height: 100vh;
     width: 100%;
 }
@@ -17,14 +17,14 @@
 
 .burger-table td {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     vertical-align: middle;
 }
 
 /* Image styling */
 .category-image {
-    width: 180px;
-    height: 180px;
+    width: 100px; /* Further reduced from 140px */
+    height: 100px; /* Further reduced from 140px */
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,7 +34,7 @@
 .category-name {
     font-size: 16px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 /* Quantity controls */
