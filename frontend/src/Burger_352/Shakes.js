@@ -17,6 +17,8 @@ function Shakes({ cart={}, addItemToCart }) {
 
  const [selectedItems, setSelectedItems] = useState({});
   
+ const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
+    
     useEffect(() => {
       if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
         setSelectedItems(cart);
@@ -24,7 +26,6 @@ function Shakes({ cart={}, addItemToCart }) {
       }
     }, [cart, selectedItems]);
     
-    const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
     
        useEffect(() => {
           setTimeout(() => {

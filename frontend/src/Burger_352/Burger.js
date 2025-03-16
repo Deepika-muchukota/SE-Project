@@ -17,6 +17,7 @@ const categories = [
 function Burger({ cart = {}, addItemToCart }) {
   const [selectedItems, setSelectedItems] = useState({});
 
+  const prevSelectedRef = useRef(cart || {});
   // Add this new useEffect right after defining selectedItems and prevSelectedRef:
 useEffect(() => {
   if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
@@ -26,7 +27,7 @@ useEffect(() => {
 }, [cart, selectedItems]);
 
   // Store the previous selectedItems to compute the delta later.
-  const prevSelectedRef = useRef(cart || {});
+
 
   // useEffect to update the cart whenever selectedItems changes.
   // We use setTimeout(..., 0) so that the effect runs after the render.
