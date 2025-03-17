@@ -9,17 +9,33 @@ import Babas from './Baba/Babas';
 import StarBucksDrinks from './Starbucks/StarBucksDrinks';
 import PandaExpress from './Panda_Exp/PandaExpress';
 import Burger from './Burger_352/Burger';
-import Chicken from './Burger_352/Chicken'
-import Shakes from './Burger_352/Shakes'
-import Sides from './Burger_352/Sides'
-import Steaks from './Burger_352/Steaks.'
+import Chicken from './Burger_352/Chicken';
+import Shakes from './Burger_352/Shakes';
+import Sides from './Burger_352/Sides';
+import Steaks from './Burger_352/Steaks.';
 import Vegeterian from './Baba/Vegeterian';
 import Nvegeterian from './Baba/Nvegeterian';
 import Layout from './Layout';
+
+// Import Subway components with the correct file names
+import Subway from './subway/subway';
+import Bread from './subway/bread';
+import Protien from './subway/protien';
+import Toppings from './subway/toppings';
+import Sauces from './subway/sauces';
+import SubwaySides from './subway/sides'; // Renamed to avoid conflict
+import Drinks from './subway/drinks';
+
+// Import Halal Shack components
+// Import Halal Shack components 
+import HalalShack from './Halal_shack/HalalShack';
+import Base from './Halal_shack/base';
+import HalalProtein from './Halal_shack/protein';
+import HalalToppings from './Halal_shack/toppings';
+import HalalSauces from './Halal_shack/sauces';
+import HalalDrinks from './Halal_shack/drinks';
  
 function App() {
-
-
   const [isLoggedIn, setIsLoggedIn] = useState('true');
   /* State variables for authentication and sign-up form
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -43,7 +59,7 @@ function App() {
     return savedCart ? JSON.parse(savedCart) : {};
   });
 
-  // Persist cart changes (or trigger any side-effect) with useEffect
+  // Persist cart changes with useEffect
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
@@ -65,7 +81,6 @@ function App() {
     });
   };
 
-  
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -127,6 +142,7 @@ function App() {
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/signin" />} />
 
+          {/* Existing Food Stall Routes */}
           <Route path="/foodstalls/burger352" element={<Burger352 />} />
           <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
           <Route path="/foodstalls/starbucks" element={<StarBucksDrinks cart={cart} addItemToCart={addItemToCart} />} />
@@ -138,6 +154,23 @@ function App() {
           <Route path="/foodstalls/burger352/steaks" element={<Steaks cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/Babas/ve" element={<Vegeterian cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/Babas/nve" element={<Nvegeterian cart={cart} addItemToCart={addItemToCart} />} />
+          
+          {/* Subway Routes - Using the actual file names you have */}
+          <Route path="/foodstalls/subway" element={<Subway cart={cart} />} />
+          <Route path="/foodstalls/subway/bread" element={<Bread cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway/protien" element={<Protien cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway/toppings" element={<Toppings cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway/sauces" element={<Sauces cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway/sides" element={<SubwaySides cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway/drinks" element={<Drinks cart={cart} addItemToCart={addItemToCart} />} />
+          
+          {/* Halal Shack Routes */}
+          <Route path="/foodstalls/halalshack" element={<HalalShack cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/base" element={<Base cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/protein" element={<HalalProtein cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/toppings" element={<HalalToppings cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/sauces" element={<HalalSauces cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/drinks" element={<HalalDrinks cart={cart} addItemToCart={addItemToCart} />} />
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,160 @@
+/* Main container */
+.halal-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e5631; /* Halal Shack green */
+  width: 100vw;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1); /* Light overlay */
+  z-index: -1;
+}
+
+.halal-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Category grid */
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* Category buttons */
+.category-button {
+  flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
+  max-width: calc(33.33% - 30px);
+  height: 210px; /* Increased height to give more room for text */
+  background-color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #292929;
+  font-size: 18px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  padding-bottom: 10px; /* Added padding to give more space for text */
+}
+
+.category-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.category-image {
+  width: 100%;
+  height: 65%;
+  object-fit: cover;
+}
+
+.category-name {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #292929;
+  padding: 10px 5px; /* Added padding */
+  width: 100%; /* Ensure it uses full width */
+  overflow: visible; /* Prevent text from being cut off */
+  text-align: center; /* Center the text */
+}
+
+/* Start Order Button */
+.start-order-btn {
+  background-color: #ffcc00;
+  color: #333;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 30px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.start-order-btn:hover {
+  background-color: #ffbb00;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Saved Order Section */
+.saved-order {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.saved-order-title {
+  color: #1e5631;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffcc00;
+  padding-bottom: 10px;
+}
+
+.reorder-btn {
+  background-color: #1e5631;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reorder-btn:hover {
+  background-color: #174726;
+  transform: translateY(-3px);
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+  .category-button {
+    flex: 1 1 calc(50% - 30px); /* 2 buttons per row */
+    max-width: calc(50% - 30px);
+  }
+}
+
+@media (max-width: 600px) {
+  .category-button {
+    flex: 1 1 100%; /* 1 button per row */
+    max-width: 100%;
+    height: 180px;
+  }
+  
+  .halal-title {
+    font-size: 2rem;
+  }
+}
