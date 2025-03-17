@@ -10,11 +10,12 @@ const categories = [
   { name: "Onion Rings", image: onion_rings , price: "$3.09"}
 ];
 
+
 function Sides({ cart, addItemToCart }) {
 
   const [selectedItems, setSelectedItems] = useState({});
 
-  const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
+  const prevSelectedRef = useRef(cart || {}); 
 
      useEffect(() => {
        if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
