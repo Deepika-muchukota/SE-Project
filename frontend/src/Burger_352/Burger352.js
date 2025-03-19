@@ -20,11 +20,11 @@ function Burger352() {
   return (
     <div className="burger-container">
       <div className="overlay"></div> 
-      <div className="category-grid">
+      <div className="b35-category-grid">
         {categories.map((category, index) => (
-          <button key={index} className="category-button" onClick={() => navigate(category.path)}>
-            <img src={category.image} alt={category.name} className="category-image" />
-            <p className="category-name">{category.name}</p>
+          <button key={index} className="b35-category-button" onClick={() => navigate(category.path)}>
+            <img src={category.image} alt={category.name} className="b35-category-image" />
+            <p className="b35-category-name">{category.name}</p>
           </button>
         ))}
       </div>
