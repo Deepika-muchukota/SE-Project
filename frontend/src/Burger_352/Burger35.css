@@ -12,7 +12,7 @@
   height: 100vh;
 }
 
-.category-grid {
+.b35-category-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -24,7 +24,7 @@
 }
 
 /* Ensuring uniform button sizes */
-.category-button {
+.b35-category-button {
   flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
   max-width: calc(33.33% - 30px);
   height: 20vh; /* Adjust height as needed */
@@ -41,7 +41,7 @@
   transition: transform 0.3s ease;
 }
 
-.category-button:hover {
+.b35-category-button:hover {
   transform: scale(1.05);
 }
 
