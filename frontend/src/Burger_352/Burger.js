@@ -117,7 +117,7 @@ useEffect(() => {
                   <p className="category-name">
                     {category.name} - {category.price}
                   </p>
-                  <div className="quantity-controls">
+                  <div className="b-quantity-controls">
                     <button onClick={() => handleRemoveItem(category)}>-</button>
                     <span>{selectedItems[category.name] || 0}</span>
                     <button onClick={() => handleSelectItem(category)}>+</button>

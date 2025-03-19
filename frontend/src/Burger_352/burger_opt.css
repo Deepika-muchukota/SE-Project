@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #ec510fdb;
+    background-color: #ec510f80;
     min-height: 100vh;
     width: 100%;
 }
@@ -38,7 +38,7 @@
 }
 
 /* Quantity controls */
-.quantity-controls {
+.b-quantity-controls {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,8 +46,8 @@
     gap: 10px;
 }
 
-.quantity-controls button {
-    background-color: #ff5900;
+.b-quantity-controls button {
+    background-color: #ffea0056;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -56,8 +56,8 @@
     font-size: 16px;
 }
 
-.quantity-controls button:hover {
-    background-color: #e68900;
+.b-quantity-controls button:hover {
+    background-color: #e6db00;
 }
 
 /* Confirm order button */

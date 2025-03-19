@@ -38,7 +38,11 @@ function NavBar({ cart, setCart, onLogout  }) {
           Finalize Order
         </button>
         <div className="navbar-cart">
-          <span className="cart-count">{cart.length}</span> Items
+          <span className="cart-count">
+          {cart && typeof cart === "object"
+      ? Object.values(cart).reduce((total, quantity) => total + quantity, 0)
+      : 0}
+          </span> Items
         </div>
         <button onClick={onLogout} className="logout-btn">
           Logout
