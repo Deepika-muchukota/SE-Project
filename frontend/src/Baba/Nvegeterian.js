@@ -23,7 +23,7 @@ function Nvegeterian({ cart, addItemToCart }) {
 
   const [selectedItems, setSelectedItems] = useState({});
    
-     const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
+     const prevSelectedRef = useRef(cart || {}); 
    
         useEffect(() => {
           if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {

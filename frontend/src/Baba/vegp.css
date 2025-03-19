@@ -17,7 +17,7 @@
   }
   
   .bab-grid-item {
-    flex: 1 1 calc(33.333% - 20px); /* Ensures three items per row */
+    flex: 1 1 calc(33.333% - 20px); 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -99,13 +99,13 @@
   /* Responsive adjustments */
   @media (max-width: 900px) {
     .bab-grid-item {
-      flex: 1 1 calc(50% - 20px); /* Two items per row */
+      flex: 1 1 calc(50% - 20px); 
     }
   }
   
   @media (max-width: 600px) {
     .bab-grid-item {
-      flex: 1 1 100%; /* One item per row */
+      flex: 1 1 100%; 
     }
   }
   
