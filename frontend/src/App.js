@@ -65,7 +65,10 @@ function App() {
   }, [cart]);
 
   // Global function to add or remove an item
-  const addItemToCart = (item, action) => {
+  const addItemToCart = (item, action='add') => {
+    if (!item || !item.name) {
+      return;
+    }
     setCart(prevCart => {
       const updatedCart = { ...prevCart };
       if (action === "add") {
@@ -80,6 +83,7 @@ function App() {
       return updatedCart;
     });
   };
+
 
   // Function to handle logout
   const handleLogout = () => {
