@@ -118,7 +118,7 @@ function Steaks({ cart, addItemToCart }) {
  
        {Object.keys(selectedItems).length > 0 && (
          <button className="confirm-order-button" onClick={handleConfirmOrder}>
-           Confirm Order
+         Add to Cart
          </button>
        )}
      </div>
