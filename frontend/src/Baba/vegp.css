@@ -1,109 +1,111 @@
-/* Veg Pizzas Page Container */
-.veg-opt-container {
-    position: relative;
-    width: 100vw;
+.bab-opt-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #cabd35;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #7d770a, #8b4513);
-    padding: 40px 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Grid layout for categories */
-.vcategory-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Reduced width */
-    gap: 5px;
     width: 100%;
-    max-width: 2900px; /* Adjusted max width */
-    margin: 0 auto;
-}
-
-/* Category Button */
-.vcategory-button {
-    background-color: #6b3e26;
-    border: none;
-    cursor: pointer;
+  }
+  
+  .bab-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 900px;
+  }
+  
+  .bab-grid-item {
+    flex: 1 1 calc(33.333% - 20px); /* Ensures three items per row */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    background: rgba(216, 24, 136, 0.562);
     border-radius: 10px;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
     overflow: hidden;
-    width: 100%;
-    height: 200px; /* Reduced height */
-}
-
-/* Hover effect */
-.vcategory-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.7);
-}
-
-/* Category Images - Adjusted for reduced button size */
-.vcategory-image {
-    width: 100%;
-    height: 120px; /* Reduced image height */
-    object-fit: contain;
-    border-radius: 10px 10px 0 0;
-    display: block;
-}
-
-/* Category Name */
-.vcategory-name {
-    font-weight: bold;
-    color: white;
-    font-size: 16px; /* Slightly smaller font */
-    text-transform: capitalize;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    max-width: 280px;
     text-align: center;
-    padding: 6px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .bab-grid-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .bab-category-image {
     width: 100%;
-}
-
-/* Confirm Order Button */
-.confirm-order-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff6600;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+    border-radius: 10px;
+  }
+  
+  .bab-category-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  .bab-quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .bab-quantity-controls button {
+    background: #ff6600;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 5px 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .bab-quantity-controls button:hover {
+    background: #e65c00;
+  }
+  
+  .bab-quantity-controls span {
     font-size: 18px;
     font-weight: bold;
-    border-radius: 8px;
+    color: #333;
+    min-width: 20px;
+    text-align: center;
+  }
+  
+  .confirm-order-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.confirm-order-btn:hover {
-    background-color: #e65c00;
-    transform: scale(1.05);
-}
-
-.category-button.selected {
-    background-color: #f39c12; /* Lighter yellow when selected */
-    border: 2px solid #ffcc00; /* Bright border when highlighted */
-    transform: scale(1.05); /* Slight scaling effect */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Stronger shadow for emphasis */
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .vcategory-grid {
-        grid-template-columns: repeat(2, minmax(180px, 1fr)); /* 2 per row */
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .confirm-order-button:hover {
+    background: #218838;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    .bab-grid-item {
+      flex: 1 1 calc(50% - 20px); /* Two items per row */
     }
-}
-
-@media (max-width: 768px) {
-    .vcategory-grid {
-        grid-template-columns: repeat(1, minmax(180px, 1fr)); /* 1 per row for mobile */
+  }
+  
+  @media (max-width: 600px) {
+    .bab-grid-item {
+      flex: 1 1 100%; /* One item per row */
     }
-}
+  }
+  
