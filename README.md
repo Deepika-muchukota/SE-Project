@@ -5,10 +5,11 @@
 - **Back End:** Kamal Kandula, Srinivas Kommineni
 
 **Problem Statement:**
-This project is a comprehensive online food ordering solution designed specifically for the University of Florida’s Reitz Union. It provides students, faculty, and staff with a seamless way to browse, order, and track food from various restaurants and shops within the union—all through a single platform.
+This project is a comprehensive online food ordering solution designed specifically for the University of Florida’s Reitz Union. It provides students, faculty, and staff with a seamless way to browse, order, and track food from various restaurants and shops within the union—all through a single platform. 
 
 **About:**
-"**UFShopEase**" is a comprehensive online food ordering platform designed specifically for the University of Florida’s Reitz Union. Built with React.js for a seamless and interactive front-end and Golang for a fast, scalable back-end, it streamlines food ordering for students, faculty, and staff. Users can effortlessly browse menus, place orders, and make secure payments while tracking their meals in real time. Restaurants benefit from an intuitive admin dashboard for efficient order management, inventory tracking, and sales analytics, ensuring a smooth and efficient dining experience across the Reitz Union.
+**UFShopEase** is a centralized, easy-to-use food ordering platform for the University of Florida's Reitz Union. The platform allows users to register once and order food from various restaurants in the union. Built using **React.js** for the frontend and **GoLang** with **Gin** and **GORM** for the backend, the system ensures scalability, fast API responses, and a smooth user experience.  
+Users can explore restaurant listings, browse menus, manage carts, and place orders securely. Restaurants can track incoming orders and manage their listings in future versions.
 
 **Key Features:**
 - **Unified Registration**: Users only need to sign up once to access all participating restaurants and stores at the Reitz Union.
