@@ -89,17 +89,25 @@ func FetchCartItems(c *gin.Context) {
 }
 
 // Delete specific item from cart
+// Delete specific item (user_id + menu_id)
 func DeleteItemFromCart(c *gin.Context) {
-	itemID := c.Param("id")
+	userIDStr := c.Param("userId")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil || userID == 0 {
+    	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+   		 return
+	}
 
-	result := database.DB.Delete(&models.CartItem{}, itemID)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+	menuID := c.Param("menuId")
+
+	if err := database.DB.Where("user_id = ? AND menu_id = ?", userID, menuID).Delete(&models.CartItem{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete item"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
+
 
 // Empty the entire cart for a user
 func EmptyCart(c *gin.Context) {
