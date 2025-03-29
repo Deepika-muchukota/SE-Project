@@ -14,4 +14,3 @@ function Layout({ children, cart, setCart, onLogout }) {
 }
 
 export default Layout;
-
