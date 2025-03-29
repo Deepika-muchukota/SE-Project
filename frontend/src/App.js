@@ -17,7 +17,7 @@ import Vegeterian from './Baba/Vegeterian';
 import Nvegeterian from './Baba/Nvegeterian';
 import Layout from './Layout';
 
-// Import Subway components with the correct file names
+// Import Subway components
 import Subway from './subway/subway';
 import Bread from './subway/bread';
 import Protien from './subway/protien';
@@ -26,7 +26,6 @@ import Sauces from './subway/sauces';
 import SubwaySides from './subway/sides'; // Renamed to avoid conflict
 import Drinks from './subway/drinks';
 
-// Import Halal Shack components
 // Import Halal Shack components 
 import HalalShack from './Halal_shack/HalalShack';
 import Base from './Halal_shack/base';
@@ -34,14 +33,10 @@ import HalalProtein from './Halal_shack/protein';
 import HalalToppings from './Halal_shack/toppings';
 import HalalSauces from './Halal_shack/sauces';
 import HalalDrinks from './Halal_shack/drinks';
- 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState('true');
-  /* State variables for authentication and sign-up form
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
-  });
-  */
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -54,36 +49,94 @@ function App() {
     localStorage.clear();
   }, []);
 
+  // Changed cart structure to store complete orders instead of individual items
   const [cart, setCart] = useState(() => {
     const savedCart = sessionStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : {};
+    return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Persist cart changes with useEffect
+  // Add this effect to log cart changes
   useEffect(() => {
+    console.log("Cart updated:", cart);
+    console.log("Total orders in cart:", cart.length);
     sessionStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Global function to add or remove an item
-  const addItemToCart = (item, action='add') => {
-    if (!item || !item.name) {
+  // Updated function to add complete orders to cart
+  const addOrderToCart = (order) => {
+    if (!order || !order.stall) {
+      console.warn("Tried to add invalid order to cart", order);
       return;
     }
+    
+    console.log("Adding order from:", order.stall);
+    
     setCart(prevCart => {
-      const updatedCart = { ...prevCart };
-      if (action === "add") {
-        updatedCart[item.name] = (updatedCart[item.name] || 0) + 1;
-      } else if (action === "remove") {
-        if (updatedCart[item.name] > 1) {
-          updatedCart[item.name] -= 1;
-        } else {
-          delete updatedCart[item.name];
-        }
-      }
-      return updatedCart;
+      // Generate a unique orderId for this order
+      const orderId = `${order.stall}-${Date.now()}`;
+      const orderWithId = {
+        ...order,
+        orderId: orderId,
+        timestamp: new Date().toISOString()
+      };
+      
+      return [...prevCart, orderWithId];
     });
   };
 
+  // Function to remove an order from cart
+  const removeOrderFromCart = (orderId) => {
+    setCart(prevCart => prevCart.filter(order => order.orderId !== orderId));
+  };
+
+  // Legacy function to maintain compatibility with existing components
+  const addItemToCart = (item, action='add', stallName = 'Individual Items') => {
+    if (!item || !item.name) {
+      console.warn("Tried to add invalid item to cart", item);
+      return;
+    }
+    
+    console.log(`${action === 'add' ? 'Adding' : 'Removing'} individual item from ${stallName}:`, item.name);
+    
+    // Create a simple order for individual items
+    if (action === "add") {
+      // Extract price properly - handle both number and string formats
+      let itemPrice = 0;
+      if (typeof item.price === 'number') {
+        itemPrice = item.price;
+      } else if (typeof item.price === 'string') {
+        // Remove $ sign and convert to number
+        itemPrice = parseFloat(item.price.replace(/[$,]/g, '')) || 0;
+      }
+      
+      const singleItemOrder = {
+        stall: stallName, // Use the provided stall name instead of default
+        items: [{ 
+          type: "Item", 
+          name: item.name, 
+          price: itemPrice,
+          quantity: 1
+        }],
+        totalPrice: itemPrice,
+      };
+      
+      addOrderToCart(singleItemOrder);
+    } else if (action === "remove") {
+      // Find the first order containing this item and remove it
+      setCart(prevCart => {
+        const orderIndex = prevCart.findIndex(order => 
+          order.stall === stallName && 
+          order.items.some(orderItem => orderItem.name === item.name)
+        );
+        
+        if (orderIndex === -1) return prevCart;
+        
+        const newCart = [...prevCart];
+        newCart.splice(orderIndex, 1);
+        return newCart;
+      });
+    }
+  };
 
   // Function to handle logout
   const handleLogout = () => {
@@ -101,7 +154,7 @@ function App() {
               isLoggedIn ? (
                 <Navigate to="/foodstalls" />
               ) : (
-                <SignIn/>
+                <SignIn setIsLoggedIn={setIsLoggedIn} />
               )
             }
           />
@@ -134,7 +187,7 @@ function App() {
            exact path="/foodstalls"
             element={
               isLoggedIn ? (
-                <Layout cart={cart} setCart={setCart} onLogout={handleLogout}>
+                <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
                   <FoodStalls onLogout={handleLogout} />
                 </Layout>
               ) : (
@@ -150,8 +203,11 @@ function App() {
           <Route path="/foodstalls/burger352" element={<Burger352 />} />
           <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
           <Route path="/foodstalls/starbucks" element={<StarBucksDrinks cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/panda-express" element={<PandaExpress />} />
-          <Route path="/foodstalls/burger352/burger"  element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
+          <Route 
+            path="/foodstalls/panda-express" 
+            element={<PandaExpress cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} 
+          />
+          <Route path="/foodstalls/burger352/burger" element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/chicken" element={<Chicken cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/shakes" element={<Shakes cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/burger352/sides" element={<Sides cart={cart} addItemToCart={addItemToCart} />} />
@@ -159,7 +215,7 @@ function App() {
           <Route path="/foodstalls/Babas/ve" element={<Vegeterian cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/Babas/nve" element={<Nvegeterian cart={cart} addItemToCart={addItemToCart} />} />
           
-          {/* Subway Routes - Using the actual file names you have */}
+          {/* Subway Routes */}
           <Route path="/foodstalls/subway" element={<Subway cart={cart} />} />
           <Route path="/foodstalls/subway/bread" element={<Bread cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/subway/protien" element={<Protien cart={cart} addItemToCart={addItemToCart} />} />
@@ -168,13 +224,13 @@ function App() {
           <Route path="/foodstalls/subway/sides" element={<SubwaySides cart={cart} addItemToCart={addItemToCart} />} />
           <Route path="/foodstalls/subway/drinks" element={<Drinks cart={cart} addItemToCart={addItemToCart} />} />
           
-          {/* Halal Shack Routes */}
-          <Route path="/foodstalls/halalshack" element={<HalalShack cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/base" element={<Base cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/protein" element={<HalalProtein cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/toppings" element={<HalalToppings cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/sauces" element={<HalalSauces cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/drinks" element={<HalalDrinks cart={cart} addItemToCart={addItemToCart} />} />
+          {/* Halal Shack Routes with updated props */}
+          <Route path="/foodstalls/halalshack" element={<HalalShack cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack/base" element={<Base cart={cart} />} />
+          <Route path="/foodstalls/halalshack/protein" element={<HalalProtein cart={cart} />} />
+          <Route path="/foodstalls/halalshack/toppings" element={<HalalToppings cart={cart} />} />
+          <Route path="/foodstalls/halalshack/sauces" element={<HalalSauces cart={cart} />} />
+          <Route path="/foodstalls/halalshack/drinks" element={<HalalDrinks cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} />
         </Routes>
       </div>
     </Router>

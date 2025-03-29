@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./sides.css"; 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import chips from "./subway_img/chips.jpeg";
 import cookies from "./subway_img/cookies.jpeg";
 
@@ -9,9 +9,45 @@ const categories = [
   { name: "Cookie", image: cookies, price: 0.89 }
 ];
 
-function Sides() {
+function Sides({ cart, addItemToCart }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [itemQuantities, setItemQuantities] = useState({});
+  const [isDirectOrder, setIsDirectOrder] = useState(false);
+  
+  // Define the stall name constant to use throughout the component
+  const STALL_NAME = "Subway";
+  
+  // Check if we're coming from the sandwich flow
+  useEffect(() => {
+    // Detect if this is standalone or part of a meal order
+    const hasExistingSandwich = sessionStorage.getItem('selectedBread') || 
+                               sessionStorage.getItem('selectedProteins') ||
+                               sessionStorage.getItem('selectedSauces');
+    
+    // Check if we came directly from the main subway menu
+    const fromMainMenu = location.state?.fromMainMenu || false;
+    
+    setIsDirectOrder(fromMainMenu || !hasExistingSandwich);
+    
+    // Load any previously selected sides from sessionStorage
+    const savedSides = sessionStorage.getItem('selectedSides');
+    if (savedSides) {
+      try {
+        const parsedSides = JSON.parse(savedSides);
+        const quantities = {};
+        
+        // Convert from the stored format to our quantities format
+        Object.entries(parsedSides).forEach(([name, details]) => {
+          quantities[name] = details.quantity;
+        });
+        
+        setItemQuantities(quantities);
+      } catch (e) {
+        console.error("Error parsing saved sides:", e);
+      }
+    }
+  }, [location]);
 
   const increaseQuantity = (item) => {
     setItemQuantities(prev => ({
@@ -50,7 +86,45 @@ function Sides() {
     
     // Store selection in sessionStorage for later
     sessionStorage.setItem('selectedSides', JSON.stringify(sidesWithDetails));
-    navigate("/foodstalls/subway/drinks");
+    
+    // Check if this is a direct sides order or part of a meal
+    if (isDirectOrder) {
+      // Handle standalone side order
+      if (Object.keys(itemQuantities).length > 0) {
+        // Add each side as a separate item to the cart
+        Object.entries(itemQuantities).forEach(([name, quantity]) => {
+          const item = categories.find(cat => cat.name === name);
+          if (item && quantity > 0) {
+            for (let i = 0; i < quantity; i++) {
+              // Use the addItemToCart function from props
+              const sideItem = {
+                name: name,
+                price: item.price,
+                orderType: "Side"
+              };
+              addItemToCart(sideItem, "add", STALL_NAME);
+            }
+          }
+        });
+        
+        // Calculate subtotal for sides
+        const subtotal = Object.entries(itemQuantities).reduce((total, [name, quantity]) => {
+          const item = categories.find(cat => cat.name === name);
+          return total + (item ? item.price * quantity : 0);
+        }, 0);
+        
+        // Clear the session storage for sides since we're not continuing the flow
+        sessionStorage.removeItem('selectedSides');
+        
+        alert(`Items added to cart! Total: $${subtotal.toFixed(2)}`);
+        navigate("/foodstalls");
+      } else {
+        alert("Please select at least one item.");
+      }
+    } else {
+      // Continue to drinks (part of sandwich flow)
+      navigate("/foodstalls/subway/drinks");
+    }
   };
 
   // Calculate subtotal for sides
@@ -118,15 +192,22 @@ function Sides() {
       <div className="navigation-buttons">
         <button 
           className="back-btn"
-          onClick={() => navigate("/foodstalls/subway/sauces")}
+          onClick={() => {
+            if (isDirectOrder) {
+              navigate("/foodstalls/subway");
+            } else {
+              navigate("/foodstalls/subway/sauces");
+            }
+          }}
         >
-          Back to Sauces
+          {isDirectOrder ? "Back to Menu" : "Back to Sauces"}
         </button>
         <button 
-          className="continue-btn" 
+          className={isDirectOrder ? "place-order-btn" : "continue-btn"} 
           onClick={handleContinue}
+          disabled={isDirectOrder && Object.keys(itemQuantities).length === 0}
         >
-          Continue to Drinks
+          {isDirectOrder ? `Add to Cart ($${subtotal.toFixed(2)})` : "Continue to Drinks"}
         </button>
       </div>
     </div>

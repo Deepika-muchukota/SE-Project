@@ -6,7 +6,7 @@ import hotSauceImg from "./Halal_img/hot_sauce.jpeg";
 import tahiniImg from "./Halal_img/tahini.jpeg";
 import redSauceImg from "./Halal_img/red_sauce.jpeg";
 
-function Sauces() {
+function Sauces({ cart, addItemToCart }) {
   const navigate = useNavigate();
   const [selectedSauces, setSelectedSauces] = useState([]);
   const [mealType, setMealType] = useState('bowl'); // Default to bowl if not set
@@ -18,28 +18,46 @@ function Sauces() {
     { name: "Red Sauce", price: 0.00, image: redSauceImg }
   ];
   
-  // Load meal type from sessionStorage on component mount
+  // Load meal type and existing selections from sessionStorage on component mount
   useEffect(() => {
     const savedMealType = sessionStorage.getItem('mealType');
     if (savedMealType) {
       setMealType(savedMealType);
     }
+
+    // Check if there are existing sauce selections
+    const savedSauces = sessionStorage.getItem('selectedSauces');
+    if (savedSauces) {
+      try {
+        const saucesData = JSON.parse(savedSauces);
+        if (Array.isArray(saucesData)) {
+          setSelectedSauces(saucesData);
+        }
+      } catch (e) {
+        console.error("Error parsing saved sauces:", e);
+      }
+    }
   }, []);
 
   const toggleSauce = (item) => {
+    let updatedSauces;
+    
     if (selectedSauces.includes(item.name)) {
       // Remove the sauce
-      setSelectedSauces(prev => prev.filter(name => name !== item.name));
+      updatedSauces = selectedSauces.filter(name => name !== item.name);
     } else {
       // Add the sauce
-      setSelectedSauces(prev => [...prev, item.name]);
+      updatedSauces = [...selectedSauces, item.name];
     }
+    
+    // Update state
+    setSelectedSauces(updatedSauces);
+    
+    // Store in sessionStorage
+    sessionStorage.setItem('selectedSauces', JSON.stringify(updatedSauces));
   };
 
   const handleContinue = () => {
-    // Store selection in sessionStorage for later
-    sessionStorage.setItem('selectedSauces', JSON.stringify(selectedSauces));
-    
     // Create the complete order before drinks
     const completeOrder = {
       mealType: mealType,

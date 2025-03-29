@@ -16,54 +16,78 @@ const categories = [
 
 function Burger({ cart = {}, addItemToCart }) {
   const [selectedItems, setSelectedItems] = useState({});
-
   const prevSelectedRef = useRef(cart || {});
-  // Add this new useEffect right after defining selectedItems and prevSelectedRef:
-useEffect(() => {
-  if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
-    setSelectedItems(cart);
-    prevSelectedRef.current = cart;
-  }
-}, [cart, selectedItems]);
+  
+  // Define the stall name constant to use throughout the component
+  const STALL_NAME = "Burger 352";
 
-  // Store the previous selectedItems to compute the delta later.
-
-
-  // useEffect to update the cart whenever selectedItems changes.
-  // We use setTimeout(..., 0) so that the effect runs after the render.
   useEffect(() => {
+    if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
+      setSelectedItems(cart);
+      prevSelectedRef.current = cart;
+    }
+  }, [cart, selectedItems]);
+
+  useEffect(() => {
+    if (!addItemToCart || typeof addItemToCart !== 'function') {
+      console.error("addItemToCart is not a function or is undefined");
+      return;
+    }
+
     setTimeout(() => {
       const prev = prevSelectedRef.current;
-
-      // For each item in the current selection, compute the delta.
-      Object.keys(selectedItems).forEach((itemName) => {
-        const newQty = selectedItems[itemName];
-        const oldQty = prev[itemName] || 0;
-        const delta = newQty - oldQty;
-        const item = categories.find((cat) => cat.name === itemName);
-        if (delta > 0) {
-          // If quantity increased, add the item delta times.
-          for (let i = 0; i < delta; i++) {
-            addItemToCart(item, "add");
-          }
-        } else if (delta < 0) {
-          // If quantity decreased, remove the item abs(delta) times.
-          for (let i = 0; i < -delta; i++) {
-            addItemToCart(item, "remove");
-          }
-        }
-      });
-
-      // Also handle items that were completely removed.
-      Object.keys(prev).forEach((itemName) => {
-        if (!(itemName in selectedItems)) {
-          const removedQty = prev[itemName];
+      
+      try {
+        // For each item in the current selection, compute the delta.
+        Object.keys(selectedItems).forEach((itemName) => {
+          const newQty = selectedItems[itemName];
+          const oldQty = prev[itemName] || 0;
+          const delta = newQty - oldQty;
           const item = categories.find((cat) => cat.name === itemName);
-          for (let i = 0; i < removedQty; i++) {
-            addItemToCart(item, "remove");
+          
+          if (delta > 0 && item) {
+            // If quantity increased, add the item delta times.
+            for (let i = 0; i < delta; i++) {
+              // Convert price from string to number by removing $ sign
+              const itemWithNumberPrice = {
+                ...item,
+                price: parseFloat(item.price.replace('$', ''))
+              };
+              addItemToCart(itemWithNumberPrice, "add", STALL_NAME);
+            }
+          } else if (delta < 0 && item) {
+            // If quantity decreased, remove the item abs(delta) times.
+            for (let i = 0; i < -delta; i++) {
+              // Convert price from string to number by removing $ sign
+              const itemWithNumberPrice = {
+                ...item,
+                price: parseFloat(item.price.replace('$', ''))
+              };
+              addItemToCart(itemWithNumberPrice, "remove", STALL_NAME);
+            }
           }
-        }
-      });
+        });
+
+        // Also handle items that were completely removed.
+        Object.keys(prev).forEach((itemName) => {
+          if (!(itemName in selectedItems)) {
+            const removedQty = prev[itemName];
+            const item = categories.find((cat) => cat.name === itemName);
+            if (item) {
+              for (let i = 0; i < removedQty; i++) {
+                // Convert price from string to number by removing $ sign
+                const itemWithNumberPrice = {
+                  ...item,
+                  price: parseFloat(item.price.replace('$', ''))
+                };
+                addItemToCart(itemWithNumberPrice, "remove", STALL_NAME);
+              }
+            }
+          }
+        });
+      } catch (error) {
+        console.error("Error in useEffect:", error);
+      }
 
       // Update the ref with the current selectedItems.
       prevSelectedRef.current = selectedItems;

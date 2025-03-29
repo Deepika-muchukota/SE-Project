@@ -70,12 +70,12 @@ const menuItemImages = {
 };
 
 const categories = [
-  { name: "Plate", image: plate, price: 10.00 },
-  { name: "Bigger Plate", image: bigger_plate, price: 11.50 },
-  { name: "Bowl", image: bowl, price: 8.50 },
-  { name: "Al a Carts", image: carts, price: 4.60 },
-  { name: "Drinks", image: drinks, price: 2.10 },
-  { name: "Appetizers", image: appetizers, price: 2.00 }
+  { name: "Plate", image: plate, price: "$9.49" },
+  { name: "Bigger Plate", image: bigger_plate, price: "$11.99" },
+  { name: "Bowl", image: bowl, price: "$7.99" },
+  { name: "Al a Carts", image: carts, price: "From $4.60" },
+  { name: "Drinks", image: drinks, price: "From $2.10" },
+  { name: "Appetizers", image: appetizers, price: "From $2.00" }
 ];
 
 // Menu options for each category
@@ -124,12 +124,21 @@ const menuOptions = {
   }
 };
 
-function PandaExpress() {
+// Actual numerical prices for calculations (not displayed on main page)
+const numericPrices = {
+  "Plate": 9.49,
+  "Bigger Plate": 11.99,
+  "Bowl": 7.99,
+  "Al a Carts": 4.60,
+  "Drinks": 2.10,
+  "Appetizers": 2.00
+};
+
+function PandaExpress({ cart = [], addOrderToCart, addItemToCart }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSide, setSelectedSide] = useState(null);
   const [selectedEntrees, setSelectedEntrees] = useState([]);
   const [selectedSize, setSelectedSize] = useState("Medium");
-  const [cart, setCart] = useState([]);
   const [selectedALaCarteItems, setSelectedALaCarteItems] = useState([]);
 
   // Handle category selection
@@ -184,7 +193,7 @@ function PandaExpress() {
 
   // Calculate price based on item and size
   const calculateItemPrice = (item) => {
-    const basePrice = selectedCategory.price;
+    const basePrice = numericPrices[selectedCategory.name];
     const sizeMultiplier = menuOptions[selectedCategory.name]?.sizeMultipliers?.[selectedSize] || 1;
     return basePrice * sizeMultiplier;
   };
@@ -198,49 +207,101 @@ function PandaExpress() {
       const updatedItems = selectedALaCarteItems.map(item => ({
         ...item,
         size: size,
-        price: selectedCategory.price * (menuOptions[selectedCategory.name]?.sizeMultipliers?.[size] || 1)
+        price: numericPrices[selectedCategory.name] * (menuOptions[selectedCategory.name]?.sizeMultipliers?.[size] || 1)
       }));
       setSelectedALaCarteItems(updatedItems);
     }
   };
 
-  // Handle add to cart
+  // Handle add to cart using the new cart structure
   const handleAddToCart = () => {
+    let orderItems = [];
+    let totalPrice = 0;
+    
     if (selectedCategory.name === "Al a Carts" || selectedCategory.name === "Drinks") {
-      // Add a la carte items to cart
-      setCart([...cart, ...selectedALaCarteItems]);
-    } else if (selectedCategory.name === "Appetizers") {
-      // Add appetizer to cart
-      selectedALaCarteItems.forEach(item => {
-        setCart([...cart, {
-          category: selectedCategory.name,
-          item: item.name,
-          price: selectedCategory.price,
+      // Add a la carte items
+      orderItems = selectedALaCarteItems.map(item => {
+        const itemTotal = item.price * item.quantity;
+        totalPrice += itemTotal;
+        
+        return {
+          type: selectedCategory.name === "Drinks" ? "Drink" : "A La Carte",
+          name: item.name,
+          size: item.size,
+          price: item.price,
           quantity: item.quantity
-        }]);
+        };
+      });
+    } else if (selectedCategory.name === "Appetizers") {
+      // Add appetizers
+      orderItems = selectedALaCarteItems.map(item => {
+        const itemTotal = numericPrices[selectedCategory.name] * item.quantity;
+        totalPrice += itemTotal;
+        
+        return {
+          type: "Appetizer",
+          name: item.name,
+          price: numericPrices[selectedCategory.name],
+          quantity: item.quantity
+        };
       });
     } else {
-      // Add meal to cart
-      setCart([...cart, {
-        category: selectedCategory.name,
-        side: selectedSide,
-        entrees: [...selectedEntrees],
-        price: selectedCategory.price
-      }]);
+      // Add meal (plate, bigger plate, bowl)
+      const mealPrice = numericPrices[selectedCategory.name];
+      totalPrice = mealPrice;
+      
+      // Add order type as first item
+      orderItems.push({
+        type: "Meal Type",
+        name: selectedCategory.name,
+        price: mealPrice,
+        isOrderType: true
+      });
+      
+      // Add side
+      orderItems.push({
+        type: "Side",
+        name: selectedSide,
+        price: 0 // Included in meal price
+      });
+      
+      // Add entrees
+      selectedEntrees.forEach(entree => {
+        orderItems.push({
+          type: "Entree",
+          name: entree,
+          price: 0 // Included in meal price
+        });
+      });
+    }
+    
+    // Create the complete order object
+    const completeOrder = {
+      stall: "Panda Express",
+      orderType: selectedCategory.name,
+      items: orderItems,
+      totalPrice: totalPrice,
+      price: totalPrice // Explicitly include price field
+    };
+    
+    // Use the addOrderToCart function from props if available
+    if (typeof addOrderToCart === 'function') {
+      addOrderToCart(completeOrder);
+    } else if (typeof addItemToCart === 'function') {
+      // Pass the complete order as a single item
+      addItemToCart({
+        name: `${selectedCategory.name} - Panda Express`, // Include the meal type in the name
+        orderType: selectedCategory.name,
+        items: orderItems,
+        totalPrice: totalPrice,
+        price: totalPrice, // Explicit price field
+        stall: "Panda Express"
+      }, "add", "Panda Express", true);
     }
     
     // Reset selection
     setSelectedALaCarteItems([]);
-  };
-
-  // Calculate total price
-  const calculateTotal = () => {
-    return cart.reduce((total, item) => {
-      if (item.quantity) {
-        return total + (item.price * item.quantity);
-      }
-      return total + item.price;
-    }, 0);
+    alert("Added to cart successfully!");
   };
 
   // Handle back to categories
@@ -249,13 +310,6 @@ function PandaExpress() {
     setSelectedSide(null);
     setSelectedEntrees([]);
     setSelectedALaCarteItems([]);
-  };
-
-  // Remove item from cart
-  const handleRemoveFromCart = (index) => {
-    const newCart = [...cart];
-    newCart.splice(index, 1);
-    setCart(newCart);
   };
 
   // Render based on current state
@@ -284,7 +338,7 @@ function PandaExpress() {
                       className={`size-button ${selectedSize === size ? 'selected' : ''}`}
                       onClick={() => handleSizeSelect(size)}
                     >
-                      {size} (${(selectedCategory.price * (options.sizeMultipliers[size] || 1)).toFixed(2)})
+                      {size} (${(numericPrices[selectedCategory.name] * (options.sizeMultipliers[size] || 1)).toFixed(2)})
                     </button>
                   ))}
                 </div>
@@ -359,8 +413,8 @@ function PandaExpress() {
                       <div className="menu-item-name">{option}</div>
                       <div className="menu-item-price">
                         ${selectedCategory.name === "Al a Carts" || selectedCategory.name === "Drinks" 
-                          ? (selectedCategory.price * (options.sizeMultipliers?.[selectedSize] || 1)).toFixed(2)
-                          : selectedCategory.price.toFixed(2)}
+                          ? (numericPrices[selectedCategory.name] * (options.sizeMultipliers?.[selectedSize] || 1)).toFixed(2)
+                          : numericPrices[selectedCategory.name].toFixed(2)}
                       </div>
                     </div>
                   ))}
@@ -376,11 +430,11 @@ function PandaExpress() {
             {/* Current selection summary */}
             {(selectedCategory.name === "Plate" || selectedCategory.name === "Bigger Plate" || selectedCategory.name === "Bowl") && (
               <div className="current-selection">
-                <h4>Current Selection</h4>
+                <h4>Current Selection: {selectedCategory.name}</h4>
                 <p><strong>Side:</strong> {selectedSide || "None selected"}</p>
                 <p><strong>Entrees:</strong> {selectedEntrees.length > 0 ? selectedEntrees.join(", ") : "None selected"}</p>
                 {selectedSide && selectedEntrees.length > 0 && (
-                  <p><strong>Price:</strong> ${selectedCategory.price.toFixed(2)}</p>
+                  <p><strong>Price:</strong> ${numericPrices[selectedCategory.name].toFixed(2)}</p>
                 )}
               </div>
             )}
@@ -388,7 +442,7 @@ function PandaExpress() {
             {/* A La Carte selection summary */}
             {(selectedCategory.name === "Al a Carts" || selectedCategory.name === "Drinks" || selectedCategory.name === "Appetizers") && (
               <div className="current-selection">
-                <h4>Current Selection</h4>
+                <h4>Current Selection: {selectedCategory.name}</h4>
                 {selectedALaCarteItems.length > 0 ? (
                   <div>
                     <p><strong>Size:</strong> {selectedSize}</p>
@@ -425,40 +479,6 @@ function PandaExpress() {
             >
               Add to Order
             </button>
-            
-            {/* Cart items */}
-            {cart.length > 0 && (
-              <div className="cart-summary">
-                <h4>Cart</h4>
-                <div className="cart-items">
-                  {cart.map((item, index) => (
-                    <div key={index} className="cart-item">
-                      {item.category === "Plate" || item.category === "Bigger Plate" || item.category === "Bowl" ? (
-                        <div>
-                          <p>
-                            <strong>{item.category}:</strong> {item.side}, {item.entrees.join(", ")}
-                          </p>
-                          <p className="item-price">${item.price.toFixed(2)}</p>
-                        </div>
-                      ) : (
-                        <div>
-                          <p>
-                            <strong>{item.size || ""} {item.name || item.item}:</strong>
-                            {" "}${(item.price * (item.quantity || 1)).toFixed(2)}
-                            {item.quantity > 1 && ` (${item.quantity}x)`}
-                          </p>
-                        </div>
-                      )}
-                      <button className="remove-item" onClick={() => handleRemoveFromCart(index)}>×</button>
-                    </div>
-                  ))}
-                </div>
-                <div className="cart-total">
-                  <p><strong>Total:</strong> ${calculateTotal().toFixed(2)}</p>
-                </div>
-                <button className="checkout-button">Checkout</button>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -481,18 +501,10 @@ function PandaExpress() {
             >
               <img src={category.image} alt={category.name} className="category-image" />
               <p className="category-name">{category.name}</p>
-              <p className="category-price">${category.price.toFixed(2)}</p>
+              <p className="category-price">{category.price}</p>
             </button>
           ))}
         </div>
-        
-        {/* Cart summary at the bottom for main page */}
-        {cart.length > 0 && (
-          <div className="cart-summary-mini">
-            <p><strong>Cart Items:</strong> {cart.length} | <strong>Total:</strong> ${calculateTotal().toFixed(2)}</p>
-            <button className="view-cart-button">View Cart</button>
-          </div>
-        )}
       </div>
     </div>
   );

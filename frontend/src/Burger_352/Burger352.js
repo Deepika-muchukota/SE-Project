@@ -1,29 +1,42 @@
 import React from "react";
-import "./Burger35.css"; 
 import { useNavigate } from "react-router-dom";
-import burger from "./burger352_images/burger.jpeg";
-import steaks from "./burger352_images/steaks.jpeg";
-import chicken from "./burger352_images/chicken.jpeg";
-import sides from "./burger352_images/sides.jpeg";
-import shakes from "./burger352_images/shakes.jpeg";
+import "./Burger35.css";
+import burgerImage from "./burger352_images/burger.jpeg";
+import chickenImage from "./burger352_images/chicken.jpeg";
+import shakesImage from "./burger352_images/shakes.jpeg";
+import sidesImage from "./burger352_images/sides.jpeg";
+import steakImage from "./burger352_images/steaks.jpeg";
 
 const categories = [
-  { name: "Burgers", image: burger, path: "/foodstalls/burger352/burger" },
-  { name: "Cheese Steaks", image:steaks, path:"/foodstalls/burger352/steaks"  },
-  { name: "Chicken Options", image:chicken, path:"/foodstalls/burger352/chicken" },
-  { name: "Sides", image: sides, path:"/foodstalls/burger352/sides" ,  },
-  { name: "Shakes", image: shakes, path:"/foodstalls/burger352/shakes" },
+  { name: "Burgers", image: burgerImage, path: "/foodstalls/burger352/burger" },
+  { name: "Chicken", image: chickenImage, path: "/foodstalls/burger352/chicken" },
+  { name: "Shakes", image: shakesImage, path: "/foodstalls/burger352/shakes" },
+  { name: "Sides", image: sidesImage, path: "/foodstalls/burger352/sides" },
+  { name: "Steaks", image: steakImage, path: "/foodstalls/burger352/steaks" }
 ];
 
 function Burger352() {
   const navigate = useNavigate();
+
+  const handleCategoryClick = (path) => {
+    navigate(path);
+  };
+
   return (
     <div className="burger-container">
-      <div className="overlay"></div> 
+      <div className="overlay"></div>
       <div className="b35-category-grid">
         {categories.map((category, index) => (
-          <button key={index} className="b35-category-button" onClick={() => navigate(category.path)}>
-            <img src={category.image} alt={category.name} className="b35-category-image" />
+          <button
+            key={index}
+            className="b35-category-button"
+            onClick={() => handleCategoryClick(category.path)}
+          >
+            <img 
+              src={category.image} 
+              alt={category.name} 
+              className="b35-category-image" 
+            />
             <p className="b35-category-name">{category.name}</p>
           </button>
         ))}

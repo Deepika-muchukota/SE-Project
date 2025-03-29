@@ -5,7 +5,7 @@ import riceImg from "./Halal_img/white-rice.png";
 import saladImg from "./Halal_img/salad.jpeg";
 import quinoaImg from "./Halal_img/quinoa.jpeg";
 
-function Base() {
+function Base({ cart, addItemToCart }) {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
   const [mealType, setMealType] = useState('bowl'); // Default to bowl if not set
@@ -16,11 +16,25 @@ function Base() {
     { name: "Quinoa", price: 1.50, image: quinoaImg }
   ];
   
-  // Load meal type from sessionStorage on component mount
+  // Load meal type and existing selection from sessionStorage on component mount
   useEffect(() => {
     const savedMealType = sessionStorage.getItem('mealType');
     if (savedMealType) {
       setMealType(savedMealType);
+    }
+
+    // Check if there's an existing base selection
+    const savedBase = sessionStorage.getItem('selectedBase');
+    if (savedBase) {
+      try {
+        const baseData = JSON.parse(savedBase);
+        const foundItem = categories.find(item => item.name === baseData.name);
+        if (foundItem) {
+          setSelectedItem(foundItem);
+        }
+      } catch (e) {
+        console.error("Error parsing saved base:", e);
+      }
     }
   }, []);
 
@@ -28,17 +42,16 @@ function Base() {
     // If this item is already selected, deselect it
     if (selectedItem && selectedItem.name === item.name) {
       setSelectedItem(null);
+      sessionStorage.removeItem('selectedBase');
     } else {
       // Select the new item
       setSelectedItem(item);
+      // Store selected item in sessionStorage for later reference
+      sessionStorage.setItem('selectedBase', JSON.stringify(item));
     }
   };
 
   const handleContinue = () => {
-    // Store selected item in sessionStorage for later reference if needed
-    if (selectedItem) {
-      sessionStorage.setItem('selectedBase', JSON.stringify(selectedItem));
-    }
     // Navigate to the protein page
     navigate("/foodstalls/halalshack/protein");
   };

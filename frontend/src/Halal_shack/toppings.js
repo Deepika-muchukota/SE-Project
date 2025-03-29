@@ -7,7 +7,7 @@ import cucumberImg from "./Halal_img/cucumber.jpeg";
 import onionsImg from "./Halal_img/onions.jpeg";
 import olivesImg from "./Halal_img/olives.jpeg";
 
-function Toppings() {
+function Toppings({ cart, addItemToCart }) {
   const navigate = useNavigate();
   const [selectedToppings, setSelectedToppings] = useState([]);
   const [mealType, setMealType] = useState('bowl'); // Default to bowl if not set
@@ -20,27 +20,46 @@ function Toppings() {
     { name: "Olives", price: 0.00, image: olivesImg }
   ];
   
-  // Load meal type from sessionStorage on component mount
+  // Load meal type and existing selections from sessionStorage on component mount
   useEffect(() => {
     const savedMealType = sessionStorage.getItem('mealType');
     if (savedMealType) {
       setMealType(savedMealType);
     }
+
+    // Check if there are existing topping selections
+    const savedToppings = sessionStorage.getItem('selectedToppings');
+    if (savedToppings) {
+      try {
+        const toppingsData = JSON.parse(savedToppings);
+        if (Array.isArray(toppingsData)) {
+          setSelectedToppings(toppingsData);
+        }
+      } catch (e) {
+        console.error("Error parsing saved toppings:", e);
+      }
+    }
   }, []);
 
   const toggleTopping = (item) => {
+    let updatedToppings;
+    
     if (selectedToppings.includes(item.name)) {
       // Remove the topping
-      setSelectedToppings(prev => prev.filter(name => name !== item.name));
+      updatedToppings = selectedToppings.filter(name => name !== item.name);
     } else {
       // Add the topping
-      setSelectedToppings(prev => [...prev, item.name]);
+      updatedToppings = [...selectedToppings, item.name];
     }
+    
+    // Update state
+    setSelectedToppings(updatedToppings);
+    
+    // Store in sessionStorage
+    sessionStorage.setItem('selectedToppings', JSON.stringify(updatedToppings));
   };
 
   const handleContinue = () => {
-    // Store selection in sessionStorage for later
-    sessionStorage.setItem('selectedToppings', JSON.stringify(selectedToppings));
     // Navigate to the sauces page
     navigate("/foodstalls/halalshack/sauces");
   };

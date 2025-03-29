@@ -5,7 +5,7 @@ import chickenImg from "./Halal_img/chicken.png";
 import beefImg from "./Halal_img/beef.png";
 import falafelImg from "./Halal_img/falafel.png";
 
-function Protein() {
+function Protein({ cart, addItemToCart }) {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
   const [mealType, setMealType] = useState('bowl'); // Default to bowl if not set
@@ -16,11 +16,25 @@ function Protein() {
     { name: "Falafel", price: 4.99, image: falafelImg }
   ];
   
-  // Load meal type from sessionStorage on component mount
+  // Load meal type and existing selection from sessionStorage on component mount
   useEffect(() => {
     const savedMealType = sessionStorage.getItem('mealType');
     if (savedMealType) {
       setMealType(savedMealType);
+    }
+
+    // Check if there's an existing protein selection
+    const savedProtein = sessionStorage.getItem('selectedProtein');
+    if (savedProtein) {
+      try {
+        const proteinData = JSON.parse(savedProtein);
+        const foundItem = categories.find(item => item.name === proteinData.name);
+        if (foundItem) {
+          setSelectedItem(foundItem);
+        }
+      } catch (e) {
+        console.error("Error parsing saved protein:", e);
+      }
     }
   }, []);
 
@@ -28,17 +42,16 @@ function Protein() {
     // If this item is already selected, deselect it
     if (selectedItem && selectedItem.name === item.name) {
       setSelectedItem(null);
+      sessionStorage.removeItem('selectedProtein');
     } else {
       // Select the new item
       setSelectedItem(item);
+      // Store selected item in sessionStorage for later reference
+      sessionStorage.setItem('selectedProtein', JSON.stringify(item));
     }
   };
 
   const handleContinue = () => {
-    // Store selected item in sessionStorage for later reference if needed
-    if (selectedItem) {
-      sessionStorage.setItem('selectedProtein', JSON.stringify(selectedItem));
-    }
     // Navigate to the next page
     navigate("/foodstalls/halalshack/toppings");
   };
