@@ -111,18 +111,22 @@ func DeleteItemFromCart(c *gin.Context) {
 
 // Empty the entire cart for a user
 func EmptyCart(c *gin.Context) {
-    userID := c.Param("userId")
-    
-    if userID == "15" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
-        return
-    }
+	userIDStr := c.Param("userId")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil || userID == 0 {
+    	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+   		 return
+	}
+	userID, err = strconv.Atoi(userIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
 
-    result := database.DB.Where("user_id = ?", userID).Delete(&models.CartItem{})
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-        return
-    }
-
-    c.JSON(http.StatusOK, gin.H{"message": "Cart emptied successfully"})
+	if err := database.DB.Where("user_id = ?", userID).Delete(&models.CartItem{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to empty cart"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Cart emptied successfully"})
 }
+
