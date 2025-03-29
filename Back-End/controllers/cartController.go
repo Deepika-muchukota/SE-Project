@@ -5,9 +5,10 @@ import (
 	"SE-Project/Back-End/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
-// Add item to cart
+// Add or update item in cart
 func AddItemToCart(c *gin.Context) {
 	var input models.CartItem
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -49,7 +50,6 @@ func AddItemToCart(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart", "cartItem": input})
 }
 
-
 // Get all cart items for a user (with name and price)
 func FetchCartItems(c *gin.Context) {
 	userIDStr := c.Param("userId")
@@ -88,8 +88,7 @@ func FetchCartItems(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"cartItems": response})
 }
 
-// Delete specific item from cart
-// Delete specific item (user_id + menu_id)
+// ✅ Delete specific item (user_id + menu_id)
 func DeleteItemFromCart(c *gin.Context) {
 	userIDStr := c.Param("userId")
 	userID, err := strconv.Atoi(userIDStr)
@@ -108,8 +107,7 @@ func DeleteItemFromCart(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Item deleted from cart"})
 }
 
-
-// Empty the entire cart for a user
+// Empty cart for user on logout
 func EmptyCart(c *gin.Context) {
 	userIDStr := c.Param("userId")
 	userID, err := strconv.Atoi(userIDStr)
@@ -129,4 +127,3 @@ func EmptyCart(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Cart emptied successfully"})
 }
-
