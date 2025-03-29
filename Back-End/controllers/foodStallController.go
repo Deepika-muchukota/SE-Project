@@ -38,3 +38,16 @@ func GetFoodMenu(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"menu": menu})
 }
+
+// Fetch all menu items across stalls
+func GetAllMenuItems(c *gin.Context) {
+	var menuItems []models.MenuItem
+
+	result := database.DB.Find(&menuItems)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"menuItems": menuItems})
+}
