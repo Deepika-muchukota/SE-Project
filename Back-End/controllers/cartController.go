@@ -9,19 +9,46 @@ import (
 
 // Add item to cart
 func AddItemToCart(c *gin.Context) {
-	var cartItem models.CartItem
-	if err := c.ShouldBindJSON(&cartItem); err != nil {
+	var input models.CartItem
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := database.DB.Create(&cartItem).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add item to cart"})
+	// Fetch menu item info
+	var menu models.MenuItem
+	if err := database.DB.First(&menu, input.MenuID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Menu item not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart", "cartItem": cartItem})
+	var existing models.CartItem
+	result := database.DB.
+		Where("user_id = ? AND menu_id = ?", input.UserID, input.MenuID).
+		First(&existing)
+
+	if result.RowsAffected > 0 {
+		existing.Quantity = input.Quantity
+		if err := database.DB.Save(&existing).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update quantity"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Quantity updated", "cartItem": existing})
+		return
+	}
+
+	// Add name and price to the new entry
+	input.Name = menu.Name
+	input.Price = menu.Price
+
+	if err := database.DB.Create(&input).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add item"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart", "cartItem": input})
 }
+
 
 // Get cart items for a user
 func FetchCartItems(c *gin.Context) {
