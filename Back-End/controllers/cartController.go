@@ -50,18 +50,42 @@ func AddItemToCart(c *gin.Context) {
 }
 
 
-// Get cart items for a user
+// Get all cart items for a user (with name and price)
 func FetchCartItems(c *gin.Context) {
-	var cartItems []models.CartItem
-	userID := c.Param("userId")
-
-	result := database.DB.Where("user_id = ?", userID).Find(&cartItems)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+	userIDStr := c.Param("userId")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"cartItems": cartItems})
+	var cartItems []models.CartItem
+	if err := database.DB.Where("user_id = ?", userID).Find(&cartItems).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch cart items"})
+		return
+	}
+
+	type CartItemDetail struct {
+		MenuID   uint    `json:"menu_id"`
+		Name     string  `json:"name"`
+		Price    float64 `json:"price"`
+		Quantity uint    `json:"quantity"`
+	}
+
+	var response []CartItemDetail
+	for _, cartItem := range cartItems {
+		var menu models.MenuItem
+		if err := database.DB.First(&menu, cartItem.MenuID).Error; err == nil {
+			response = append(response, CartItemDetail{
+				MenuID:   cartItem.MenuID,
+				Name:     menu.Name,
+				Price:    menu.Price,
+				Quantity: cartItem.Quantity,
+			})
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"cartItems": response})
 }
 
 // Delete specific item from cart
