@@ -50,7 +50,7 @@ function App() {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("authToken");
 
-  // ✅ Fetch all menu items once logged in
+  // Fetch all menu items once logged in
   useEffect(() => {
     const fetchMenus = async () => {
       try {
@@ -75,7 +75,7 @@ function App() {
     }
   }, [isLoggedIn]);
 
-  // ✅ Fetch cart items from backend on login
+  // Fetch cart items from backend on login
   useEffect(() => {
     if (!user || !token) return;
 
@@ -103,12 +103,12 @@ function App() {
     fetchCart();
   }, [isLoggedIn, menuItems]);
 
-  // 🔄 Sync local cart to sessionStorage
+  // Sync local cart to sessionStorage
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  // ✅ Add/Remove cart items and sync with backend
+  // Add/Remove cart items and sync with backend
   const addItemToCart = async (item, action = 'add') => {
     const currentUser = JSON.parse(localStorage.getItem("user"));
     if (!item || !item.name || !currentUser) return;
