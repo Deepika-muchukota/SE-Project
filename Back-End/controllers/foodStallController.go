@@ -51,3 +51,13 @@ func GetAllMenuItems(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"menuItems": menuItems})
 }
+
+func GetMenuItemByName(c *gin.Context) {
+    name := c.Param("name")
+    var item models.MenuItem
+    if err := database.DB.Where("name = ?", name).First(&item).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Menu item not found"})
+        return
+    }
+    c.JSON(http.StatusOK, gin.H{"menuItem": item})
+}
