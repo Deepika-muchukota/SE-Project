@@ -39,6 +39,7 @@ const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword
     return Object.keys(newErrors).length === 0;
   };
 
+  /*
   const createUser = () => {
     axios.post('http://localhost:3500/items', {
       "Name": name,
@@ -53,7 +54,23 @@ const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword
         console.log(error);
       });
   }
+  */
 
+  const createUser = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/users/signup", {
+        name,
+        email,
+        phone,
+        password
+      });
+      console.log("Signup successful:", response.data);
+      navigate("/signin");
+    } catch (error) {
+      console.error("Signup failed:", error.response?.data?.error || error.message);
+    }
+  };  
+  
   return (
     <div className='sign-up-page'
     style={{
