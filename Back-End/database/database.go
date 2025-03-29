@@ -20,5 +20,5 @@ func ConnectDB() {
 	db.AutoMigrate(&models.User{}, &models.FoodStall{}, &models.MenuItem{}, &models.CartItem{})
 
 	DB = db
-	log.Println("Database connected successfully!")
+	log.Println("Database connected successfully!!")
 }

@@ -27,11 +27,13 @@ func main() {
 	// Food Stalls & Menu Routes
 	r.GET("/api/foodstalls", controllers.GetFoodStalls)
 	r.GET("/api/foodstalls/:id/menu", controllers.GetFoodMenu)
+	r.GET("/api/all-menu-items", controllers.GetAllMenuItems)
+	r.GET("/api/menu/item/:name", controllers.GetMenuItemByName)
 
 	// Cart Routes
 	r.POST("/api/cart/add", controllers.AddItemToCart)
 	r.GET("/api/cart/:userId", controllers.FetchCartItems)
-	r.DELETE("/api/cart/delete/:id", controllers.DeleteItemFromCart)
+	r.DELETE("/api/cart/delete/:userId/:menuId", controllers.DeleteItemFromCart)
 	r.DELETE("/api/cart/empty/:userId", controllers.EmptyCart)
 
 	// Start the server on port 5000
