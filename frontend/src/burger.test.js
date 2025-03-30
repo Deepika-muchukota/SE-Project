@@ -10,8 +10,8 @@ describe("Burger Component", () => {
   test("renders component correctly", () => {
     render(<Burger cart={{}} addItemToCart={mockAddItemToCart} />);
 
-    expect(screen.getByText("Chicken Strips - $10.79")).toBeTruthy();  // Alternative check
-    expect(screen.getByText("Chicken Wings - $10.99")).toBeTruthy();
+    expect(screen.getByText("The Classic - $8.99")).toBeTruthy();  // Alternative check
+    expect(screen.getByText("The Bacon Jam - $9.29")).toBeTruthy();
   });
 
   test("increments and decrements item quantity correctly", () => {
