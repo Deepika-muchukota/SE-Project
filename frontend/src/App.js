@@ -12,7 +12,7 @@ import Burger from './Burger_352/Burger';
 import Chicken from './Burger_352/Chicken';
 import Shakes from './Burger_352/Shakes';
 import Sides from './Burger_352/Sides';
-import Steaks from './Burger_352/Steaks.';
+import Steaks from './Burger_352/Steaks';
 import Vegeterian from './Baba/Vegeterian';
 import Nvegeterian from './Baba/Nvegeterian';
 import Layout from './Layout';
