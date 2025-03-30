@@ -1,21 +1,21 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Steaks from "./Burger_352/Steaks";
+import Sides from "./Burger_352/Sides";
 
 
-describe("Steaks Component", () => {
+describe("Sides Component", () => {
   const mockAddItemToCart = jest.fn();
 
 
   test("renders component correctly", () => {
-    render(<Steaks cart={{}} addItemToCart={mockAddItemToCart} />);
-
-    expect(screen.getByText("Philly - $10.99")).toBeTruthy();  // Alternative check
-    expect(screen.getByText("Chicken Philly - $10.99")).toBeTruthy();
+    render(<Sides cart={{}} addItemToCart={mockAddItemToCart} />);
+    expect(screen.getByText("Fries - $2.49")).toBeTruthy();
+    expect(screen.getByText("Sweet Fries - $2.49")).toBeTruthy();  // Alternative check
+    expect(screen.getByText("Onion Rings - $3.09")).toBeTruthy();
   });
 
   test("increments and decrements item quantity correctly", () => {
-    render(<Steaks cart={{}} addItemToCart={mockAddItemToCart} />);
+    render(<Sides cart={{}} addItemToCart={mockAddItemToCart} />);
 
     const incrementButton = screen.getAllByText("+")[0];
     const decrementButton = screen.getAllByText("-")[0];
@@ -35,7 +35,7 @@ describe("Steaks Component", () => {
   });
 
   test("displays 'Add to Cart' button when items are selected", () => {
-    render(<Steaks cart={{}} addItemToCart={mockAddItemToCart} />);
+    render(<Sides cart={{}} addItemToCart={mockAddItemToCart} />);
 
     // Initially, the button should NOT be in the document
     expect(screen.queryByText("Add to Cart")).not.toBeTruthy();
@@ -50,7 +50,7 @@ describe("Steaks Component", () => {
   test("updates cart state on confirm order", () => {
     global.alert = jest.fn(); // Mock alert to prevent pop-ups
 
-    render(<Steaks cart={{}} addItemToCart={mockAddItemToCart} />);
+    render(<Sides cart={{}} addItemToCart={mockAddItemToCart} />);
 
     fireEvent.click(screen.getAllByText("+")[0]); // Add an item
     fireEvent.click(screen.getByText("Add to Cart")); // Click 'Add to Cart'
