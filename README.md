@@ -15,8 +15,4 @@ Users can explore restaurant listings, browse menus, manage carts, and place ord
 - **Unified Registration**: Users only need to sign up once to access all participating restaurants and stores at the Reitz Union.
 - **Restaurant & Menu Access**: View menus, special deals, and available food options from all eateries in one place.  
 - **Seamless Ordering**: Easily place orders from multiple vendors within the Reitz Union. 
-- **Real-Time Order Tracking**: Monitor the status of ongoing orders, from preparation to pickup/delivery. 
 - **Secure Payments & Transactions**: Supports multiple payment methods, including credit/debit cards, UF meal plans, and digital wallets.  
-- **Reward System**: Earn points for every purchase and redeem them for free meals or discounts.
-- **Order History & Reordering**: Users can access past orders for easy reordering and tracking expenses.
-- **Notifications & Alerts**: Get updates on order status, exclusive deals, and loyalty rewards.
