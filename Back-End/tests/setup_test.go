@@ -26,5 +26,11 @@ func SetupRouter() *gin.Engine {
 	r.DELETE("/api/cart/delete/:id", controllers.DeleteItemFromCart)
 	r.DELETE("/api/cart/empty", controllers.EmptyCart)
 
+	r.GET("/api/all-menu-items", controllers.GetAllMenuItems)
+	r.GET("/api/menu/item/:name", controllers.GetMenuItemByName)
+	r.PUT("/api/cart/update", controllers.UpdateCartItemQuantity)
+	r.POST("/api/users/forgot-password", controllers.ForgotPassword)
+	r.POST("/api/users/reset-password", controllers.ResetPassword)
+
 	return r
 }
