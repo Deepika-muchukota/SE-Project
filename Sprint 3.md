@@ -118,7 +118,7 @@ The backend was tested using Go's built-in testing package (`testing` and `httpt
 | `foodstall_test.go` | TestGetFoodStalls, TestGetFoodMenu |
 | `menu_test.go` | TestGetAllMenuItems, TestGetMenuItemByName |
 
-**Example Backend Test (TestUpdateCartItemQuantity API) (the completed code for all the test cases can be viwed in github)**
+**Example Backend Test (TestUpdateCartItemQuantity API) (Remaining test cases can be found [here](https://github.com/Deepika-muchukota/SE-Project/tree/branch/Back-End/tests))**
 ```go
 func TestUpdateCartItemQuantity(t *testing.T) {
 	router := SetupRouter()
@@ -139,12 +139,7 @@ func TestUpdateCartItemQuantity(t *testing.T) {
 ## **Frontend Unit & Cypress Tests**
 Frontend testing was conducted using **Cypress** for UI interactions and **Jest** for component testing.
 
-### **Cypress Tests**
-| **Test Name** | **Description** |
-|--------------|----------------|
-|  | |
-
-### ** Example Cypress Test (Logout); (the completed code for all the test cases can be viwed in github)**
+**Example Cypress Test (Logout): (Remaining test cases can be found [here](https://github.com/Deepika-muchukota/SE-Project/tree/branch/frontend/src))**
 ```js
 describe("Logout Functionality", () => {
     beforeEach(() => {
@@ -171,13 +166,7 @@ describe("Logout Functionality", () => {
       cy.get("h2").should("contain", "Sign In");
     });
 ```
-
-### **Unit Tests**
-| **Test Name** | **Description** |
-|--------------|----------------|
-|  | |
-
-### ** Example Unit Test (Quantity Indicators) (the completed code for all the test cases can be viwed in github)**
+**Example Unit Test (Quantity Indicators) (Remaining test cases can be found [here](https://github.com/Deepika-muchukota/SE-Project/tree/branch/frontend/src))**
 ```js
   test("increments and decrements item quantity correctly", () => {
     render(<Chicken cart={{}} addItemToCart={mockAddItemToCart} />);
