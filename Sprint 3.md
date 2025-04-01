@@ -6,10 +6,10 @@
 
 ## **Sprint 3 Objectives**
 In Sprint 3, our team aimed to:
-1. Complete pending tasks from Sprint 2.
+1. Complete pending tasks and new issues found in1 Sprint 2.
 2. Implement additional APIs for core functionalities.
 3. Continue improving integration between frontend and backend.
-4. Write comprehensive backend and frontend unit tests.
+4. Write comprehensive backend and frontend unit tests, and cypress tests for frontend.
 5. Provide detailed backend API documentation.
 6. Submit GitHub repository link and a narrated demo video.
 
@@ -30,12 +30,28 @@ In Sprint 3, our team aimed to:
 
 ### **Frontend:**
 - **Integrated backend APIs** with the React frontend.
-- **Implemented new UI components**:
-  - Integrated new cart functionalities (e.g., update quantity).
-  - Handled backend integration for menu item search.
-  - Frontend unit testing for new workflows.
+- **Implemented new UI components and Made the Nav Bar fully Functional**:
+  - Added + and - buttons for each item to increment and decrement quantity of same type.
+  - Added display of quantity of each item selected.
+  - Implemented logout functionality.
+  - Made the cart functional and integrated the cart with backend
+  - Added the Add to Cart Button for each web page
+  - Added Display of total number of items in the cart in Nav Bar
 - **Developed Unit tests** for frontend validation.
-- **Wrote unit tests** for individual components.
+  - tested whether components are correctly rendered for all food stall items
+  - tested whether increments and decrements quantity of items are done correctly for all food stalls
+  - tested whether 'Add to Cart' button  is displayed when items are selected for all food stalls
+  - tested whether it updates cart state on confirm order for all food stall items
+  - tested whether all food stalls are rendered correctly
+  - tested whether it is routed properly  when Starbucks button is clicked
+  - tested whether it is routed properly  when Burger 352 button is clicked
+- **Wrote cypress tests**
+  - tested sigin page
+  - tested signup page
+  - tested if user is directed to foodstalls page on successful signin
+  - tested logout functionality
+  - tested Burger foodstall (similarly to other foodstalls)  buttons navigation
+  - tested quantity indicators
 
 ---
 
@@ -102,7 +118,7 @@ The backend was tested using Go's built-in testing package (`testing` and `httpt
 | `foodstall_test.go` | TestGetFoodStalls, TestGetFoodMenu |
 | `menu_test.go` | TestGetAllMenuItems, TestGetMenuItemByName |
 
-**Example Backend Test (TestUpdateCartItemQuantity API)**
+**Example Backend Test (TestUpdateCartItemQuantity API) (the completed code for all the test cases can be viwed in github)**
 ```go
 func TestUpdateCartItemQuantity(t *testing.T) {
 	router := SetupRouter()
@@ -128,19 +144,32 @@ Frontend testing was conducted using **Cypress** for UI interactions and **Jest*
 |--------------|----------------|
 |  | |
 
-### ** Example Cypress Test (Signup)**
+### ** Example Cypress Test (Logout); (the completed code for all the test cases can be viwed in github)**
 ```js
-describe('User Signup', () => {
-  it('Should register a new user', () => {
-    cy.visit('/signup')
-    cy.get('input[name="name"]').type('Test User')
-    cy.get('input[name="email"]').type('test@example.com')
-    cy.get('input[name="phone"]').type('1234567890')
-    cy.get('input[name="password"]').type('Password123')
-    cy.get('button[type="submit"]').click()
-    cy.url().should('include', '/signin')
-  })
-})
+describe("Logout Functionality", () => {
+    beforeEach(() => {
+      // Simulate a logged-in state
+      cy.window().then((win) => {
+        win.localStorage.setItem("authToken", "test-token"); // Mock auth token
+      });
+  
+      // Visit the Food Stalls page (assuming user is logged in)
+      cy.visit("http://localhost:3000/foodstalls");
+    });
+  
+    it("should log out and redirect to Sign In page", () => {
+      // Ensure we're on the Food Stalls page
+      cy.url().should("include", "/foodstalls");
+  
+      // Click the Logout button (update selector based on your actual button class or ID)
+      cy.get(".logout-btn").click(); 
+  
+      // Verify redirection to Sign In page
+      cy.url().should("include", "/signin");
+  
+      // Check if Sign In heading is visible
+      cy.get("h2").should("contain", "Sign In");
+    });
 ```
 
 ### **Unit Tests**
@@ -148,25 +177,33 @@ describe('User Signup', () => {
 |--------------|----------------|
 |  | |
 
-### ** Example Unit Test (Signup)**
+### ** Example Unit Test (Quantity Indicators) (the completed code for all the test cases can be viwed in github)**
 ```js
-describe('User Signup', () => {
-  it('Should register a new user', () => {
-    cy.visit('/signup')
-    cy.get('input[name="name"]').type('Test User')
-    cy.get('input[name="email"]').type('test@example.com')
-    cy.get('input[name="phone"]').type('1234567890')
-    cy.get('input[name="password"]').type('Password123')
-    cy.get('button[type="submit"]').click()
-    cy.url().should('include', '/signin')
-  })
-})
+  test("increments and decrements item quantity correctly", () => {
+    render(<Chicken cart={{}} addItemToCart={mockAddItemToCart} />);
+
+    const incrementButton = screen.getAllByText("+")[0];
+    const decrementButton = screen.getAllByText("-")[0];
+    const quantityDisplay = screen.getAllByText("0")[0];
+
+    // Initially, the quantity should be 0
+    expect(quantityDisplay.textContent).toBe("0"); 
+
+
+    // Click the "+" button and expect quantity to be 1
+    fireEvent.click(incrementButton);
+    expect(screen.getAllByText("1")[0]).toBeTruthy();
+
+    // Click the "-" button and expect quantity to be 0 again
+    fireEvent.click(decrementButton);
+    expect(screen.getAllByText("0")[0]).toBeTruthy();
+  });
 ```
 - [**API Documentation**](https://github.com/Deepika-muchukota/SE-Project/blob/branch/API%20Documentation.md)
 - [**User Stories**](https://github.com/Deepika-muchukota/SE-Project/issues) can be viewed in Issues tab.
 - [**Github Repository**](https://github.com/Deepika-muchukota/SE-Project/tree/branch)
 
   ## Next Steps (Sprint 4):
-- Implement Finalize Order Functionality and payment integration.
+- Implement Finalize Order Functionality (to display order summary) and payment integration.
 - Enhance frontend UI/UX for a better user experience.
 - Improve unit test coverage for robustness.
