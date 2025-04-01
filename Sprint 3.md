@@ -162,14 +162,11 @@ describe('User Signup', () => {
   })
 })
 ```
-## Next Steps (Sprint 4):
+- [**API Documentation**](https://github.com/Deepika-muchukota/SE-Project/blob/branch/API%20Documentation.md)
+- [**User Stories**](https://github.com/Deepika-muchukota/SE-Project/issues) can be viewed in Issues tab.
+- [**Github Repository**](https://github.com/Deepika-muchukota/SE-Project/tree/branch)
+
+  ## Next Steps (Sprint 4):
 - Implement Finalize Order Functionality and payment integration.
 - Enhance frontend UI/UX for a better user experience.
 - Improve unit test coverage for robustness.
-
-## API Documentation Link:
-- https://github.com/Deepika-muchukota/SE-Project/blob/branch/API%20Documentation.md
-
-## Github Link:
-- https://github.com/Deepika-muchukota/SE-Project/tree/branch
-- User Stories can be viewed in Issues tab.
