@@ -35,7 +35,7 @@ import HalalSauces from './Halal_shack/sauces';
 import HalalDrinks from './Halal_shack/drinks';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState('true');
+  const [isLoggedIn, setIsLoggedIn] = useState('false');
   
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
