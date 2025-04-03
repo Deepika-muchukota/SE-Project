@@ -64,10 +64,9 @@ func TestEditUser(t *testing.T) {
 	}
 }
 
-
 func TestDeleteUser(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("DELETE", "/api/users?name=S Iyer", nil)
+	req, _ := http.NewRequest("DELETE", "/api/users?name=Test User", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -80,7 +79,7 @@ func TestDeleteUser(t *testing.T) {
 func TestForgotPassword(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"email": "kamalkandula1@gmail.com"}`
+	body := `{"email": "seprojectuser@gmail.com"}`
 	req, _ := http.NewRequest("POST", "/api/users/forgot-password", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -98,7 +97,7 @@ func TestResetPassword(t *testing.T) {
 
 	body := `{
 		"token": "mocked.jwt.token.here", 
-		"new_password": "NewPassword123"
+		"new_password": "NewPassword@123"
 	}`
 	req, _ := http.NewRequest("POST", "/api/users/reset-password", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
