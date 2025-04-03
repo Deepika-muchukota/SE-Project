@@ -1,12 +1,15 @@
 package tests
 
+
 import (
 	"SE-Project/Back-End/controllers"
 	"SE-Project/Back-End/database"
 	"github.com/gin-gonic/gin"
 )
 
+
 // SetupRouter initializes the router for testing
+
 func SetupRouter() *gin.Engine {
 	database.ConnectDB() // Ensure the database is connected
 
