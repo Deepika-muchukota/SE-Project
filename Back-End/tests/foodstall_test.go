@@ -29,3 +29,4 @@ func TestGetFoodMenu(t *testing.T) {
 		t.Errorf("Expected status 200 but got %d", w.Code)
 	}
 }
+
