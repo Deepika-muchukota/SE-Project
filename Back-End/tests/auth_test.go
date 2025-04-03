@@ -25,7 +25,7 @@ func TestSignup(t *testing.T) {
 func TestSignin(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"email": "kamalkandula1@gmail.com", "password": "Password@123"}`
+	body := `{"email": "seprojectuser@gmail.com", "password": "Password@123"}`
 	req, _ := http.NewRequest("POST", "/api/users/signin", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
