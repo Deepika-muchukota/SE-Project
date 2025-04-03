@@ -39,7 +39,7 @@ func TestSignin(t *testing.T) {
 
 func TestFetchUser(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("GET", "/api/users?name=Kamal Kandula", nil)
+	req, _ := http.NewRequest("GET", "/api/users?name=SE Project User", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -52,7 +52,7 @@ func TestFetchUser(t *testing.T) {
 func TestEditUser(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"name": "Updated User", "email": "kamalkandula1@gmail.com", "phone": "9876443211"}`
+	body := `{"name": "SE Project User", "email": "seprojectuser@gmail.com", "phone": "9876447201"}`
 	req, _ := http.NewRequest("PUT", "/api/users/43", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -63,6 +63,7 @@ func TestEditUser(t *testing.T) {
 		t.Errorf("Expected status 200 but got %d", w.Code)
 	}
 }
+
 
 func TestDeleteUser(t *testing.T) {
 	router := SetupRouter()
