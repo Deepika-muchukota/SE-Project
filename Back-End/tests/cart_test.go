@@ -36,7 +36,7 @@ func TestFetchCartItems(t *testing.T) {
 
 func TestDeleteItemFromCart(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("DELETE", "/api/cart/delete/42/188", nil)
+	req, _ := http.NewRequest("DELETE", "/api/cart/delete/50/238", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -48,7 +48,7 @@ func TestDeleteItemFromCart(t *testing.T) {
 
 func TestEmptyCart(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("DELETE", "/api/cart/empty/41", nil)
+	req, _ := http.NewRequest("DELETE", "/api/cart/empty/50", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -61,7 +61,7 @@ func TestEmptyCart(t *testing.T) {
 func TestUpdateCartItemQuantity(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"user_id": 42, "menu_id": 188, "quantity": 2}`
+	body := `{"user_id": 50, "menu_id": 238, "quantity": 3}`
 	req, _ := http.NewRequest("PUT", "/api/cart/update", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -72,3 +72,4 @@ func TestUpdateCartItemQuantity(t *testing.T) {
 		t.Errorf("Expected status 200 but got %d", w.Code)
 	}
 }
+
