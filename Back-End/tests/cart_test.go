@@ -10,7 +10,7 @@ import (
 func TestAddItemToCart(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"user_id": 42, "menu_id": 188, "quantity": 2}`
+	body := `{"user_id": 50, "menu_id": 238, "quantity": 2}`
 	req, _ := http.NewRequest("POST", "/api/cart/add", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -24,7 +24,7 @@ func TestAddItemToCart(t *testing.T) {
 
 func TestFetchCartItems(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("GET", "/api/cart/42", nil)
+	req, _ := http.NewRequest("GET", "/api/cart/50", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
