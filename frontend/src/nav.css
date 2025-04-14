@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #1e5631;
+  background: linear-gradient(to right, #37403a, #59655d) !important;
   color: white;
   padding: 15px 20px;
   display: flex;
@@ -12,12 +12,17 @@
 .navbar-logo {
   font-size: 1.5rem;
   font-weight: bold;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 
 .navbar-content {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: auto;
 }
 
 .navbar-cart {
@@ -183,10 +188,15 @@
   .navbar-content {
     gap: 10px;
   }
-
+  
   .cart-dropdown {
     width: 90%;
     right: 5%;
+  }
+  
+  /* Maintain centered logo on medium screens */
+  .navbar {
+    padding: 15px 60px; /* Add more padding to accommodate the centered logo */
   }
 }
 
@@ -194,19 +204,30 @@
   .navbar {
     padding: 10px;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 15px;
   }
-
+  
+  .navbar-logo {
+    position: static;
+    transform: none;
+    margin-bottom: 10px;
+  }
+  
   .navbar-content {
     width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-
+  
   .navbar-cart {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .finalize-order-btn, .view-cart-btn {
+    margin: 5px;
   }
 }
-

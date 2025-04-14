@@ -7,7 +7,7 @@
     "cra-template": "1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.5",
+    "react-router-dom": "^7.4.1",
     "react-scripts": "5.0.1"
   },
   "scripts": {
@@ -35,6 +35,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "cypress": "^14.2.1",

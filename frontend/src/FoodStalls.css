@@ -5,7 +5,11 @@
   padding: 50px 10px;
   width: 100vw;
   min-height: 100vh; 
-  background: linear-gradient(to bottom, #1e3c72, #2a5298); 
+  background: linear-gradient(to bottom, #1e3c72, #2a5298);
+  background-image: url('assets/bg_image.avif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
   
 }
 
