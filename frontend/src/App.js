@@ -3,6 +3,7 @@ import './App.css';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import FoodStalls from './FoodStalls'; 
+import CartPage from './CartPage'; // Import the CartPage component
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Burger352 from './Burger_352/Burger352'; 
 import Babas from './Baba/Babas';
@@ -196,41 +197,153 @@ function App() {
             }
           />
 
+          {/* New Cart Page Route */}
+          <Route
+            path="/cart"
+            element={
+              isLoggedIn ? (
+                <CartPage 
+                  cart={cart} 
+                  setCart={setCart} 
+                  removeOrderFromCart={removeOrderFromCart} 
+                />
+              ) : (
+                <Navigate to="/signin" />
+              )
+            }
+          />
+
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/signin" />} />
 
           {/* Existing Food Stall Routes */}
-          <Route path="/foodstalls/burger352" element={<Burger352 />} />
-          <Route path="/foodstalls/baba-pizza" element={<Babas/>} />
-          <Route path="/foodstalls/starbucks" element={<StarBucksDrinks cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/burger352" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Burger352 />
+            </Layout>
+          } />
+          <Route path="/foodstalls/baba-pizza" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Babas/>
+            </Layout>
+          } />
+          <Route path="/foodstalls/starbucks" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <StarBucksDrinks cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
           <Route 
             path="/foodstalls/panda-express" 
-            element={<PandaExpress cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} 
+            element={
+              <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+                <PandaExpress cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />
+              </Layout>
+            } 
           />
-          <Route path="/foodstalls/burger352/burger" element={<Burger cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/chicken" element={<Chicken cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/shakes" element={<Shakes cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/sides" element={<Sides cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/burger352/steaks" element={<Steaks cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/Babas/ve" element={<Vegeterian cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/Babas/nve" element={<Nvegeterian cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/burger352/burger" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Burger cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/burger352/chicken" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Chicken cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/burger352/shakes" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Shakes cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/burger352/sides" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Sides cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/burger352/steaks" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Steaks cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/Babas/ve" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Vegeterian cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/Babas/nve" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Nvegeterian cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
           
           {/* Subway Routes */}
-          <Route path="/foodstalls/subway" element={<Subway cart={cart} />} />
-          <Route path="/foodstalls/subway/bread" element={<Bread cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/subway/protien" element={<Protien cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/subway/toppings" element={<Toppings cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/subway/sauces" element={<Sauces cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/subway/sides" element={<SubwaySides cart={cart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/subway/drinks" element={<Drinks cart={cart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/subway" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Subway cart={cart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/bread" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Bread cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/protien" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Protien cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/toppings" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Toppings cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/sauces" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Sauces cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/sides" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <SubwaySides cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/subway/drinks" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Drinks cart={cart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
           
           {/* Halal Shack Routes with updated props */}
-          <Route path="/foodstalls/halalshack" element={<HalalShack cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} />
-          <Route path="/foodstalls/halalshack/base" element={<Base cart={cart} />} />
-          <Route path="/foodstalls/halalshack/protein" element={<HalalProtein cart={cart} />} />
-          <Route path="/foodstalls/halalshack/toppings" element={<HalalToppings cart={cart} />} />
-          <Route path="/foodstalls/halalshack/sauces" element={<HalalSauces cart={cart} />} />
-          <Route path="/foodstalls/halalshack/drinks" element={<HalalDrinks cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />} />
+          <Route path="/foodstalls/halalshack" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <HalalShack cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/halalshack/base" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <Base cart={cart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/halalshack/protein" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <HalalProtein cart={cart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/halalshack/toppings" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <HalalToppings cart={cart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/halalshack/sauces" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <HalalSauces cart={cart} />
+            </Layout>
+          } />
+          <Route path="/foodstalls/halalshack/drinks" element={
+            <Layout cart={cart} setCart={setCart} onLogout={handleLogout} removeOrderFromCart={removeOrderFromCart}>
+              <HalalDrinks cart={cart} addOrderToCart={addOrderToCart} addItemToCart={addItemToCart} />
+            </Layout>
+          } />
         </Routes>
       </div>
     </Router>
