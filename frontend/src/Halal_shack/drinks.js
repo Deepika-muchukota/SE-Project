@@ -388,7 +388,7 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
         <button 
           className="place-order-btn"
           onClick={handlePlaceOrder}
-          disabled={Object.keys(itemQuantities).length === 0}
+          disabled={false}
         >
           Place Order (${total.toFixed(2)})
         </button>
