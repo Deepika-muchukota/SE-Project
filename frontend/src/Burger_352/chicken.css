@@ -53,47 +53,49 @@
     text-align: center;
   }
   
-  /* Quantity controls */
-  .quantity-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    gap: 10px;
-  }
-  
-  .quantity-controls span{
-color: antiquewhite;
-  }
-  .quantity-controls button {
-    background-color: #d9dc1f46;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  .quantity-controls button:hover {
-    background-color: #c9af2c;
-  }
-  
-  /* Confirm order button */
-  .confirm-order-button {
-    margin-top: 20px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    color: white;
-    background-color: #5cb85c;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .confirm-order-button:hover {
-    background-color: #4cae4c;
-  }
-  
+  /* Updated quantity controls for chicken options */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+/* Fix for the quantity number visibility */
+.quantity-controls span {
+  color: #000000; /* Black text instead of antiquewhite for better visibility */
+  font-weight: 600; /* Semi-bold */
+  font-size: 15px; /* Readable size */
+  margin: 0 8px; /* Good spacing */
+  min-width: 20px; /* Ensure enough space */
+  text-align: center; /* Center the text */
+}
+
+/* Update button styling for better contrast */
+.quantity-controls button {
+  background-color: #d9b71f; /* Slightly darker yellow for better visibility */
+  color: black; /* Black text on yellow for better contrast */
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  font-weight: bold; /* Make the + and - bold */
+}
+
+.quantity-controls button:hover {
+  background-color: #c9af2c;
+}
+
+/* Add specific styling for decrease and increase buttons if needed */
+.quantity-controls button:first-child { /* Decrease button */
+  background-color: #e0e0e0; /* Light gray */
+  color: #333;
+}
+
+.quantity-controls button:last-child { /* Increase button */
+  background-color: #d9b71f; /* Yellow */
+  color: #333;
+}
