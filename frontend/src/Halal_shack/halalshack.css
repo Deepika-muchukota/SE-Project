@@ -1,16 +1,17 @@
-/* Main container */
+/* Main container styling */
 .halal-container {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #1e5631; /* Halal Shack green */
+  background-color: #336633; /* Dark green background */
   width: 100vw;
   min-height: 100vh;
   padding: 20px;
 }
 
+/* Overlay effect */
 .overlay {
   position: absolute;
   top: 0;
@@ -21,6 +22,7 @@
   z-index: -1;
 }
 
+/* Title styling */
 .halal-title {
   color: #ffffff;
   font-size: 2.5rem;
@@ -29,7 +31,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Category grid */
+/* Category grid layout */
 .category-grid {
   display: flex;
   flex-wrap: wrap;
@@ -40,25 +42,24 @@
   max-width: 1000px;
 }
 
-/* Category buttons */
+/* Category button styling */
 .category-button {
-  flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
-  max-width: calc(33.33% - 30px);
-  height: 210px; /* Increased height to give more room for text */
-  background-color: #ffffff;
-  border: none;
-  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: #292929;
-  font-size: 18px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 15px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  height: auto; /* Allow height to adjust to content */
+  min-height: 220px; /* Minimum height */
   cursor: pointer;
-  padding-bottom: 10px; /* Added padding to give more space for text */
+  flex: 1 1 calc(33.33% - 30px);
+  max-width: calc(33.33% - 30px);
+  border: none;
 }
 
 .category-button:hover {
@@ -66,33 +67,63 @@
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Image styling */
 .category-image {
-  width: 100%;
-  height: 65%;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
+/* Item info container */
+.item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Category name styling */
 .category-name {
-  margin-top: 15px;
+  color: #333;
+  font-size: 1.5rem;
   font-weight: bold;
-  font-size: 1.2rem;
-  color: #292929;
-  padding: 10px 5px; /* Added padding */
-  width: 100%; /* Ensure it uses full width */
-  overflow: visible; /* Prevent text from being cut off */
-  text-align: center; /* Center the text */
+  margin: 10px 0 5px;
+  text-align: center;
 }
 
-/* Start Order Button */
+/* Price wrapper to ensure visibility */
+.price-wrapper {
+  width: 100%;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* CRITICAL: Price styling */
+.category-price {
+  color: #336633; /* Match Halal Shack green */
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  display: block !important; /* Force display */
+  visibility: visible !important; /* Ensure visibility */
+  position: relative;
+  z-index: 5; /* Higher z-index */
+  width: 100%;
+  text-align: center;
+}
+
+/* Start new order button */
 .start-order-btn {
-  background-color: #ffcc00;
-  color: #333;
+  background-color: #ffcc00; /* Yellow button */
+  color: #292929;
   border: none;
   border-radius: 50px;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 12px 30px;
-  margin-top: 30px;
+  margin-top: 40px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -104,57 +135,127 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Saved Order Section */
-.saved-order {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 20px;
-  margin-top: 30px;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+/* Quantity controls for other screens */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 10px;
 }
 
-.saved-order-title {
-  color: #1e5631;
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #ffcc00;
-  padding-bottom: 10px;
+.quantity-display {
+  color: #000000; /* Black text for maximum visibility */
+  font-weight: 600; /* Semi-bold */
+  font-size: 18px; /* Good readable size */
+  margin: 0 12px; /* Spacing between buttons */
+  min-width: 20px; /* Ensure enough width */
+  text-align: center; /* Center the text */
 }
 
-.reorder-btn {
-  background-color: #1e5631;
+.quantity-btn.decrease {
+  background-color: #e0e0e0; /* Light gray */
+  color: #333;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-btn.increase {
+  background-color: #4caf50; /* Green */
   color: white;
   border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  margin-top: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.reorder-btn:hover {
-  background-color: #174726;
-  transform: translateY(-3px);
+.quantity-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive design */
+.quantity-btn:disabled {
+  background-color: #cccccc;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive styling */
 @media (max-width: 900px) {
   .category-button {
-    flex: 1 1 calc(50% - 30px); /* 2 buttons per row */
+    flex: 1 1 calc(50% - 30px);
     max-width: calc(50% - 30px);
+    min-height: 200px; /* Slightly smaller on medium screens */
+  }
+  
+  .category-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .category-name {
+    font-size: 1.3rem;
+  }
+  
+  .category-price {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 600px) {
   .category-button {
-    flex: 1 1 100%; /* 1 button per row */
+    flex: 1 1 100%;
     max-width: 100%;
-    height: 180px;
+    min-height: 180px; /* Even smaller on mobile */
   }
   
   .halal-title {
     font-size: 2rem;
+  }
+  
+  .category-image {
+    width: 130px;
+    height: 130px;
+  }
+  
+  .category-name {
+    font-size: 1.2rem;
+  }
+  
+  .category-price {
+    font-size: 1rem;
+  }
+  
+  .quantity-controls {
+    gap: 5px;
+  }
+  
+  .quantity-display {
+    margin: 0 8px;
+    font-size: 16px;
+  }
+  
+  .quantity-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
 }
