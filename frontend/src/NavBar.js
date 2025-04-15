@@ -2,29 +2,39 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './nav.css'; 
 
-function NavBar({ cart, setCart, onLogout  }) {
+function NavBar({ cart, setCart, onLogout, removeOrderFromCart }) {
   const navigate = useNavigate();
 
-  const finalizeOrder = async () => {
-    // Replace with your actual backend endpoint
-    const endpoint = 'https://your-backend.com/api/orders';
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ items: cart })
-      });
+  // Calculate total items across all orders
+  const totalItems = Array.isArray(cart) ? cart.reduce((total, order) => {
+    // Sum up quantities from all items in the order
+    const orderItemCount = order.items ? order.items.reduce((count, item) => {
+      return count + (item.quantity || 1); // Default to 1 if quantity not specified
+    }, 0) : 0;
+    return total + orderItemCount;
+  }, 0) : 0;
 
-      if (response.ok) {
-        // Clear the cart after order is placed and navigate to confirmation
-        setCart([]);
-        navigate('/order-success');
-        console.log("Order placed successfully");
-      } else {
-        console.error('Order failed');
-      }
+  // Calculate total price across all orders
+  const totalPrice = Array.isArray(cart) ? cart.reduce((total, order) => {
+    return total + (order.totalPrice || 0);
+  }, 0) : 0;
+
+  const navigateToCartPage = () => {
+    navigate('/cart');
+  };
+
+  const finalizeOrder = async () => {
+    if (!Array.isArray(cart) || cart.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
+
+    try {
+      // For testing without a backend
+      console.log("Order placed successfully:", cart);
+      alert(`Order placed successfully! Total: $${totalPrice.toFixed(2)}`);
+      setCart([]);
+      navigate('/foodstalls');
     } catch (error) {
       console.error('Error finalizing order:', error);
     }
@@ -38,7 +48,10 @@ function NavBar({ cart, setCart, onLogout  }) {
           Finalize Order
         </button>
         <div className="navbar-cart">
-          <span className="cart-count">{cart.length}</span> Items
+          <span className="cart-count">{totalItems}</span> Items
+          <button onClick={navigateToCartPage} className="view-cart-btn">
+            View Cart
+          </button>
         </div>
         <button onClick={onLogout} className="logout-btn">
           Logout
