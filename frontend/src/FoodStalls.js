@@ -3,7 +3,7 @@ import "./FoodStalls.css";
 import { useNavigate } from "react-router-dom";
 import starbucks from "./assets/starbucks.jpg";
 import burger352 from "./assets/Burger 352.png";
-import pandaExpress from "./assets/Panda.jpg";
+import pandaExpress from "./assets/Panda.jpeg";
 import subway from "./assets/subway.jpg";
 import halal from "./assets/Halal.png";
 import Baba from "./assets/Baba's Pizza.png";
