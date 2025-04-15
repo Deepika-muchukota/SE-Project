@@ -76,43 +76,51 @@
   margin: 5px 0 10px;
 }
 
+/* Direct fix for the transparent quantity display */
+.quantity-display {
+  margin: 0 15px;
+  font-weight: 900 !important; /* Extra bold */
+  font-size: 15px !important; /* Much larger */
+  min-width: 30px !important;
+  text-align: center;
+  color: #000000 !important; /* Force black color */
+  opacity: 1 !important; /* Force full opacity */
+  text-shadow: none !important; /* Remove any text shadows */
+  background-color: transparent !important; /* No background */
+}
+/* Make sure the quantity controls are properly spaced */
 .quantity-controls {
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  justify-content: center;
+  margin-top: 15px;
+  background: transparent !important;
 }
 
+/* Square buttons with rounded corners for - and + */
 .quantity-btn {
   background-color: #009743;
   color: white;
   border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  font-size: 18px;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 24px;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.quantity-btn:hover {
-  background-color: #007a36;
+.quantity-btn.decrease {
+  background-color: #e0e0e0;
+  color: #333;
 }
 
-.quantity-btn:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.quantity-display {
-  margin: 0 15px;
-  font-weight: bold;
-  font-size: 18px;
-  min-width: 20px;
-  text-align: center;
+.quantity-btn.increase {
+  background-color: #4caf50;
 }
 
 .order-summary {
