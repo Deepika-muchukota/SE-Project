@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./vegp.css"; 
+import "./nvegp.css"; 
 import pepperoni from "./Baba_images/pepperoni.jpeg";
 import tikka from "./Baba_images/tikka.jpeg";
 import bbq from "./Baba_images/bbq.jpeg";
