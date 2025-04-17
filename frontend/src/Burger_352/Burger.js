@@ -1,126 +1,176 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./burger_opt.css";
 import classic from "./burger352_images/classic.jpg";
 import bacon from "./burger352_images/baconjam.jpg";
 import cowboy from "./burger352_images/cowboy.jpeg";
 import mushroom from "./burger352_images/mushroomswiss.jpeg";
 import pizza from "./burger352_images/pizzaburger.jpg";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const categories = [
-  { name: "The Classic", image: classic, price: "$8.99" },
-  { name: "The Bacon Jam", image: bacon, price: "$9.29" },
-  { name: "The CowBoy", image: cowboy, price: "$9.99" },
-  { name: "The Mushroom Swiss", image: mushroom, price: "$8.59" },
-  { name: "The Pizza burger", image: pizza, price: "$9.49" },
+  { id: 197, name: "The Classic", image: classic, price: 8.99 },
+  { id: 198, name: "The Bacon Jam", image: bacon, price: 9.29 },
+  { id: 199, name: "The CowBoy", image: cowboy, price: 9.99 },
+  { id: 200, name: "The Mushroom Swiss", image: mushroom, price: 8.59 },
+  { id: 201, name: "The Pizza burger", image: pizza, price: 9.49 },
 ];
 
-function Burger({ cart = {}, addItemToCart }) {
+
+function Burger() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToCart, removeFromCart, cartItems, loading: cartLoading } = useCart();
   const [selectedItems, setSelectedItems] = useState({});
-  const prevSelectedRef = useRef(cart || {});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   
-  // Define the stall name constant to use throughout the component
   const STALL_NAME = "Burger 352";
+  const SESSION_STORAGE_KEY = "burger352_burger_selected_items";
 
+  // Load selected items from session storage on mount
   useEffect(() => {
-    if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
-      setSelectedItems(cart);
-      prevSelectedRef.current = cart;
+    if (!user) {
+      navigate('/signin');
+      return;
     }
-  }, [cart, selectedItems]);
+    
+    const savedItems = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (savedItems) {
+      try {
+        const parsedItems = JSON.parse(savedItems);
+        setSelectedItems(parsedItems);
+      } catch (error) {
+        console.error('Error parsing saved items:', error);
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      }
+    }
+  }, [user, navigate]);
 
+  // Save selected items to session storage whenever they change
   useEffect(() => {
-    if (!addItemToCart || typeof addItemToCart !== 'function') {
-      console.error("addItemToCart is not a function or is undefined");
+    if (user && Object.keys(selectedItems).length > 0) {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedItems));
+    }
+  }, [selectedItems, user]);
+
+  // Clear session storage when component unmounts if user is not logged in
+  useEffect(() => {
+    return () => {
+      if (!user) {
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      }
+    };
+  }, [user]);
+
+  const handleSelectItem = async (item) => {
+    if (!user) {
+      navigate('/signin');
       return;
     }
 
-    setTimeout(() => {
-      const prev = prevSelectedRef.current;
+    try {
+      setLoading(true);
+      setError(null);
       
-      try {
-        // For each item in the current selection, compute the delta.
-        Object.keys(selectedItems).forEach((itemName) => {
-          const newQty = selectedItems[itemName];
-          const oldQty = prev[itemName] || 0;
-          const delta = newQty - oldQty;
-          const item = categories.find((cat) => cat.name === itemName);
-          
-          if (delta > 0 && item) {
-            // If quantity increased, add the item delta times.
-            for (let i = 0; i < delta; i++) {
-              // Convert price from string to number by removing $ sign
-              const itemWithNumberPrice = {
-                ...item,
-                price: parseFloat(item.price.replace('$', ''))
-              };
-              addItemToCart(itemWithNumberPrice, "add", STALL_NAME);
-            }
-          } else if (delta < 0 && item) {
-            // If quantity decreased, remove the item abs(delta) times.
-            for (let i = 0; i < -delta; i++) {
-              // Convert price from string to number by removing $ sign
-              const itemWithNumberPrice = {
-                ...item,
-                price: parseFloat(item.price.replace('$', ''))
-              };
-              addItemToCart(itemWithNumberPrice, "remove", STALL_NAME);
-            }
-          }
-        });
+      const newQuantity = (selectedItems[item.name] || 0) + 1;
+      
+      // Create the cart item object with proper type conversion
+      const cartItem = {
+        menu_id: Number(item.id),
+        name: `${STALL_NAME} - ${item.name}`,
+        price: Number(item.price),
+        quantity: Number(newQuantity)
+      };
 
-        // Also handle items that were completely removed.
-        Object.keys(prev).forEach((itemName) => {
-          if (!(itemName in selectedItems)) {
-            const removedQty = prev[itemName];
-            const item = categories.find((cat) => cat.name === itemName);
-            if (item) {
-              for (let i = 0; i < removedQty; i++) {
-                // Convert price from string to number by removing $ sign
-                const itemWithNumberPrice = {
-                  ...item,
-                  price: parseFloat(item.price.replace('$', ''))
-                };
-                addItemToCart(itemWithNumberPrice, "remove", STALL_NAME);
-              }
-            }
-          }
-        });
-      } catch (error) {
-        console.error("Error in useEffect:", error);
-      }
-
-      // Update the ref with the current selectedItems.
-      prevSelectedRef.current = selectedItems;
-    }, 0);
-  }, [selectedItems, addItemToCart]);
-
-  // Increase quantity locally.
-  const handleSelectItem = (item) => {
-    setSelectedItems((prev) => {
-      const updated = { ...prev };
-      updated[item.name] = (updated[item.name] || 0) + 1;
-      return updated;
-    });
-  };
-
-  // Decrease quantity locally.
-  const handleRemoveItem = (item) => {
-    setSelectedItems((prev) => {
-      const updated = { ...prev };
-      if (updated[item.name] > 1) {
-        updated[item.name] -= 1;
+      // Use the cart context's addToCart function
+      const success = await addToCart(cartItem);
+      
+      if (success) {
+        // Update local state only after successful cart update
+        setSelectedItems(prev => ({
+          ...prev,
+          [item.name]: newQuantity
+        }));
       } else {
-        delete updated[item.name];
+        setError('Failed to add item to cart');
       }
-      return updated;
-    });
+    } catch (err) {
+      setError('Failed to add item to cart');
+      console.error('Error adding to cart:', err);
+    } finally {
+      setLoading(false);
+    }
   };
+             
+  const handleRemoveItem = async (item) => {
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
 
+    const currentQuantity = selectedItems[item.name] || 0;
+    if (currentQuantity <= 0) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Immediately update local state to prevent UI flicker
+      const newQuantity = currentQuantity - 1;
+      const updatedItems = { ...selectedItems };
+      
+      if (newQuantity === 0) {
+        delete updatedItems[item.name];
+      } else {
+        updatedItems[item.name] = newQuantity;
+      }
+      
+      setSelectedItems(updatedItems);
+
+      if (newQuantity === 0) {
+        // Remove item from cart using cart context
+        await removeFromCart(item.id);
+      } else {
+        // Update quantity using cart context
+        const cartItem = {
+          menu_id: Number(item.id),
+          name: `${STALL_NAME} - ${item.name}`,
+          price: Number(item.price),
+          quantity: Number(newQuantity)
+        };
+        await addToCart(cartItem);
+      }
+    } catch (err) {
+      setError('Failed to remove item from cart');
+      console.error('Error removing from cart:', err);
+      // Revert local state on error
+      setSelectedItems(prev => ({
+        ...prev,
+        [item.name]: currentQuantity
+      }));
+    } finally {
+      setLoading(false);
+    }
+  };
+         
   const handleConfirmOrder = () => {
-    alert("Cart has been updated!");
-    console.log(cart);
+    navigate('/cart');
   };
+         
+  if (!user) {
+    return null;
+  }
 
+  if (loading || cartLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
+         
   return (
     <div className="burger-opt-container">
       <table className="burger-table">
@@ -139,12 +189,22 @@ function Burger({ cart = {}, addItemToCart }) {
                     className="category-image"
                   />
                   <p className="category-name">
-                    {category.name} - {category.price}
+                    {category.name} - ${category.price.toFixed(2)}
                   </p>
                   <div className="b-quantity-controls">
-                    <button onClick={() => handleRemoveItem(category)}>-</button>
+                    <button 
+                      onClick={() => handleRemoveItem(category)}
+                      disabled={loading || cartLoading || !selectedItems[category.name]}
+                    >
+                      -
+                    </button>
                     <span>{selectedItems[category.name] || 0}</span>
-                    <button onClick={() => handleSelectItem(category)}>+</button>
+                    <button 
+                      onClick={() => handleSelectItem(category)}
+                      disabled={loading || cartLoading}
+                    >
+                      +
+                    </button>
                   </div>
                 </td>
               ))}
@@ -154,8 +214,12 @@ function Burger({ cart = {}, addItemToCart }) {
       </table>
   
       {Object.keys(selectedItems).length > 0 && (
-        <button className="confirm-order-button" onClick={handleConfirmOrder}>
-          Add to Cart
+        <button 
+          className="confirm-order-button" 
+          onClick={handleConfirmOrder}
+          disabled={loading || cartLoading}
+        >
+          {loading || cartLoading ? 'Processing...' : 'Add to Cart'}
         </button>
       )}
     </div>
