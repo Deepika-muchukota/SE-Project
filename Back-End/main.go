@@ -3,6 +3,7 @@ package main
 import (
 	"SE-Project/Back-End/controllers"
 	"SE-Project/Back-End/database"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -39,3 +40,4 @@ func main() {
 	// Start the server on port 5000
 	r.Run(":5000")
 }
+
