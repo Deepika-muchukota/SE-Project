@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./pandaexp.css";
 import plate from "./panda_images/plate.png"; 
 import bigger_plate from "./panda_images/bigger_plate.png";
@@ -6,6 +6,9 @@ import bowl from "./panda_images/bowl.png";
 import carts from "./panda_images/carts.png";
 import drinks from "./panda_images/drinks.png";
 import appetizers from "./panda_images/appetizers.png";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 // Sides
 import whiteRice from './panda_images/white-rice.png';
@@ -134,12 +137,90 @@ const numericPrices = {
   "Appetizers": 2.00
 };
 
-function PandaExpress({ cart = [], addOrderToCart, addItemToCart }) {
+function PandaExpress() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSide, setSelectedSide] = useState(null);
   const [selectedEntrees, setSelectedEntrees] = useState([]);
   const [selectedSize, setSelectedSize] = useState("Medium");
   const [selectedALaCarteItems, setSelectedALaCarteItems] = useState([]);
+
+  // Check if user is logged in when component mounts
+  useEffect(() => {
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+  }, [user, navigate]);
+
+  // Load saved selections from session storage when component mounts
+  useEffect(() => {
+    if (user) {
+      // Load saved category if exists
+      const savedCategory = sessionStorage.getItem('panda_selected_category');
+      if (savedCategory) {
+        const category = categories.find(c => c.name === savedCategory);
+        if (category) {
+          setSelectedCategory(category);
+          
+          // Load saved side if exists
+          const savedSide = sessionStorage.getItem('panda_selected_side');
+          if (savedSide) {
+            setSelectedSide(savedSide);
+          }
+          
+          // Load saved entrees if exist
+          const savedEntrees = sessionStorage.getItem('panda_selected_entrees');
+          if (savedEntrees) {
+            try {
+              setSelectedEntrees(JSON.parse(savedEntrees));
+            } catch (e) {
+              console.error("Error parsing saved entrees:", e);
+            }
+          }
+          
+          // Load saved size if exists
+          const savedSize = sessionStorage.getItem('panda_selected_size');
+          if (savedSize) {
+            setSelectedSize(savedSize);
+          }
+          
+          // Load saved a la carte items if exist
+          const savedItems = sessionStorage.getItem(`panda_${category.name.toLowerCase().replace(' ', '_')}_selected_items`);
+          if (savedItems) {
+            try {
+              setSelectedALaCarteItems(JSON.parse(savedItems));
+            } catch (e) {
+              console.error("Error parsing saved items:", e);
+            }
+          }
+        }
+      }
+    }
+  }, [user]);
+
+  // Save selections to session storage when they change
+  useEffect(() => {
+    if (user && selectedCategory) {
+      sessionStorage.setItem('panda_selected_category', selectedCategory.name);
+      
+      if (selectedSide) {
+        sessionStorage.setItem('panda_selected_side', selectedSide);
+      }
+      
+      if (selectedEntrees.length > 0) {
+        sessionStorage.setItem('panda_selected_entrees', JSON.stringify(selectedEntrees));
+      }
+      
+      sessionStorage.setItem('panda_selected_size', selectedSize);
+      
+      if (selectedALaCarteItems.length > 0) {
+        sessionStorage.setItem(`panda_${selectedCategory.name.toLowerCase().replace(' ', '_')}_selected_items`, JSON.stringify(selectedALaCarteItems));
+      }
+    }
+  }, [user, selectedCategory, selectedSide, selectedEntrees, selectedSize, selectedALaCarteItems]);
 
   // Handle category selection
   const handleCategoryClick = (category) => {
@@ -213,7 +294,7 @@ function PandaExpress({ cart = [], addOrderToCart, addItemToCart }) {
     }
   };
 
-  // Handle add to cart using the new cart structure
+  // Handle add to cart using the cart context
   const handleAddToCart = () => {
     let orderItems = [];
     let totalPrice = 0;
@@ -277,27 +358,18 @@ function PandaExpress({ cart = [], addOrderToCart, addItemToCart }) {
     
     // Create the complete order object
     const completeOrder = {
-      stall: "Panda Express",
+      name: `${selectedCategory.name} - Panda Express`,
       orderType: selectedCategory.name,
       items: orderItems,
       totalPrice: totalPrice,
-      price: totalPrice // Explicitly include price field
+      price: totalPrice,
+      stall: "Panda Express",
+      menu_id: 0, // This will be set by the backend
+      quantity: 1
     };
     
-    // Use the addOrderToCart function from props if available
-    if (typeof addOrderToCart === 'function') {
-      addOrderToCart(completeOrder);
-    } else if (typeof addItemToCart === 'function') {
-      // Pass the complete order as a single item
-      addItemToCart({
-        name: `${selectedCategory.name} - Panda Express`, // Include the meal type in the name
-        orderType: selectedCategory.name,
-        items: orderItems,
-        totalPrice: totalPrice,
-        price: totalPrice, // Explicit price field
-        stall: "Panda Express"
-      }, "add", "Panda Express", true);
-    }
+    // Add to cart using the cart context
+    addToCart(completeOrder);
     
     // Reset selection
     setSelectedALaCarteItems([]);
