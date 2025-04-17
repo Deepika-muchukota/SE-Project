@@ -1,5 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./star.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+
 import brew_milk from "./starbucks_images/bew&milk.jpeg";
 import caramel_macchito from "./starbucks_images/caramel_macchito.jpeg";
 import caramel from "./starbucks_images/caramel.jpeg";
@@ -21,141 +26,321 @@ import vanilla_nitro from "./starbucks_images/vanilla_nitro.jpg";
 import vanilla_oatmilk from "./starbucks_images/vanilla_oatmilk.jpeg";
 import double_choco_chip from "./starbucks_images/double_choco_chip.jpeg";
 
-const categories = [
-  { name: "Vanilla Sweet Cream Nitro", image: vanilla_nitro , price:"$7.89"  },
-  { name: "Vanilla Oat Milk", image: vanilla_oatmilk, price: "$6.49" },
-  { name: "Iced Caffe Latte", image: latte, price: "$5.29" },
-  { name: "Iced Caffe Mocha", image: mocha, price: "$5.79" },
-  { name: "Iced Matcha Latte", image: matcha_latte, price: "$6.59" },
-  { name: "Cold Brew With Milk", image: brew_milk, price: "$5.99" },
-  { name: "Iced Coffee With Milk", image: ice_coffee, price: "$4.99" },
-  { name: "Iced Flat White", image: flat_white, price: "$5.89" },
-  { name: "Pumpkin Spice Latte", image: pumpkin_latte, price: "$6.29" },
-  { name: "Iced Shaken Espresso", image: ice_shake, price: "$5.49" },
-  { name: "Coffee Frappuccino", image: coffee_frappacino, price: "$5.99" },
-  { name: "Salted Caramel Brew", image: salted_caramel, price: "$6.19" },
-  { name: "Honey Almond Milk", image: honey_almondmilk, price: "$5.79" },
-  { name: "Caramel Frappuccino", image: caramel, price: "$5.89" },
-  { name: "Caramel Macchiato", image: caramel_macchito, price: "$5.69" },
-  { name: "Refreshers", image: refreshers, price: "$4.89" },
-  { name: "Pumpkin Spice Frappuccino", image: pumpkin_frappacino, price: "$6.49" },
-  { name: "Double Choco Chip", image: double_choco_chip, price: "$5.99" },
-  { name: "Mango Espresso", image: mango, price: "$5.69" },
-  { name: "Java Chip", image: java, price: "$6.29" }
+const defaultCategories = [
+  {
+    id: 1,
+    name: "Caramel Frappuccino",
+    price: 5.95,
+    image: "/images/starbucks/caramel-frappuccino.jpg"
+  },
+  {
+    id: 2,
+    name: "Mocha Frappuccino",
+    price: 5.95,
+    image: "/images/starbucks/mocha-frappuccino.jpg"
+  },
+  {
+    id: 3,
+    name: "Vanilla Bean Frappuccino",
+    price: 5.95,
+    image: "/images/starbucks/vanilla-frappuccino.jpg"
+  },
+  {
+    id: 4,
+    name: "Java Chip Frappuccino",
+    price: 5.95,
+    image: "/images/starbucks/java-chip-frappuccino.jpg"
+  },
+  {
+    id: 5,
+    name: "Espresso Frappuccino",
+    price: 5.45,
+    image: "/images/starbucks/espresso-frappuccino.jpg"
+  },
+  {
+    id: 6,
+    name: "Coffee Frappuccino",
+    price: 5.45,
+    image: "/images/starbucks/coffee-frappuccino.jpg"
+  }
 ];
 
-
-function StarBucksDrinks({ cart, addItemToCart }) {
+function StarBucksDrinks() {
+  const navigate = useNavigate();
+  const { addToCart, removeFromCart, cartItems } = useCart();
+  const { user } = useAuth();
   const [selectedItems, setSelectedItems] = useState({});
-  const prevSelectedRef = useRef(cart || {}); // Ensure ref starts as an empty object
+  const [menuItems, setMenuItems] = useState(defaultCategories);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [removingItemId, setRemovingItemId] = useState(null);
   
-  // Define the stall name constant to use throughout the component
   const STALL_NAME = "Starbucks";
+  const SESSION_STORAGE_KEY = "starbucks_selected_items";
 
+  // Load selected items from session storage on mount
   useEffect(() => {
-    if (Object.keys(cart).length > 0 && Object.keys(selectedItems).length === 0) {
-      setSelectedItems(cart);
-      prevSelectedRef.current = cart;
-    }
-  }, [cart, selectedItems]);
-       
-       
-       
-  useEffect(() => {
-    setTimeout(() => {
-      const prev = prevSelectedRef.current;
-
-      // For each item in the current selection, compute the delta.
-      Object.keys(selectedItems).forEach((itemName) => {
-        const newQty = selectedItems[itemName];
-        const oldQty = prev[itemName] || 0;
-        const delta = newQty - oldQty;
-        const item = categories.find((cat) => cat.name === itemName);
-        if (delta > 0) {
-          // If quantity increased, add the item delta times.
-          for (let i = 0; i < delta; i++) {
-            addItemToCart(item, "add", STALL_NAME); // Add stall name
-          }
-        } else if (delta < 0) {
-          // If quantity decreased, remove the item abs(delta) times.
-          for (let i = 0; i < -delta; i++) {
-            addItemToCart(item, "remove", STALL_NAME); // Add stall name
-          }
+    const loadSelectedItems = () => {
+      try {
+        if (!user) {
+          navigate('/signin');
+          return;
         }
-      });
-
-      // Also handle items that were completely removed.
-      Object.keys(prev).forEach((itemName) => {
-        if (!(itemName in selectedItems)) {
-          const removedQty = prev[itemName];
-          const item = categories.find((cat) => cat.name === itemName);
-          for (let i = 0; i < removedQty; i++) {
-            addItemToCart(item, "remove", STALL_NAME); // Add stall name
-          }
+        
+        // First try to load from session storage
+        const storedItems = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (storedItems) {
+          setSelectedItems(JSON.parse(storedItems));
+          return;
         }
-      });
-
-      // Update the ref with the current selectedItems.
-      prevSelectedRef.current = selectedItems;
-    }, 0);
-  }, [selectedItems, addItemToCart]);
-       
-       
-  const handleSelectItem = (item) => {
-    setSelectedItems((prev) => {
-      const updated = { ...prev };
-      updated[item.name] = (updated[item.name] || 0) + 1;
-      return updated;
-    });
-  };
-           
-  const handleRemoveItem = (item) => {
-    setSelectedItems((prev) => {
-      const updated = { ...prev };
-      if (updated[item.name] > 1) {
-        updated[item.name] -= 1;
-      } else {
-        delete updated[item.name];
+        
+        // If not in session storage, initialize from cart
+        const starbucksItems = cartItems.filter(item => 
+          item.name.toLowerCase().includes('starbucks')
+        );
+        
+        const cartItemsMap = {};
+        starbucksItems.forEach(item => {
+          cartItemsMap[item.name] = item.quantity;
+        });
+        
+        setSelectedItems(cartItemsMap);
+        // Save to session storage
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(cartItemsMap));
+      } catch (err) {
+        console.error("Error loading selected items:", err);
+        setError("Failed to load cart items");
       }
-      return updated;
-    });
+    };
+
+    loadSelectedItems();
+  }, [user, cartItems, navigate]);
+
+  // Save selected items to session storage whenever they change
+  useEffect(() => {
+    if (Object.keys(selectedItems).length > 0) {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(selectedItems));
+    }
+  }, [selectedItems]);
+
+  // Fetch menu items from the backend
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // First, get the Starbucks food stall ID
+        const stallsResponse = await axios.get('http://localhost:5000/api/foodstalls');
+        const starbucksStall = stallsResponse.data.foodstalls.find(stall => 
+          stall.name.toLowerCase() === 'starbucks'
+        );
+        
+        if (starbucksStall) {
+          // Then get the menu items for Starbucks
+          const menuResponse = await axios.get(`http://localhost:5000/api/foodstalls/${starbucksStall.id}/menu`);
+          
+          if (menuResponse.data.menu && menuResponse.data.menu.length > 0) {
+            // Map the backend data to our frontend format
+            const formattedMenu = menuResponse.data.menu.map(item => ({
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              // Use default images based on name matching
+              image: getImageForMenuItem(item.name)
+            }));
+            setMenuItems(formattedMenu);
+          } else {
+            console.warn("No menu items found for Starbucks, using defaults");
+          }
+        } else {
+          console.warn("Starbucks stall not found, using default menu");
+        }
+      } catch (err) {
+        console.error("Error fetching menu items:", err);
+        setError("Failed to load menu items. Using default items.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
+
+  const getImageForMenuItem = (itemName) => {
+    const name = itemName.toLowerCase();
+    if (name.includes('brew') && name.includes('milk')) return brew_milk;
+    if (name.includes('caramel') && name.includes('macchiato')) return caramel_macchito;
+    if (name.includes('caramel')) return caramel;
+    if (name.includes('coffee') && name.includes('frappuccino')) return coffee_frappacino;
+    if (name.includes('flat') && name.includes('white')) return flat_white;
+    if (name.includes('honey') && name.includes('almond')) return honey_almondmilk;
+    if (name.includes('ice') && name.includes('coffee')) return ice_coffee;
+    if (name.includes('ice') && name.includes('shake')) return ice_shake;
+    if (name.includes('java')) return java;
+    if (name.includes('latte') && !name.includes('matcha') && !name.includes('pumpkin')) return latte;
+    if (name.includes('matcha')) return matcha_latte;
+    if (name.includes('mocha')) return mocha;
+    if (name.includes('mango')) return mango;
+    if (name.includes('pumpkin') && name.includes('latte')) return pumpkin_latte;
+    if (name.includes('pumpkin') && name.includes('frappuccino')) return pumpkin_frappacino;
+    if (name.includes('refresher')) return refreshers;
+    if (name.includes('salted') && name.includes('caramel')) return salted_caramel;
+    if (name.includes('vanilla') && name.includes('nitro')) return vanilla_nitro;
+    if (name.includes('vanilla') && name.includes('oat')) return vanilla_oatmilk;
+    if (name.includes('double') && name.includes('choco')) return double_choco_chip;
+    return latte; // Default image if no match is found
   };
-       
-  const handleConfirmOrder = () => {
-    alert("Cart has been updated!");
-    console.log(cart);
+
+  const handleSelectItem = async (item) => {
+    try {
+      if (!user) {
+        navigate('/signin');
+        return;
+      }
+
+      const newQuantity = (selectedItems[item.name] || 0) + 1;
+      
+      // Disable the button temporarily to prevent rapid clicks
+      const button = document.querySelector(`button[data-item-id="${item.id}"][data-action="add"]`);
+      if (button) button.disabled = true;
+      
+      try {
+        // Create the cart item object
+        const cartItem = {
+          menu_id: Number(item.id),
+          name: `${STALL_NAME} - ${item.name}`,
+          price: Number(item.price),
+          quantity: newQuantity
+        };
+
+        // Use the cart context's addToCart function
+        const success = await addToCart(cartItem);
+        
+        if (success) {
+          // Update local state only after successful cart update
+          setSelectedItems(prev => ({
+            ...prev,
+            [item.name]: newQuantity
+          }));
+          
+          // Save to session storage
+          sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({
+            ...selectedItems,
+            [item.name]: newQuantity
+          }));
+        } else {
+          setError('Failed to add item to cart');
+        }
+      } catch (error) {
+        console.error('Error updating cart:', error);
+        setError('Failed to update cart. Please try again.');
+      } finally {
+        // Re-enable the button
+        if (button) button.disabled = false;
+      }
+    } catch (error) {
+      console.error('Error in handleSelectItem:', error);
+      setError('An unexpected error occurred. Please try again.');
+    }
   };
-       
-     
+
+  const handleRemoveItem = async (item) => {
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+
+    const currentQuantity = selectedItems[item.name] || 0;
+    if (currentQuantity <= 0) return;
+
+    // Set removing state
+    setRemovingItemId(item.id);
+
+    try {
+      // Immediately update local state to prevent UI flicker
+      const newQuantity = currentQuantity - 1;
+      const updatedItems = { ...selectedItems };
+      
+      if (newQuantity === 0) {
+        delete updatedItems[item.name];
+      } else {
+        updatedItems[item.name] = newQuantity;
+      }
+      
+      setSelectedItems(updatedItems);
+
+      if (newQuantity === 0) {
+        // Remove item from cart using cart context
+        await removeFromCart(item.id);
+      } else {
+        // Update quantity using cart context
+        const cartItem = {
+          menu_id: Number(item.id),
+          name: `${STALL_NAME} - ${item.name}`,
+          price: Number(item.price),
+          quantity: newQuantity
+        };
+        await addToCart(cartItem);
+      }
+
+      // Update session storage
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(updatedItems));
+    } catch (error) {
+      console.error('Error in handleRemoveItem:', error);
+      // Revert local state on error
+      setSelectedItems(prev => ({
+        ...prev,
+        [item.name]: currentQuantity
+      }));
+      setError('Failed to update cart. Please try again.');
+    } finally {
+      setRemovingItemId(null);
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Loading menu items...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
+
   return (
-    <div className="star-opt-container">
-      <div className="star-grid">
-        {categories.map((category, index) => (
-          <div key={index} className="star-grid-item">
-            <img
-              src={category.image}
-              alt={category.name}
-              className="star-category-image"
-            />
-            <p className="star-category-name">
-              {category.name} - {category.price}
-            </p>
-            <div className="star-quantity-controls">
-              <button onClick={() => handleRemoveItem(category)}>-</button>
-              <span>{selectedItems[category.name] || 0}</span>
-              <button onClick={() => handleSelectItem(category)}>+</button>
+    <div className="starbucks-container">
+      <h1>Starbucks Menu</h1>
+      <div className="menu-grid">
+        {menuItems.map((item) => (
+          <div key={item.id} className="menu-item">
+            <img src={item.image} alt={item.name} />
+            <h3>{item.name}</h3>
+            <p className="price">${item.price.toFixed(2)}</p>
+            <div className="quantity-controls">
+              <button 
+                className="quantity-btn decrease-btn"
+                data-item-id={item.id}
+                data-action="remove"
+                onClick={() => handleRemoveItem(item)}
+                disabled={!selectedItems[item.name] || removingItemId === item.id}
+              >
+                {removingItemId === item.id ? '...' : '-'}
+              </button>
+              <span className="quantity-display">{selectedItems[item.name] || 0}</span>
+              <button 
+                className="quantity-btn increase-btn"
+                data-item-id={item.id}
+                data-action="add"
+                onClick={() => handleSelectItem(item)}
+              >
+                +
+              </button>
             </div>
           </div>
         ))}
       </div>
-  
-      {Object.keys(selectedItems).length > 0 && (
-        <button className="confirm-order-button" onClick={handleConfirmOrder}>
-          Add to Cart
-        </button>
-      )}
     </div>
   );
 }
-   
+
 export default StarBucksDrinks;
