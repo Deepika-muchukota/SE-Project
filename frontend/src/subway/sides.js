@@ -1,22 +1,129 @@
 import React, { useState, useEffect } from "react";
 import "./sides.css"; 
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import { getFoodStalls, getFoodMenu } from "../services/api";
+
 import chips from "./subway_img/chips.jpeg";
 import cookies from "./subway_img/cookies.jpeg";
 
-const categories = [
+const defaultCategories = [
   { name: "Chips", image: chips, price: 1.59 },
   { name: "Cookie", image: cookies, price: 0.89 }
+];
+
+// Map of side names to images
+const sideImages = {
+  "Chips": chips,
+  "Cookie": cookies
+};
+
+const sideOptions = [
+  { id: 273, name: "Chips", price: 1.59, image: chips },
+  { id: 274, name: "Cookie", price: 0.89, image: cookies }
 ];
 
 function Sides({ cart, addItemToCart }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const { addToCart, loading: cartLoading } = useCart();
   const [itemQuantities, setItemQuantities] = useState({});
   const [isDirectOrder, setIsDirectOrder] = useState(false);
+  const [categories, setCategories] = useState(defaultCategories);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [stallId, setStallId] = useState(null);
   
   // Define the stall name constant to use throughout the component
   const STALL_NAME = "Subway";
+  
+  // Fetch sides menu items on component mount
+  useEffect(() => {
+    const fetchSidesMenu = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Get all food stalls
+        console.log("Fetching food stalls...");
+        const stalls = await getFoodStalls();
+        console.log("Food stalls response:", stalls);
+
+        if (!stalls || !Array.isArray(stalls)) {
+          console.error("Invalid food stalls response:", stalls);
+          setError("Invalid response from server");
+          return;
+        }
+        
+        // Find the Subway stall
+        const subwayStall = stalls.find(stall => 
+          stall.Name?.toLowerCase() === 'subway' || 
+          stall.name?.toLowerCase() === 'subway'
+        );
+        
+        console.log("Found Subway stall:", subwayStall);
+        
+        if (subwayStall) {
+          const stallId = subwayStall.ID || subwayStall.id;
+          setStallId(stallId);
+          console.log("Using stall ID:", stallId);
+          
+          // Get menu items for Subway
+          console.log("Fetching menu for stall ID:", stallId);
+          const menu = await getFoodMenu(stallId);
+          console.log("Menu response:", menu);
+          
+          if (!menu || !Array.isArray(menu)) {
+            console.error("Invalid menu response:", menu);
+            setError("Invalid menu response from server");
+            return;
+          }
+          
+          // Filter sides items from the menu
+          const sidesItems = menu.filter(item => {
+            const itemName = (item.Name || item.name || '').toLowerCase();
+            const isSideItem = itemName.includes('chips') || 
+                             itemName.includes('cookie');
+            console.log(`Checking item ${itemName}: ${isSideItem ? 'is' : 'is not'} a side item`);
+            return isSideItem;
+          });
+          
+          console.log("Filtered side items:", sidesItems);
+          
+          if (sidesItems.length > 0) {
+            // Map API data to our format
+            const formattedSidesItems = sidesItems.map(item => ({
+              id: item.ID || item.id,
+              name: item.Name || item.name,
+              price: item.Price || item.price || 0,
+              image: sideImages[item.Name || item.name] || chips
+            }));
+            
+            console.log("Formatted side items:", formattedSidesItems);
+            setCategories(formattedSidesItems);
+          } else {
+            console.log("No side items found in menu, using defaults");
+            setCategories(defaultCategories);
+          }
+        } else {
+          console.error("Available stalls:", stalls);
+          setError("Subway stall not found in the available food stalls");
+        }
+      } catch (err) {
+        console.error("Error fetching sides menu:", err);
+        setError(err.message || "Failed to load sides menu");
+        // Use default categories on error
+        console.log("Using default categories due to error");
+        setCategories(defaultCategories);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchSidesMenu();
+  }, []);
   
   // Check if we're coming from the sandwich flow
   useEffect(() => {
@@ -71,59 +178,29 @@ function Sides({ cart, addItemToCart }) {
     });
   };
 
-  const handleContinue = () => {
-    // Convert quantities to an object with item details for easier retrieval later
-    const sidesWithDetails = {};
-    Object.entries(itemQuantities).forEach(([name, quantity]) => {
-      const item = categories.find(cat => cat.name === name);
-      if (item && quantity > 0) {
-        sidesWithDetails[name] = {
-          quantity: quantity,
-          price: item.price
-        };
+  const handlePlaceOrder = async () => {
+    try {
+      // Add selected sides to cart
+      for (const [name, quantity] of Object.entries(itemQuantities)) {
+        const side = sideOptions.find(s => s.name === name);
+        if (side && quantity > 0) {
+          await addToCart({
+            menu_id: side.id,
+            name: side.name,
+            price: side.price,
+            quantity
+          });
+        }
       }
-    });
-    
-    // Store selection in sessionStorage for later
-    sessionStorage.setItem('selectedSides', JSON.stringify(sidesWithDetails));
-    
-    // Check if this is a direct sides order or part of a meal
-    if (isDirectOrder) {
-      // Handle standalone side order
-      if (Object.keys(itemQuantities).length > 0) {
-        // Add each side as a separate item to the cart
-        Object.entries(itemQuantities).forEach(([name, quantity]) => {
-          const item = categories.find(cat => cat.name === name);
-          if (item && quantity > 0) {
-            for (let i = 0; i < quantity; i++) {
-              // Use the addItemToCart function from props
-              const sideItem = {
-                name: name,
-                price: item.price,
-                orderType: "Side"
-              };
-              addItemToCart(sideItem, "add", STALL_NAME);
-            }
-          }
-        });
-        
-        // Calculate subtotal for sides
-        const subtotal = Object.entries(itemQuantities).reduce((total, [name, quantity]) => {
-          const item = categories.find(cat => cat.name === name);
-          return total + (item ? item.price * quantity : 0);
-        }, 0);
-        
-        // Clear the session storage for sides since we're not continuing the flow
-        sessionStorage.removeItem('selectedSides');
-        
-        alert(`Items added to cart! Total: $${subtotal.toFixed(2)}`);
-        navigate("/foodstalls");
-      } else {
-        alert("Please select at least one item.");
-      }
-    } else {
-      // Continue to drinks (part of sandwich flow)
-      navigate("/foodstalls/subway/drinks");
+      
+      // Store the selected sides in sessionStorage
+      sessionStorage.setItem('selectedSides', JSON.stringify(itemQuantities));
+      
+      // Navigate to cart page
+      navigate("/cart");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("There was an error placing your order. Please try again.");
     }
   };
 
@@ -133,13 +210,65 @@ function Sides({ cart, addItemToCart }) {
     return total + (item ? item.price * quantity : 0);
   }, 0);
 
+  // Add this function to get all selected items from sessionStorage
+  const getOrderSummary = () => {
+    const bread = sessionStorage.getItem('selectedBread') ? JSON.parse(sessionStorage.getItem('selectedBread')) : null;
+    const proteins = sessionStorage.getItem('selectedProteins') ? JSON.parse(sessionStorage.getItem('selectedProteins')) : {};
+    const toppings = sessionStorage.getItem('selectedToppings') ? JSON.parse(sessionStorage.getItem('selectedToppings')) : [];
+    const sauces = sessionStorage.getItem('selectedSauces') ? JSON.parse(sessionStorage.getItem('selectedSauces')) : [];
+    
+    // Only include items with quantity > 0
+    const sides = {};
+    Object.entries(itemQuantities).forEach(([name, qty]) => {
+      if (qty && qty > 0) {
+        sides[name] = qty;
+      }
+    });
+    
+    return { bread, proteins, toppings, sauces, sides };
+  };
+
+  const handleContinue = async () => {
+    for (const [name, quantity] of Object.entries(itemQuantities)) {
+      const side = sideOptions.find(s => s.name === name);
+      if (side && quantity > 0) {
+        await addToCart({
+          menu_id: side.id,
+          name: side.name,
+          price: side.price,
+          quantity
+        });
+      }
+    }
+    // Store the selected sides in sessionStorage
+    sessionStorage.setItem('selectedSides', JSON.stringify(itemQuantities));
+    // Navigate to drinks
+    navigate("/foodstalls/subway/drinks");
+  };
+
+  if (loading) {
+    return <div className="loading">Loading sides options...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="error">
+        <p>Error: {error}</p>
+        <p>Using default side options</p>
+        <button onClick={() => window.location.reload()} className="retry-btn">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="sides-container">
       <div className="overlay"></div> 
-      <h2 className="page-title">Add Sides</h2>
+      <h2 className="page-title">Select Your Sides</h2>
       
       <div className="category-grid">
-        {categories.map((category, index) => (
+        {sideOptions.map((category, index) => (
           <div key={index} className="item-card">
             <img 
               src={category.image} 
@@ -178,7 +307,7 @@ function Sides({ cart, addItemToCart }) {
             <ul className="selected-items">
               {Object.entries(itemQuantities).map(([name, quantity]) => (
                 <li key={name}>
-                  {name} x{quantity} - ${(categories.find(cat => cat.name === name)?.price * quantity).toFixed(2)}
+                  {name} x{quantity} - ${(sideOptions.find(s => s.name === name)?.price * quantity).toFixed(2)}
                 </li>
               ))}
             </ul>
@@ -192,22 +321,16 @@ function Sides({ cart, addItemToCart }) {
       <div className="navigation-buttons">
         <button 
           className="back-btn"
-          onClick={() => {
-            if (isDirectOrder) {
-              navigate("/foodstalls/subway");
-            } else {
-              navigate("/foodstalls/subway/sauces");
-            }
-          }}
+          onClick={() => navigate("/foodstalls/subway/toppings")}
         >
-          {isDirectOrder ? "Back to Menu" : "Back to Sauces"}
+          Back to Toppings
         </button>
         <button 
-          className={isDirectOrder ? "place-order-btn" : "continue-btn"} 
+          className="continue-btn" 
           onClick={handleContinue}
-          disabled={isDirectOrder && Object.keys(itemQuantities).length === 0}
+          disabled={Object.keys(itemQuantities).length === 0}
         >
-          {isDirectOrder ? `Add to Cart ($${subtotal.toFixed(2)})` : "Continue to Drinks"}
+          Continue to Drinks
         </button>
       </div>
     </div>

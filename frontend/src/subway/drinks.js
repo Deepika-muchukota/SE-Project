@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./drinks.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
-// Import drink images - update paths as needed
-import waterImg from "./subway_img/water.png"; // Add this image to your project
-import sodaImg from "./subway_img/coke.png";  // You already have this
-import fantaImg from "./subway_img/fanta.png"; // Add this image to your project
-import spriteImg from "./subway_img/sprite.png"; // Add this image to your project
 
-function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
+import waterImg from "./subway_img/water.png"; 
+import sodaImg from "./subway_img/coke.png";  
+import fantaImg from "./subway_img/fanta.png"; 
+import spriteImg from "./subway_img/sprite.png"; 
+
+function Drinks() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const { addToCart, loading: cartLoading } = useCart();
   const [itemQuantities, setItemQuantities] = useState({});
   const [order, setOrder] = useState(null);
   const [isDirectDrinkOrder, setIsDirectDrinkOrder] = useState(false);
@@ -20,10 +24,10 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
   
   // Updated drink options with images
   const categories = [
-    { name: "Water", price: 1.99, image: waterImg },
-    { name: "Soda", price: 2.49, image: sodaImg },
-    { name: "Fanta", price: 2.49, image: fantaImg },
-    { name: "Sprite", price: 2.49, image: spriteImg }
+    { id: 264, name: "Water", price: 1.89, image: waterImg },
+    { id: 261, name: "Coca-Cola", price: 2.19, image: sodaImg },
+    { id: 263, name: "Fanta", price: 2.19, image: fantaImg },
+    { id: 262, name: "Sprite", price: 2.19, image: spriteImg }
   ];
   
   // Helper function to create a detailed sandwich description
@@ -80,6 +84,7 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
     const toppingsJson = sessionStorage.getItem('selectedToppings');
     const saucesJson = sessionStorage.getItem('selectedSauces');
     const sidesJson = sessionStorage.getItem('selectedSides');
+    const drinksJson = sessionStorage.getItem('selectedDrinks');
     
     // Check if we came directly from the main subway menu
     const directDrinkOrder = location.state?.directDrinkOrder || false;
@@ -91,20 +96,25 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
         proteins: proteinsJson ? JSON.parse(proteinsJson) : {},
         toppings: toppingsJson ? JSON.parse(toppingsJson) : [],
         sauces: saucesJson ? JSON.parse(saucesJson) : [],
-        sides: sidesJson ? JSON.parse(sidesJson) : {}
+        sides: sidesJson ? JSON.parse(sidesJson) : {},
+        drinks: drinksJson ? JSON.parse(drinksJson) : {}
       };
       
       setOrder(orderData);
       setIsDirectDrinkOrder(false);
+      
+      // If there are previously selected drinks, load them
+      if (drinksJson) {
+        setItemQuantities(JSON.parse(drinksJson));
+      }
     } else {
       // No existing order means this is likely a direct drink order
       setIsDirectDrinkOrder(directDrinkOrder || true);
-    }
-    
-    // Load any previously selected drinks from sessionStorage
-    const savedDrinks = sessionStorage.getItem('subwayDrinks');
-    if (savedDrinks) {
-      setItemQuantities(JSON.parse(savedDrinks));
+      
+      // Still load any previously selected drinks
+      if (drinksJson) {
+        setItemQuantities(JSON.parse(drinksJson));
+      }
     }
   }, [location]);
   
@@ -194,88 +204,29 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
     total += drinksSubtotal;
   }
 
-  // Handle place order
-  const handlePlaceOrder = () => {
-    if (isDirectDrinkOrder) {
-      // Handle direct drink order
-      if (Object.keys(itemQuantities).length > 0) {
-        // Add each drink as a separate item with the specific name
-        Object.entries(itemQuantities).forEach(([name, quantity]) => {
-          const item = categories.find(cat => cat.name === name);
-          if (item && quantity > 0) {
-            // Create a drink item with specific name
-            const drinkItem = {
-              name: name, // Use the specific drink name (Water, Soda, Fanta, Sprite)
-              price: item.price * quantity,
-              orderType: "Drink", // Changed from "Drinks" to "Drink" to match format
-              quantity: quantity,
-              description: `${name} drink` // Simple description
-            };
-            
-            // Add to cart with specific drink name
-            addItemToCart(drinkItem, "add", STALL_NAME);
-          }
-        });
-        
-        // Clear session storage for drinks
-        sessionStorage.removeItem('subwayDrinks');
-        
-        alert(`Items added to cart! Total: $${drinksSubtotal.toFixed(2)}`);
-        navigate("/foodstalls");
-      } else {
-        alert("Please select at least one drink.");
+  const handleAddToCart = async () => {
+    try {
+      // Add selected drinks to cart
+      for (const [name, quantity] of Object.entries(itemQuantities)) {
+        const drink = categories.find(d => d.name === name);
+        if (drink && quantity > 0) {
+          await addToCart({
+            menu_id: drink.id,
+            name: drink.name,
+            price: drink.price,
+            quantity
+          });
+        }
       }
-    } else {
-      // Handle as part of a meal order
-      // Get data from session storage
-      const breadJson = sessionStorage.getItem('selectedBread');
-      const bread = breadJson ? JSON.parse(breadJson) : null;
       
-      const proteinsJson = sessionStorage.getItem('selectedProteins');
-      const proteins = proteinsJson ? JSON.parse(proteinsJson) : {};
+      // Store the selected drinks in sessionStorage
+      sessionStorage.setItem('selectedDrinks', JSON.stringify(itemQuantities));
       
-      const toppingsJson = sessionStorage.getItem('selectedToppings');
-      const toppings = toppingsJson ? JSON.parse(toppingsJson) : [];
-      
-      const saucesJson = sessionStorage.getItem('selectedSauces');
-      const sauces = saucesJson ? JSON.parse(saucesJson) : [];
-      
-      const sidesJson = sessionStorage.getItem('selectedSides');
-      const sides = sidesJson ? JSON.parse(sidesJson) : {};
-      
-      // Create a detailed description for the cart
-      const sandwichDescription = createSandwichDescription(
-        bread, 
-        proteins, 
-        toppings, 
-        sauces, 
-        sides, 
-        itemQuantities
-      );
-      
-      // Create a simple sandwich item with a detailed description
-      const sandwichItem = {
-        name: "Sandwich",
-        price: total,
-        orderType: "Sandwich",
-        description: sandwichDescription
-      };
-      
-      // Add to cart
-      addItemToCart(sandwichItem, "add", STALL_NAME);
-      
-      // Clear session storage
-      sessionStorage.removeItem('selectedBread');
-      sessionStorage.removeItem('basePrice');
-      sessionStorage.removeItem('selectedProteins');
-      sessionStorage.removeItem('selectedToppings');
-      sessionStorage.removeItem('selectedSauces');
-      sessionStorage.removeItem('selectedSides');
-      sessionStorage.removeItem('subwayOrder');
-      sessionStorage.removeItem('subwayDrinks');
-      
-      alert(`Thank you for your order! Total: $${total.toFixed(2)}`);
-      navigate("/foodstalls");
+      // Navigate to cart page
+      navigate("/cart");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("There was an error adding items to your cart. Please try again.");
     }
   };
 
@@ -333,21 +284,28 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
       </div>
       
       <div className="order-summary">
-        <h3 className="order-summary-title">Drinks Selection</h3>
-        {Object.keys(itemQuantities).length > 0 ? (
-          <>
-            <ul className="selected-items">
-              {Object.entries(itemQuantities).map(([name, quantity]) => (
-                <li key={name} className="selected-item">
-                  {name} x{quantity} - ${(categories.find(cat => cat.name === name)?.price * quantity).toFixed(2)}
-                </li>
-              ))}
-            </ul>
-            <p className="subtotal">Subtotal: ${drinksSubtotal.toFixed(2)}</p>
-          </>
-        ) : (
-          <p>No drinks selected yet.</p>
-        )}
+        <h3>Drinks Summary</h3>
+        <div className="selected-items">
+          {Object.entries(itemQuantities).map(([name, quantity]) => {
+            const drink = categories.find(d => d.name === name);
+            return drink && quantity > 0 ? (
+              <li key={name}>
+                <span>{name} x{quantity}</span>
+                <span>${(drink.price * quantity).toFixed(2)}</span>
+              </li>
+            ) : null;
+          })}
+        </div>
+        <div className="subtotal">
+          Subtotal: ${drinksSubtotal.toFixed(2)}
+        </div>
+        <button 
+          className="place-order-btn" 
+          onClick={handleAddToCart}
+          disabled={Object.keys(itemQuantities).length === 0}
+        >
+          Add to Cart
+        </button>
       </div>
       
       {!isDirectDrinkOrder && order && (
@@ -476,11 +434,11 @@ function Drinks({ cart = [], addOrderToCart, addItemToCart }) {
           </button>
         )}
         <button 
-          className="place-order-btn"
-          onClick={handlePlaceOrder}
-          disabled={Object.keys(itemQuantities).length === 0}
+          className={isDirectDrinkOrder ? "place-order-btn" : "finalize-order-btn"} 
+          onClick={handleAddToCart}
+          disabled={cartLoading}
         >
-          Place Order (${total.toFixed(2)})
+          {cartLoading ? "Processing..." : "Add to Cart"}
         </button>
       </div>
     </div>

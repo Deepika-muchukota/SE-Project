@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./protien.css"; 
 import { useNavigate } from "react-router-dom";
 import turkey from "./subway_img/turkey.jpeg";
 import ham from "./subway_img/ham.jpeg";
 import tuna from "./subway_img/tuna.jpeg";
 import vegDelite from "./subway_img/veg_delite.jpeg";
+import { useCart } from "../context/CartContext";
 
-const categories = [
-  { name: "Turkey", image: turkey, price: 5.99 },
-  { name: "Ham", image: ham, price: 5.49 },
-  { name: "Tuna", image: tuna, price: 5.99 },
-  { name: "Veggie Delite", image: vegDelite, price: 4.99 }
+const proteinOptions = [
+  { id: 265, name: "Turkey", price: 5.99, image: turkey },
+  { id: 266, name: "Ham", price: 5.49, image: ham },
+  { id: 267, name: "Tuna", price: 5.99, image: tuna },
+  { id: 268, name: "Veggie Delite", price: 4.99, image: vegDelite }
 ];
 
 function Protein() {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [itemQuantities, setItemQuantities] = useState({});
+
+  // Load saved protein selections when component mounts
+  useEffect(() => {
+    const savedProteins = sessionStorage.getItem('selectedProteins');
+    if (savedProteins) {
+      try {
+        const parsedProteins = JSON.parse(savedProteins);
+        setItemQuantities(parsedProteins);
+      } catch (error) {
+        console.error("Error loading saved proteins:", error);
+      }
+    }
+  }, []);
 
   const increaseQuantity = (item) => {
     setItemQuantities(prev => ({
@@ -39,15 +54,26 @@ function Protein() {
     });
   };
 
-  const handleContinue = () => {
-    // Store selection in sessionStorage for later
+  const handleContinue = async () => {
+    for (const [name, quantity] of Object.entries(itemQuantities)) {
+      const protein = proteinOptions.find(p => p.name === name);
+      if (protein && quantity > 0) {
+        await addToCart({
+          menu_id: protein.id,
+          name: protein.name,
+          price: protein.price,
+          quantity
+        });
+      }
+    }
+    // Store the selected proteins in sessionStorage
     sessionStorage.setItem('selectedProteins', JSON.stringify(itemQuantities));
-    navigate("/foodstalls/subway/toppings");
+    navigate("/foodstalls/subway/sauces");
   };
 
   // Calculate subtotal for proteins
   const subtotal = Object.entries(itemQuantities).reduce((total, [name, quantity]) => {
-    const item = categories.find(cat => cat.name === name);
+    const item = proteinOptions.find(cat => cat.name === name);
     return total + (item ? item.price * quantity : 0);
   }, 0);
 
@@ -57,7 +83,7 @@ function Protein() {
       <h2 className="page-title">Select Your Protein</h2>
       
       <div className="category-grid">
-        {categories.map((category, index) => (
+        {proteinOptions.map((category, index) => (
           <div key={index} className="item-card">
             <img 
               src={category.image} 
@@ -96,7 +122,7 @@ function Protein() {
             <ul className="selected-items">
               {Object.entries(itemQuantities).map(([name, quantity]) => (
                 <li key={name}>
-                  {name} x{quantity} - ${(categories.find(cat => cat.name === name)?.price * quantity).toFixed(2)}
+                  {name} x{quantity} - ${(proteinOptions.find(cat => cat.name === name)?.price * quantity).toFixed(2)}
                 </li>
               ))}
             </ul>
@@ -119,7 +145,7 @@ function Protein() {
           onClick={handleContinue}
           disabled={Object.keys(itemQuantities).length === 0}
         >
-          Continue to Toppings
+          Continue to Sauces
         </button>
       </div>
     </div>
