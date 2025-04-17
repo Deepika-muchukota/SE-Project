@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Burger35.css";
 import burgerImage from "./burger352_images/burger.jpeg";
@@ -6,6 +6,7 @@ import chickenImage from "./burger352_images/chicken.jpeg";
 import shakesImage from "./burger352_images/shakes.jpeg";
 import sidesImage from "./burger352_images/sides.jpeg";
 import steakImage from "./burger352_images/steaks.jpeg";
+import { useAuth } from "../context/AuthContext";
 
 const categories = [
   { name: "Burgers", image: burgerImage, path: "/foodstalls/burger352/burger" },
@@ -17,10 +18,36 @@ const categories = [
 
 function Burger352() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+   useEffect(() => {
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+  }, [user, navigate]);
+
+  // Clear session storage when component unmounts if user is not logged in
+  useEffect(() => {
+    return () => {
+      if (!user) {
+        // Clear all Burger 352 related session storage
+        sessionStorage.removeItem('burger352_burger_selected_items');
+        sessionStorage.removeItem('burger352_chicken_selected_items');
+        sessionStorage.removeItem('burger352_shakes_selected_items');
+        sessionStorage.removeItem('burger352_sides_selected_items');
+        sessionStorage.removeItem('burger352_steaks_selected_items');
+      }
+    };
+  }, [user]);
 
   const handleCategoryClick = (path) => {
     navigate(path);
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="burger-container">
