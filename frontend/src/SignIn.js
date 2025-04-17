@@ -1,32 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import cafeteriaBg from "./cafeteria-bg.jpg";
+import "./SignIn.css";
 
-const SignIn = ({ setIsLoggedIn }) => {
+const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State to store error messages
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
-      const response = await axios.post("http://localhost:3500/auth/login", { 
-        email, 
-        password 
-      });
-
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token); // Store auth token
-        setIsLoggedIn(true); // Update login state
+      const success = await login({ email, password });
+      if (success) {
+        console.log("Login successful, navigating to /foodstalls");
+        navigate("/foodstalls");
       } else {
         setError("Login failed. Please try again.");
       }
-      
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid email or password");
+      console.error("Login error:", err);
+      setError(err.response?.data?.error || "Invalid email or password");
     }
   };
 
@@ -45,7 +44,7 @@ const SignIn = ({ setIsLoggedIn }) => {
     >
       <div className="signin-container">
         <h2>Sign In</h2>
-        {error && <p className="error-message">{error}</p>} {/* Display error message */}
+        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Email</label>
