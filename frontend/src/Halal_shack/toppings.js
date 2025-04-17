@@ -14,7 +14,7 @@ const toppingOptions = [
   { id: 227, name: "Lettuce", price: 0.00, image: lettuceImg },
   { id: 228, name: "Tomatoes", price: 0.00, image: tomatoImg },
   { id: 229, name: "Cucumbers", price: 0.00, image: cucumberImg },
-  { id: 230, name: "Onions", price: 0.00, image: onionImg },
+  { id: 230, name: "Onions", price: 0.00, image: onionsImg },
   { id: 231, name: "Olives", price: 0.00, image: olivesImg }
 ];
 
