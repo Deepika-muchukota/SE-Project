@@ -1,62 +1,123 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import cafeteriaBg from "./cafeteria-bg.jpg";
 import "./SignUp.css";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword,confirmPassword,confirmSetPassword,errors,setErrors,passwordFocused,setPasswordFocused}) => {
-
+const SignUp = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { register } = useAuth();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (validateForm()) { 
-      console.log('Submitted:', { name, email, password });
-      navigate("/")
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setError("Name is required");
+      return false;
+    }
+
+    if (!formData.email.trim()) {
+      setError("Email is required");
+      return false;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+
+    if (!formData.phone.trim()) {
+      setError("Phone number is required");
+      return false;
+    }
+
+    if (!/^\d{10}$/.test(formData.phone)) {
+      setError("Please enter a valid 10-digit phone number");
+      return false;
+    }
+
+    if (!formData.password) {
+      setError("Password is required");
+      return false;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setError(""); // Clear error when user types
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      console.log("Attempting to register with data:", {
+        ...formData,
+        password: "[HIDDEN]",
+        confirmPassword: "[HIDDEN]"
+      });
+
+      const success = await register({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+      });
+      
+      if (success) {
+        console.log("Registration successful, navigating to signin");
+        navigate("/signin");
+      } else {
+        console.error("Registration failed without error");
+        setError("Registration failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      let errorMessage = err.response?.data?.error || err.message || "Registration failed";
+      
+      // Check for specific error types
+      if (errorMessage.includes("uni_users_phone") || errorMessage.includes("duplicate key")) {
+        errorMessage = "This phone number is already registered. Please use a different phone number.";
+      } else if (errorMessage.includes("uni_users_email")) {
+        errorMessage = "This email is already registered. Please use a different email address.";
+      }
+      
+      console.error("Error details:", errorMessage);
+      setError(errorMessage);
     }
   };
 
-  const validateForm = () => {
-    let newErrors = {};
-
-    if (!name.trim()) newErrors.name = 'Name is required';
-
-    if (!phone.trim()) newErrors.phone = 'Phone number is required';
-    else if (!/^\d{10}$/.test(phone)) newErrors.phone = 'Enter a valid 10-digit phone number';
-
-    if (!email.trim()) newErrors.email = 'Email is required';
-    else if (!/^\S+@\S+\.\S+$/.test(email)) newErrors.email = 'Enter a valid email';
-
-    if (!password) newErrors.password = 'Password is required';
-    else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters';
-    else if (!/\d/.test(password)) newErrors.password = 'Password must contain at least one number';
-    else if (!/[A-Z]/.test(password)) newErrors.password = 'Password must contain at least one uppercase letter';
-
-    if (!confirmPassword) newErrors.confirmPassword = 'confirmation of password required';
-    if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const createUser = () => {
-    axios.post('http://localhost:3500/items', {
-      "Name": name,
-      "Email": email,
-      "Phone Number": phone,
-      "Password": password,
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   return (
-    <div className='sign-up-page'
-    style={{
+    <div
+      className="signup-page"
+      style={{
         backgroundImage: `url(${cafeteriaBg})`,
         backgroundSize: "cover",
         height: "100vh",
@@ -64,76 +125,80 @@ const SignUp = ({name,setName,email,setEmail,phone,setPhone,password,setPassword
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-      }}>
-      <form className='sign-up-form' onSubmit={handleSubmit}
-      >
-      <h2>Sign Up</h2>
-      <div className='signup-inp'>
-      <label >
-        Name:
-        <input autoFocus placeholder="Enter your name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        {errors.name && <span className="error">{errors.name}</span>}
-      </label>
-      </div>
-
-      <div className='signup-inp'>
-      <label >
-        Email:
-        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        {errors.email && <span className="error">{errors.email}</span>}
-      </label>
-      </div>
-
-      <div className='signup-inp'>
-      <label >
-        Phone Number:
-        <input
-        type="tel" 
-        placeholder="Enter your phone number" 
-        value={phone} 
-        onChange={(e) => setPhone(e.target.value)} 
-        />
-        {errors.phone && <span className="error">{errors.phone}</span>}
-      </label>
-      </div>
-
-      <div className='signup-inp'>
-      <label >
-        Password:
-        <input 
-          type="password" 
-          placeholder="Set up your password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          onFocus={() => setPasswordFocused(true)} 
-          onBlur={() => setPasswordFocused(false)}
-        />
-        {errors.password && <span className="error">{errors.password}</span>}
-        {passwordFocused && (
-          <div className="password-requirements">
-            <ul>
-              <li>At least 8 characters</li>
-              <li>At least one number</li>
-              <li>At least one uppercase letter</li>
-            </ul>
+      }}
+    >
+      <div className="signup-container">
+        <h2>Sign Up</h2>
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label>Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
-        )}
-      </label>
+          <div className="input-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Enter your 10-digit phone number"
+              value={formData.phone}
+              onChange={handleChange}
+              pattern="[0-9]{10}"
+              maxLength="10"
+              required
+            />
+            <small className="input-hint">Use a unique phone number that hasn't been registered before</small>
+          </div>
+          <div className="input-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password (min. 6 characters)"
+              value={formData.password}
+              onChange={handleChange}
+              minLength="6"
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              minLength="6"
+              required
+            />
+          </div>
+          <button type="submit" className="signup-btn">Sign Up</button>
+        </form>
+        <div className="signup-links">
+          Already have an account? <Link to="/signin">Sign in here</Link>
+        </div>
       </div>
-
-      <div className='signup-inp' >
-      <label>
-        Confirm Password:
-        <input type="password" placeholder="Re-enter your password" value={confirmPassword} onChange={(e) => confirmSetPassword(e.target.value)} />
-        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-      </label>
-      </div>
-
-      <button className='signup-btn' type="submit" disabled={Object.keys(errors).length > 0} onClick={createUser}>Sign Up</button>
-
-      </form>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
