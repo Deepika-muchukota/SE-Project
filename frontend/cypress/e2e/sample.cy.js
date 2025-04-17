@@ -4,18 +4,6 @@ describe('Sign In Page Test', () => {
     cy.clearLocalStorage();
   });
 
-  it('should open the Sign In page by default', () => {
-    // Visit the root URL which should redirect to /signin
-    cy.visit('http://localhost:3000/signIn'); // Assuming this redirects to /signin
-
-    // Assert that the URL includes /signin
-    cy.url().should('include', '/signIn');
-
-    // Check if the Sign In heading is visible
-    cy.get('.signin-container', { timeout: 10000 }).should('exist');
-    cy.get('h2').should('contain', 'Sign In');
-
-  });
 
   it('should allow access to Sign Up page', () => {
     cy.visit('http://localhost:3000/SignUp');

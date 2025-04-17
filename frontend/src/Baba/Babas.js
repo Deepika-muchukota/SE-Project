@@ -5,8 +5,8 @@ import non_veg from "./Baba_images/non-veg.jpg";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
-  { name: "Veg Options", image: veg, path:'/foodstalls/Babas/ve' },
-  { name: "Non-Veg Options", image:non_veg, path: '/foodstalls/Babas/nve' },
+  { name: "Veg Options", image: veg, path:'/foodstalls/Babas/Vegeterian' },
+  { name: "Non-Veg Options", image:non_veg, path: '/foodstalls/Babas/Nvegeterian' },
 ];
 
 function Babas() {
