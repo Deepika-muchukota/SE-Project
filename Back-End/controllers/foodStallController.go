@@ -3,8 +3,9 @@ package controllers
 import (
 	"SE-Project/Back-End/database"
 	"SE-Project/Back-End/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Fetch all food stalls
@@ -22,7 +23,7 @@ func GetFoodStalls(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"foodstalls": foodStalls})  // 🔹 Fix JSON key to lowercase
+	c.JSON(http.StatusOK, gin.H{"foodstalls": foodStalls}) // 🔹 Fix JSON key to lowercase
 }
 
 // Fetch menu for a specific food stall
@@ -53,11 +54,11 @@ func GetAllMenuItems(c *gin.Context) {
 }
 
 func GetMenuItemByName(c *gin.Context) {
-    name := c.Param("name")
-    var item models.MenuItem
-    if err := database.DB.Where("name = ?", name).First(&item).Error; err != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "Menu item not found"})
-        return
-    }
-    c.JSON(http.StatusOK, gin.H{"menuItem": item})
+	name := c.Param("name")
+	var item models.MenuItem
+	if err := database.DB.Where("name = ?", name).First(&item).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Menu item not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"menuItem": item})
 }
