@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./burger_opt.css";
+import "./chicken.css";
 import strips from "./burger352_images/strips.jpeg";
 import wings from "./burger352_images/wings.jpeg";
 import { useNavigate } from "react-router-dom";
