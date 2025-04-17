@@ -1,43 +1,38 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './nav.css'; 
+import { useCart } from './context/CartContext';
 
-function NavBar({ cart, setCart, onLogout, removeOrderFromCart }) {
+function NavBar({ cartItemCount, onLogout, isAuthenticated }) {
   const navigate = useNavigate();
-
-  // Calculate total items across all orders
-  const totalItems = Array.isArray(cart) ? cart.reduce((total, order) => {
-    // Sum up quantities from all items in the order
-    const orderItemCount = order.items ? order.items.reduce((count, item) => {
-      return count + (item.quantity || 1); // Default to 1 if quantity not specified
-    }, 0) : 0;
-    return total + orderItemCount;
-  }, 0) : 0;
-
-  // Calculate total price across all orders
-  const totalPrice = Array.isArray(cart) ? cart.reduce((total, order) => {
-    return total + (order.totalPrice || 0);
-  }, 0) : 0;
+  const { cartItems, getCartTotal, clearCart } = useCart();
 
   const navigateToCartPage = () => {
     navigate('/cart');
   };
 
   const finalizeOrder = async () => {
-    if (!Array.isArray(cart) || cart.length === 0) {
+    if (cartItems.length === 0) {
       alert("Your cart is empty");
       return;
     }
 
     try {
       // For testing without a backend
-      console.log("Order placed successfully:", cart);
-      alert(`Order placed successfully! Total: $${totalPrice.toFixed(2)}`);
-      setCart([]);
+      console.log("Order placed successfully:", cartItems);
+      alert(`Order placed successfully! Total: $${getCartTotal().toFixed(2)}`);
+      clearCart();
       navigate('/foodstalls');
     } catch (error) {
       console.error('Error finalizing order:', error);
     }
+  };
+
+  const handleLogout = () => {
+    // Call the logout function
+    onLogout();
+    // Navigate to the signin page
+    navigate('/signin');
   };
 
   return (
@@ -48,12 +43,12 @@ function NavBar({ cart, setCart, onLogout, removeOrderFromCart }) {
           Finalize Order
         </button>
         <div className="navbar-cart">
-          <span className="cart-count">{totalItems}</span> Items
+          <span className="cart-count">{cartItemCount}</span> Items
           <button onClick={navigateToCartPage} className="view-cart-btn">
             View Cart
           </button>
         </div>
-        <button onClick={onLogout} className="logout-btn">
+        <button onClick={handleLogout} className="logout-btn">
           Logout
         </button>
       </div>
