@@ -1,5 +1,7 @@
+sides.js :
+
 import React, { useState, useEffect } from "react";
-import "./sides.css"; 
+import "./sides.css";
 import fries from "./burger352_images/fries.jpeg";
 import sweet_fries from "./burger352_images/sweet_fries.jpeg";
 import onion_rings from "./burger352_images/onion_rings.jpeg";
@@ -7,12 +9,12 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
+// Updated menu items with correct IDs from the database
 const categories = [
   { id: 208, name: "Fries", image: fries, price: 2.49 },
   { id: 209, name: "Sweet Fries", image: sweet_fries, price: 2.49 },
   { id: 210, name: "Onion Rings", image: onion_rings, price: 3.09 },
 ];
-
 
 function Sides() {
   const navigate = useNavigate();
