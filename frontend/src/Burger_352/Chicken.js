@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "./chicken.css";
-import strips from "./burger352_images/strips.jpeg";
+import "./burger_opt.css";
+import chicken from "./burger352_images/chicken.jpeg";
 import wings from "./burger352_images/wings.jpeg";
+import strips from "./burger352_images/strips.jpeg";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
+// Updated menu items with correct IDs from the database
 const categories = [
-  { id: 204, name: "Chicken Wings", image: wings, price: 9.29 },
-  { id: 205, name: "Chicken Strips", image: strips, price: 9.99 },
+  { id: 202, name: "Chicken Strips", image: strips, price: 10.79 },
+  { id: 203, name: "Chicken Wings", image: wings, price: 10.99 },
 ];
 
 function Chicken() {
