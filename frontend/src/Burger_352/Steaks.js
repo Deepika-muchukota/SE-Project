@@ -1,3 +1,5 @@
+steaks.js :
+
 import React, { useState, useEffect } from "react";
 import "./steaks.css"; 
 import philly from "./burger352_images/philly.jpeg";
@@ -6,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
+// Updated menu items with correct IDs from the database
 const categories = [
-  { id: 201, name: "Philly", image: philly, price: 10.99 },
-  { id: 202, name: "Chicken Philly", image: chicken_philly, price: 10.99 }
+  { id: 211, name: "Philly", image: philly, price: 10.99 },
+  { id: 212, name: "Chicken Philly", image: chicken_philly, price: 10.99 }
 ];
 
 function Steaks() {
@@ -63,7 +66,7 @@ function Steaks() {
       // Create the cart item object with proper type conversion
       const cartItem = {
         menu_id: Number(item.id),
-        name: `${STALL_NAME} - ${item.name}`,
+        name: ${STALL_NAME} - ${item.name},
         price: Number(item.price),
         quantity: Number(newQuantity)
       };
@@ -120,7 +123,7 @@ function Steaks() {
         // Update quantity using cart context
         const cartItem = {
           menu_id: Number(item.id),
-          name: `${STALL_NAME} - ${item.name}`,
+          name: ${STALL_NAME} - ${item.name},
           price: Number(item.price),
           quantity: Number(newQuantity)
         };
