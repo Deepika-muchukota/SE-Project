@@ -1,5 +1,3 @@
-steaks.js :
-
 import React, { useState, useEffect } from "react";
 import "./steaks.css"; 
 import philly from "./burger352_images/philly.jpeg";
