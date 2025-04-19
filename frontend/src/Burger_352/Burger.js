@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
+// Updated menu items with correct IDs from the database
 const categories = [
   { id: 197, name: "The Classic", image: classic, price: 8.99 },
   { id: 198, name: "The Bacon Jam", image: bacon, price: 9.29 },
@@ -16,7 +17,6 @@ const categories = [
   { id: 200, name: "The Mushroom Swiss", image: mushroom, price: 8.59 },
   { id: 201, name: "The Pizza burger", image: pizza, price: 9.49 },
 ];
-
 
 function Burger() {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ function Burger() {
       // Create the cart item object with proper type conversion
       const cartItem = {
         menu_id: Number(item.id),
-        name: `${STALL_NAME} - ${item.name}`,
+        name: ${STALL_NAME} - ${item.name},
         price: Number(item.price),
         quantity: Number(newQuantity)
       };
@@ -136,7 +136,7 @@ function Burger() {
         // Update quantity using cart context
         const cartItem = {
           menu_id: Number(item.id),
-          name: `${STALL_NAME} - ${item.name}`,
+          name: ${STALL_NAME} - ${item.name},
           price: Number(item.price),
           quantity: Number(newQuantity)
         };
