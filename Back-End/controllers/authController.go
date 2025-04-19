@@ -184,3 +184,4 @@ func EditUser(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": user})
 }
+

@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import "./shakes.css"; 
+import React, { useState, useEffect } from "react";
+import "./shakes.css";
 import vanilla from "./burger352_images/vanilla.jpeg";
 import chocolate from "./burger352_images/chocolate.jpeg";
 import oreo from "./burger352_images/oreo.jpeg";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
+// Updated menu items with correct IDs from the database
 const categories = [
   { id: 204, name: "Vanilla Milk Shake", image: vanilla, price: 4.69 },
   { id: 205, name: "Chocolate Milk Shake", image: chocolate, price: 4.69 },
@@ -67,7 +68,7 @@ function Shakes() {
       // Create the cart item object with proper type conversion
       const cartItem = {
         menu_id: Number(item.id),
-        name: `${STALL_NAME} - ${item.name}`,
+        name: ${STALL_NAME} - ${item.name},
         price: Number(item.price),
         quantity: Number(newQuantity)
       };
@@ -124,7 +125,7 @@ function Shakes() {
         // Update quantity using cart context
         const cartItem = {
           menu_id: Number(item.id),
-          name: `${STALL_NAME} - ${item.name}`,
+          name: ${STALL_NAME} - ${item.name},
           price: Number(item.price),
           quantity: Number(newQuantity)
         };

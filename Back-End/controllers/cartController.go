@@ -88,7 +88,7 @@ func FetchCartItems(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"cartItems": response})
 }
 
-// ✅ Delete specific item (user_id + menu_id)
+// Delete specific item (user_id + menu_id)
 func DeleteItemFromCart(c *gin.Context) {
 	userIDStr := c.Param("userId")
 	userID, err := strconv.Atoi(userIDStr)
