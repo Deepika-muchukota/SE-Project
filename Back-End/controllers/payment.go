@@ -24,7 +24,7 @@ func CreateCheckoutSession(c *gin.Context) {
 		return
 	}
 
-	stripe.Key = "sk_test_51REKFG00Mz4anjn8zqV6Nt4ly0tOpcFUcq1QtXxUrBA0Jp4dOAIpne447zY7fBRdfbGoOyJM8OmxQgezuOu5wZtM00MKyBqkhV"
+	stripe.Key = ""
 
 	var lineItems []*stripe.CheckoutSessionLineItemParams
 	for _, item := range req.Items {
