@@ -3,6 +3,7 @@ package main
 import (
 	"SE-Project/Back-End/controllers"
 	"SE-Project/Back-End/database"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
