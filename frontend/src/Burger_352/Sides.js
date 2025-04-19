@@ -1,5 +1,3 @@
-sides.js :
-
 import React, { useState, useEffect } from "react";
 import "./sides.css";
 import fries from "./burger352_images/fries.jpeg";
