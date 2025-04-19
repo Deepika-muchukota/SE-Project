@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CartPage.css';
 import { useCart } from './context/CartContext';
+import { loadStripe } from '@stripe/stripe-js';
+import axios from 'axios';
 
 function CartPage() {
   const navigate = useNavigate();
@@ -14,18 +16,37 @@ function CartPage() {
       alert("Your cart is empty");
       return;
     }
+  
+    setLoading(true);
+    setError(null);
+  
     try {
-      setLoading(true);
-      alert(`Order placed successfully! Total: $${getCartTotal().toFixed(2)}`);
-      await clearCart();
-      navigate('/foodstalls');
+      const stripe = await loadStripe("pk_test_51REKFG00Mz4anjn8ie9qIXkTEUgGRpFqCtXYi3rlU6O9xjm0yRwUmfUgp3TT27dJwMbHNh7myBxRIn0SyWfTgjD9000nx3pFfs"); 
+
+  
+      const response = await axios.post('http://localhost:8080/create-checkout-session', {
+        items: cartItems.map(item => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      });
+  
+      const sessionId = response.data.sessionId;
+  
+      const result = await stripe.redirectToCheckout({ sessionId });
+  
+      if (result.error) {
+        setError(result.error.message);
+      }
     } catch (error) {
-      setError("Failed to place order. Please try again.");
+      console.error(error);
+      setError("Payment failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleBackToFoodStalls = () => {
     navigate('/foodstalls');
   };
