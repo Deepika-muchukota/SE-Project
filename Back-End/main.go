@@ -23,7 +23,8 @@ func main() {
 	r.POST("/api/users/signin", controllers.Signin)
 	r.GET("/api/users", controllers.GetUserByName)
 	r.PUT("/api/users/:id", controllers.EditUser)
-	r.DELETE("/api/users", controllers.DeleteUser)
+	r.POST("/api/users/delete/:id", controllers.DeleteUser)
+	r.PUT("/api/users/:id/change-password", controllers.ChangePassword)
 
 	// Food Stalls & Menu Routes
 	r.GET("/api/foodstalls", controllers.GetFoodStalls)
@@ -36,6 +37,14 @@ func main() {
 	r.GET("/api/cart/:userId", controllers.FetchCartItems)
 	r.DELETE("/api/cart/delete/:userId/:menuId", controllers.DeleteItemFromCart)
 	r.DELETE("/api/cart/empty/:userId", controllers.EmptyCart)
+
+	// Order Routes
+	r.POST("/api/place-order/:userId", controllers.FinalizeOrder)
+	r.GET("/api/orders/:userId", controllers.GetOrdersByUser)
+
+	// Payment Routes
+	r.POST("/api/payments", controllers.HandlePayment)
+
 
 	// Start the server on port 5000
 	r.Run(":5000")
