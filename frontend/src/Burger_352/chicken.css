@@ -1,142 +1,98 @@
 .chicken-opt-container {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(to bottom, #df4f16, #1b0e0a);
-    flex-direction: column;
-    padding: 40px 20px;
-    width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #d33434a7;
+  min-height: 100vh;
+  width: 100%;
 }
 
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
-    z-index: -1;
+/* Ensure horizontal alignment */
+.chicken-grid {
+  display: flex;
+  justify-content: center; /* Centers items */
+  flex-wrap: wrap; /* Ensures responsiveness */
+  gap: 20px;
+  width: 80%; /* Adjust this if needed */
+  margin-top: 20px;
 }
 
-
-.category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px; 
-    width: 100%;
-    max-width: 600px;
+/* Individual item styling */
+.chicken-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  width: 200px; /* Set fixed width to align properly */
 }
 
-.category-button {
-    background-color: #5d4037; 
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 220px;
-    height: 260px;
-    text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+.chicken-item:hover {
+  transform: scale(1.05);
 }
 
-
-.category-button:nth-child(1) { background-color: #6d4c41; } 
-.category-button:nth-child(2) { background-color: #8d6e63; } 
-
-
-.category-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
-}
-
-
+/* Image styling */
 .category-image {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 12px 12px 0 0;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
-
+/* Name and price */
 .category-name {
-    margin-top: 10px;
-    font-weight: bold;
-    color: white;
-    font-size: 18px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #ecda17a7;
+  text-align: center;
 }
 
-.category-button {
-    flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
-    max-width: calc(33.33% - 30px);
-    height: 40vh; /* Adjusted height for better fit */
-    background-color: #ffcc00;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+/* Quantity controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 10px;
 }
 
-.confirm-order-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.quantity-controls span{
+color: antiquewhite;
+}
+.quantity-controls button {
+  background-color: #d9dc1f46;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.confirm-order-btn:hover {
-    background-color: #e65c00;
-    transform: scale(1.05);
+.quantity-controls button:hover {
+  background-color: #c9af2c;
 }
 
-.category-button.selected {
-    background-color: #f39c12; /* Lighter yellow when selected */
-    border: 2px solid #ffcc00; /* Bright border when highlighted */
-    transform: scale(1.05); /* Slight scaling effect */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Stronger shadow for emphasis */
+/* Confirm order button */
+.confirm-order-button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #5cb85c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-@media (max-width: 768px) {
-    .category-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .category-button {
-        width: 200px;
-        height: 240px;
-    }
-}
-
-@media (max-width: 500px) {
-    .category-button {
-        width: 180px;
-        height: 220px;
-    }
-
-    .category-name {
-        font-size: 16px;
-    }
+.confirm-order-button:hover {
+  background-color: #4cae4c;
 }
