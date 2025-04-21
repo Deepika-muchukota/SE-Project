@@ -25,7 +25,7 @@ In Sprint 4, our primary focus was to:
 - Implemented **user account management APIs**:
   - Change User Password
   - User Logout
-- **Database schema:**:
+- **Database schema**:
   - Tables created: `users`, `food_stalls`, `menu_items`, `cart_items`, `order`, `order_items`
 - **Added unit tests** for new API endpoints.
 - **Updated backend API documentation** and ensured consistent error handling across routes.
