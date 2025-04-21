@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+var SecretKey = []byte("my_super_secret_key")
+
 func TestSignup(t *testing.T) {
 	router := SetupRouter()
 
@@ -66,7 +68,7 @@ func TestEditUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	router := SetupRouter()
-	req, _ := http.NewRequest("DELETE", "/api/users?name=Test User", nil)
+	req, _ := http.NewRequest("DELETE", "/api/users/10", nil)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
