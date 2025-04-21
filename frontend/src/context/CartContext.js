@@ -10,6 +10,7 @@ export const useCart = () => useContext(CartContext);
 // Cart provider component
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [quantities, setQuantities] = useState({}); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
@@ -129,6 +130,7 @@ export const CartProvider = ({ children }) => {
     try {
       await emptyCart(userId);
       setCartItems([]);
+      setQuantities({});
     } catch (err) {
       setError('Failed to clear cart');
       console.error(err);
@@ -137,6 +139,39 @@ export const CartProvider = ({ children }) => {
     }
   };
   
+  const updateQuantity = (menuId, qty) => {
+    setQuantities(prev => ({ ...prev, [menuId]: qty }));
+  };
+  
+  const getQuantity = (menuId) => quantities[menuId] || 0;
+
+  const placeOrder = async () => {
+    const userId = getCurrentUserId();
+    if (!userId || cartItems.length === 0) return false;
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/place-order/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartItems)
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to place order');
+      }
+  
+      await clearCart(); // ✅ Clear cart after placing order
+      return true;
+    } catch (err) {
+      setError('Failed to place order');
+      console.error(err);
+      return false;
+    }
+  };
+
   // Calculate the total price of the cart
   const getCartTotal = () => {
     return (cartItems || []).reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -155,9 +190,12 @@ export const CartProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     clearCart,
+    updateQuantity,
+    getQuantity,   
     getCartTotal,
     getCartItemCount,
-    loadCartItems
+    loadCartItems,
+    placeOrder
   };
   
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
