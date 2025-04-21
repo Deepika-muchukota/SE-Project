@@ -1,151 +1,85 @@
-
 .shakes-opt-container {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #d9ec0f36;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(to bottom, #2b1a1a, #4e342e); /* Dark chocolate shake theme */
-    flex-direction: column;
-    padding: 40px 20px;
-    width: 100vw;
-}
-
-/* Overlay effect */
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Darker overlay */
-    z-index: -1;
 }
 
-/* Grid layout for categories */
-.category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px; /* Proper spacing */
-    width: 100%;
-    max-width: 800px;
+/* Table styling */
+.shakes-table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* Ensures equal spacing */
 }
 
-/* Category button styling */
-.category-button {
-    background-color: #6d4c41; /* Dark brown */
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 250px;
+.shakes-table tr {
+    display: table-row; /* Resetting any flex applied */
+}
+
+.shakes-table td {
     text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    padding: 15px;
+    vertical-align: middle;
+    width: 10%; /* Two items per row */
+    max-width: 300px; /* Prevents columns from growing too much */
+    box-sizing: border-box;
 }
 
-/* Different background shades for variety */
-.category-button:nth-child(1) { background-color: #8d6e63; } /* Light Brown */
-.category-button:nth-child(2) { background-color: #795548; } /* Medium Brown */
-.category-button:nth-child(3) { background-color: #5d4037; } /* Dark Brown */
-.category-button:nth-child(4) { background-color: #4e342e; } /* Deep Brown */
 
-/* Hover effect */
-.category-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
-}
-
-/* Image styling - Uniform size */
-.category-image {
-    width: 100%;
+/* Image styling */
+.shakes-category-image {
+    width: 160px; /* Match burger styles */
     height: 160px;
     object-fit: cover;
-    border-radius: 12px 12px 0 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Text Styling */
-.category-name {
-    margin-top: 10px;
+/* Name and price */
+.shakes-category-name {
+    font-size: 16px;
     font-weight: bold;
-    color: white;
-    font-size: 18px;
-    text-transform: capitalize;
-    text-align: center;
+    margin-top: 8px;
 }
 
-.category-button {
-    flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
-    max-width: calc(33.33% - 30px);
-    height: 40vh; /* Adjusted height for better fit */
-    background-color: #ffcc00;
-    border: none;
-    cursor: pointer;
+/* Quantity controls */
+.shakes-quantity-controls {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    margin-top: 8px;
+    gap: 10px;
 }
 
-.confirm-order-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff6600;
+.shakes-quantity-controls button {
+    background-color: #ff5900;
     color: white;
     border: none;
-    padding: 12px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
+    padding: 5px 10px;
+    border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
 }
 
-.confirm-order-btn:hover {
-    background-color: #e65c00;
-    transform: scale(1.05);
+.shakes-quantity-controls button:hover {
+    background-color: #e68900;
 }
 
-.category-button.selected {
-    background-color: #f39c12; /* Lighter yellow when selected */
-    border: 2px solid #ffcc00; /* Bright border when highlighted */
-    transform: scale(1.05); /* Slight scaling effect */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6); /* Stronger shadow for emphasis */
+/* Confirm order button */
+.confirm-order-button {
+    margin-top: 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .category-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .category-button {
-        width: 180px;
-        height: 230px;
-    }
-}
-
-/* One item per row for very small screens */
-@media (max-width: 500px) {
-    .category-button {
-        width: 160px;
-        height: 210px;
-    }
-
-    .category-name {
-        font-size: 16px;
-    }
+.confirm-order-button:hover {
+    background-color: #45a049;
 }
