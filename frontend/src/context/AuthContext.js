@@ -154,16 +154,15 @@ export const AuthProvider = ({ children }) => {
   const deleteUserAccount = async (password) => {
     const storedUser = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user") || "{}");
     const id = storedUser?.id;
-    const email = storedUser?.email;
   
-    if (!id || !email) {
-      console.warn("User ID or email missing");
+    if (!id) {
+      console.warn("User ID is missing");
       return false;
     }
   
     try {
-      const response = await fetch(`http://localhost:5000/api/users/delete/${id}`, {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/api/users/${id}`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         },
