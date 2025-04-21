@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f8f8f8;
+    background-color: #ec510f80;
     min-height: 100vh;
     width: 100%;
 }
@@ -17,14 +17,14 @@
 
 .burger-table td {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     vertical-align: middle;
 }
 
 /* Image styling */
 .category-image {
-    width: 180px;
-    height: 180px;
+    width: 100px; /* Further reduced from 140px */
+    height: 100px; /* Further reduced from 140px */
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,11 +34,11 @@
 .category-name {
     font-size: 16px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 /* Quantity controls */
-.quantity-controls {
+.b-quantity-controls {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,8 +46,8 @@
     gap: 10px;
 }
 
-.quantity-controls button {
-    background-color: #ff9800;
+.b-quantity-controls button {
+    background-color: #ffea0056;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -56,8 +56,8 @@
     font-size: 16px;
 }
 
-.quantity-controls button:hover {
-    background-color: #e68900;
+.b-quantity-controls button:hover {
+    background-color: #e6db00;
 }
 
 /* Confirm order button */
