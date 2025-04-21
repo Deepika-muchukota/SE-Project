@@ -12,7 +12,7 @@ import (
     "fmt"
 )
 
-var SecretKey = "supersecretkey"
+var SecretKey = []byte("my_super_secret_key")
 
 // Signup Handler
 func Signup(c *gin.Context) {
@@ -91,18 +91,9 @@ func Signin(c *gin.Context) {
     })
 }
 
-// DeleteUser by ID or Name
-func DeleteUser(c *gin.Context) {
+// DeleteUser by ID
+func DeleteUserByID(c *gin.Context) {
     id := c.Param("id")
-
-    var req struct {
-        Password string `json:"password"`
-    }
-
-    if err := c.ShouldBindJSON(&req); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-        return
-    }
 
     var user models.User
     if err := database.DB.First(&user, id).Error; err != nil {
@@ -110,19 +101,13 @@ func DeleteUser(c *gin.Context) {
         return
     }
 
-    if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect password"})
-        return
-    }
-
     if err := database.DB.Delete(&user).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete account"})
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"message": "Account deleted successfully"})
+    c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
-
 
 // Get user by Name
 func GetUserByName(c *gin.Context) {
@@ -230,3 +215,120 @@ func ChangePassword(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
 }
 
+func LogoutUserByEmail(c *gin.Context) {
+    var req struct {
+        Email string `json:"email"`
+    }
+
+    if err := c.ShouldBindJSON(&req); err != nil || req.Email == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Email is required"})
+        return
+    }
+
+    var user models.User
+    if err := database.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "message": fmt.Sprintf("User %s logged out successfully", user.Name),
+    })
+}
+
+// ✅ Generate JWT token for password reset
+func generateResetToken(email string) (string, error) {
+    claims := jwt.MapClaims{
+        "email": email,
+        "exp":   time.Now().Add(1 * time.Hour).Unix(),
+    }
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(SecretKey)
+}
+
+// ✅ Helper: Validate JWT token
+func validateResetToken(tokenStr string) (string, error) {
+    token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+        return SecretKey, nil
+    })
+    if err != nil || !token.Valid {
+        return "", err
+    }
+
+    claims, ok := token.Claims.(jwt.MapClaims)
+    if !ok {
+        return "", fmt.Errorf("invalid claims format")
+    }
+
+    email, ok := claims["email"].(string)
+    if !ok {
+        return "", fmt.Errorf("email claim missing or invalid")
+    }
+
+    return email, nil
+}
+
+// ✅ Forgot Password - Logs reset link to console
+func ForgotPassword(c *gin.Context) {
+    var req struct {
+        Email string `json:"email"`
+    }
+
+    if err := c.ShouldBindJSON(&req); err != nil || req.Email == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+        return
+    }
+
+    var user models.User
+    if err := database.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    token, err := generateResetToken(user.Email)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create token"})
+        return
+    }
+
+    resetLink := fmt.Sprintf("http://localhost:3000/reset-password?token=%s", token)
+    log.Println("Password reset link:", resetLink) // ← This logs the token URL to console
+
+    c.JSON(http.StatusOK, gin.H{"message": "Reset link generated. Check your console."})
+}
+
+// ✅ Reset Password - Accepts token & new password
+func ResetPassword(c *gin.Context) {
+    var req struct {
+        Token       string `json:"token"`
+        NewPassword string `json:"new_password"`
+    }
+
+    if err := c.ShouldBindJSON(&req); err != nil || req.NewPassword == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+        return
+    }
+
+    email, err := validateResetToken(req.Token)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or expired token"})
+        return
+    }
+
+    var user models.User
+    if err := database.DB.Where("email = ?", email).First(&user).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Password encryption failed"})
+        return
+    }
+
+    user.Password = string(hashedPassword)
+    database.DB.Save(&user)
+
+    c.JSON(http.StatusOK, gin.H{"message": "Password reset successful"})
+}
