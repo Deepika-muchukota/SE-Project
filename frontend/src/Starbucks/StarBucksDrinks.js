@@ -67,7 +67,7 @@ const defaultCategories = [
 
 function StarBucksDrinks() {
   const navigate = useNavigate();
-  const { addToCart, removeFromCart, cartItems } = useCart();
+  const { addToCart, removeFromCart, cartItems, getQuantity, updateQuantity } = useCart();
   const { user } = useAuth();
   const [selectedItems, setSelectedItems] = useState({});
   const [menuItems, setMenuItems] = useState(defaultCategories);
