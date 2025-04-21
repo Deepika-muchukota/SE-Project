@@ -64,7 +64,7 @@ function Steaks() {
       // Create the cart item object with proper type conversion
       const cartItem = {
         menu_id: Number(item.id),
-        name: ${STALL_NAME} - ${item.name},
+        name: `${STALL_NAME} - ${item.name}`,
         price: Number(item.price),
         quantity: Number(newQuantity)
       };
@@ -121,7 +121,7 @@ function Steaks() {
         // Update quantity using cart context
         const cartItem = {
           menu_id: Number(item.id),
-          name: ${STALL_NAME} - ${item.name},
+          name: `${STALL_NAME} - ${item.name}`,
           price: Number(item.price),
           quantity: Number(newQuantity)
         };
