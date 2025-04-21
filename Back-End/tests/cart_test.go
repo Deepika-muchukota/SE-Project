@@ -61,8 +61,20 @@ func TestEmptyCart(t *testing.T) {
 func TestUpdateCartItemQuantity(t *testing.T) {
 	router := SetupRouter()
 
-	body := `{"user_id": 50, "menu_id": 238, "quantity": 3}`
-	req, _ := http.NewRequest("PUT", "/api/cart/update", bytes.NewBuffer([]byte(body)))
+	// First, add the item to ensure it exists
+	addBody := `{"user_id": 50, "menu_id": 188, "quantity": 2}`
+	addReq, _ := http.NewRequest("POST", "/api/cart/add", bytes.NewBuffer([]byte(addBody)))
+	addReq.Header.Set("Content-Type", "application/json")
+	addResp := httptest.NewRecorder()
+	router.ServeHTTP(addResp, addReq)
+
+	if addResp.Code != http.StatusOK {
+		t.Fatalf("Setup failed: could not add item to cart. Status %d", addResp.Code)
+	}
+
+	// Now update the quantity
+	updateBody := `{"quantity": 5}`
+	req, _ := http.NewRequest("PUT", "/api/cart/update/50/188", bytes.NewBuffer([]byte(updateBody)))
 	req.Header.Set("Content-Type", "application/json")
 
 	w := httptest.NewRecorder()
