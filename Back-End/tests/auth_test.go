@@ -110,3 +110,38 @@ func TestResetPassword(t *testing.T) {
 		t.Errorf("Expected status 400 but got %d", w.Code)
 	}
 }
+
+func TestChangeUserPassword(t *testing.T) {
+	router := SetupRouter()
+
+	body := `{
+		"currentPassword": "Password@123",
+		"newPassword": "NewPassword@123"
+	}`
+	req, _ := http.NewRequest("PUT", "/api/users/53/change-password", bytes.NewBuffer([]byte(body)))
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected 200 but got %d", w.Code)
+	}
+}
+
+func TestUserLogout(t *testing.T) {
+	router := SetupRouter()
+
+	body := `{
+		"email": "seprojectuser@gmail.com"
+	}`
+	req, _ := http.NewRequest("POST", "/api/users/logout", bytes.NewBuffer([]byte(body)))
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected 200 but got %d", w.Code)
+	}
+}
