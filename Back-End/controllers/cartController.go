@@ -127,3 +127,34 @@ func EmptyCart(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Cart emptied successfully"})
 }
+
+func UpdateCartItemQuantity(c *gin.Context) {
+    userID := c.Param("userId")
+    menuID := c.Param("menuId")
+
+    var body struct {
+        Quantity uint `json:"quantity"`
+    }
+
+    if err := c.ShouldBindJSON(&body); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+        return
+    }
+
+    var cartItem models.CartItem
+    if err := database.DB.Where("user_id = ? AND menu_id = ?", userID, menuID).First(&cartItem).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Cart item not found"})
+        return
+    }
+
+    cartItem.Quantity = body.Quantity
+    if err := database.DB.Save(&cartItem).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update quantity"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "message": "Cart item quantity updated successfully",
+        "cartItem": cartItem,
+    })
+}
