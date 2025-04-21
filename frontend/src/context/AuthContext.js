@@ -149,6 +149,40 @@ export const AuthProvider = ({ children }) => {
     
     console.log('User logged out and all selections cleared');
   };
+
+  // Delete user account
+  const deleteUserAccount = async (password) => {
+    const storedUser = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user") || "{}");
+    const id = storedUser?.id;
+    const email = storedUser?.email;
+  
+    if (!id || !email) {
+      console.warn("User ID or email missing");
+      return false;
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/users/delete/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password })
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        logout();
+        return true;
+      } else {
+        console.warn("Account deletion failed:", result.error || result.message);
+        return false;
+      }
+    } catch (err) {
+      console.error("Delete account error:", err);
+      return false;
+    }
+  };  
   
   // Check if user is authenticated
   const isAuthenticated = () => {
@@ -163,7 +197,8 @@ export const AuthProvider = ({ children }) => {
       login,
       register,
       logout,
-      isAuthenticated
+      isAuthenticated,
+      deleteUserAccount
     }}>
       {!loading && children}
     </AuthContext.Provider>
