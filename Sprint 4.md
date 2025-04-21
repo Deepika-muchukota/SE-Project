@@ -31,7 +31,7 @@ In Sprint 4, our primary focus was to:
 - **Updated backend API documentation** and ensured consistent error handling across routes.
 - **Integrated** order placement and cart clearing flow post-confirmation.
 
-### **Frontend:**
+### **Frontend Enhancements:**
 - **Integrated backend APIs** with the React frontend.
 - **Integrated PlaceOrder functionality** with backend:
   - Users can now place orders with selected cart items.
