@@ -88,3 +88,23 @@
   .signin-links a:hover {
     text-decoration: underline;
   } 
+
+  .password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-field input {
+    width: 100%;
+    padding-right: 40px;
+  }
+  
+  .eye-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #555;
+    font-size: 1rem;
+  }
+  
