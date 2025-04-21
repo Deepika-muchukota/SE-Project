@@ -4,6 +4,11 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import FoodStalls from './FoodStalls'; 
 import CartPage from './CartPage';
+import Profile from './Profile';
+import ChangePassword from './ChangePassword';
+import DeleteAccount from './DeleteAccount';
+import Orders from './Orders';
+import PaymentForm from './PaymentForm';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Burger352 from './Burger_352/Burger352'; 
 import Babas from './Baba/Babas';
@@ -57,14 +62,44 @@ function App() {
     <AuthProvider>
       <SubwayOrderProvider>
         <CartProvider>
-    <Router>
-        <Routes>
+          <Router>
+            <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Navigate to="/signin" replace />} />
                 <Route path="signin" element={<SignIn />} />
                 <Route path="signup" element={<SignUp />} />
                 
                 {/* Protected Routes */}
+                <Route path="profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="change-password" element={
+                  <ProtectedRoute>
+                    <ChangePassword />
+                  </ProtectedRoute>
+                } />
+
+                <Route path="/delete-account" element={
+                  <ProtectedRoute>
+                    <DeleteAccount />
+                  </ProtectedRoute>
+                } />
+
+                <Route path="orders" element={
+                  <ProtectedRoute>
+                    <Orders />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="payment" element={
+                  <ProtectedRoute>
+                    <PaymentForm />
+                  </ProtectedRoute>
+                } />
+                
                 <Route path="foodstalls" element={
                   <ProtectedRoute>
                     <FoodStalls />
@@ -80,7 +115,7 @@ function App() {
                 {/* Food Stall Routes */}
                 <Route path="foodstalls/burger352" element={
                   <ProtectedRoute>
-              <Burger352 />
+                    <Burger352 />
                   </ProtectedRoute>
                 } />
                 <Route path="foodstalls/burger352/burger" element={<Burger />} />
@@ -105,13 +140,6 @@ function App() {
                   </ProtectedRoute>
                 } />
                 
-                {/* Panda Express routes */}
-                <Route path="foodstalls/pandaexpress" element={
-                  <ProtectedRoute>
-                    <PandaExpress />
-                  </ProtectedRoute>
-                } />
-                
                 {/* Subway routes */}
                 <Route path="foodstalls/subway" element={
                   <ProtectedRoute>
@@ -119,7 +147,7 @@ function App() {
                   </ProtectedRoute>
                 } />
                 <Route path="foodstalls/subway/bread" element={<Bread />} />
-                <Route path="foodstalls/subway/protein" element={<Protien />} />
+                <Route path="foodstalls/subway/protien" element={<Protien />} />
                 <Route path="foodstalls/subway/toppings" element={<Toppings />} />
                 <Route path="foodstalls/subway/sauces" element={<Sauces />} />
                 <Route path="foodstalls/subway/sides" element={<SubwaySides />} />
@@ -136,9 +164,16 @@ function App() {
                 <Route path="foodstalls/halalshack/toppings" element={<HalalToppings />} />
                 <Route path="foodstalls/halalshack/sauces" element={<HalalSauces />} />
                 <Route path="foodstalls/halalshack/drinks" element={<HalalDrinks />} />
+                
+                {/* Panda Express routes */}
+                <Route path="foodstalls/pandaexpress" element={
+                  <ProtectedRoute>
+                    <PandaExpress />
+                  </ProtectedRoute>
+                } />
               </Route>
-        </Routes>
-    </Router>
+            </Routes>
+          </Router>
         </CartProvider>
       </SubwayOrderProvider>
     </AuthProvider>
