@@ -6,7 +6,6 @@ import (
     "github.com/dgrijalva/jwt-go"
     "github.com/gin-gonic/gin"
     "golang.org/x/crypto/bcrypt"
-    "gorm.io/gorm"
     "net/http"
     "time"
     "log"
@@ -94,28 +93,36 @@ func Signin(c *gin.Context) {
 
 // DeleteUser by ID or Name
 func DeleteUser(c *gin.Context) {
-    userID := c.Query("id")
-    username := c.Query("name")
+    id := c.Param("id")
 
-    var user models.User
-    var result *gorm.DB
+    var req struct {
+        Password string `json:"password"`
+    }
 
-    if userID != "" {
-        result = database.DB.Where("id = ?", userID).Delete(&user)
-    } else if username != "" {
-        result = database.DB.Where("name = ?", username).Delete(&user)
-    } else {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Provide either user ID or username"})
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
         return
     }
 
-    if result.RowsAffected == 0 {
+    var user models.User
+    if err := database.DB.First(&user, id).Error; err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+    if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect password"})
+        return
+    }
+
+    if err := database.DB.Delete(&user).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete account"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Account deleted successfully"})
 }
+
 
 // Get user by Name
 func GetUserByName(c *gin.Context) {
@@ -183,5 +190,43 @@ func EditUser(c *gin.Context) {
     database.DB.Save(&user)
 
     c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": user})
+}
+
+func ChangePassword(c *gin.Context) {
+    userID := c.Param("id")
+    var req struct {
+        CurrentPassword string `json:"currentPassword"`
+        NewPassword     string `json:"newPassword"`
+    }
+
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+        return
+    }
+
+    var user models.User
+    if err := database.DB.First(&user, userID).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.CurrentPassword)); err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Current password is incorrect"})
+        return
+    }
+
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+        return
+    }
+
+    user.Password = string(hashedPassword)
+    if err := database.DB.Save(&user).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update password"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
 }
 
