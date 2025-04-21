@@ -2,9 +2,10 @@ package database
 
 import (
 	"SE-Project/Back-End/models"
+	"log"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 )
 
 var DB *gorm.DB
@@ -17,8 +18,9 @@ func ConnectDB() {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&models.User{}, &models.FoodStall{}, &models.MenuItem{}, &models.CartItem{})
+	db.AutoMigrate(&models.User{}, &models.FoodStall{}, &models.MenuItem{}, &models.CartItem{}, &models.Order{}, &models.OrderItem{})
 
 	DB = db
-	log.Println("Database connected successfully!")
+	log.Println("Database connected successfully!!")
 }
+
