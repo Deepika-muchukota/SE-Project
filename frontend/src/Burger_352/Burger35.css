@@ -1,47 +1,76 @@
-
-
-/* Main container should fill screen properly */
 .burger-container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #2c3e50;
-  width: 100vw;
-}
-.category-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
   width: 100%;
-  height: 50%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eb9408;
   padding: 20px;
 }
 
-/* Ensuring uniform button sizes */
-.category-button {
-  flex: 1 1 calc(33.33% - 30px); /* 3 buttons per row */
-  max-width: calc(33.33% - 30px);
-  height: 20vh; /* Adjust height as needed */
-  background-color: #34495e;
-  border: none;
-  border-radius: 15px;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: -1;
+}
+
+.b35-category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 900px;
+}
+
+.b35-category-button {
+  flex: 1 1 calc(33.333% - 20px); /* Ensures three items per row */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 18px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
+  background: rgb(209, 155, 38);
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  max-width: 280px;
 }
 
-.category-button:hover {
+.b35-category-button:hover {
   transform: scale(1.05);
 }
 
-/* Ensuring exactly 2 rows */
+.b35-category-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 2px solid #ddd;
+}
 
+.b35-category-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .b35-category-button {
+    flex: 1 1 calc(50% - 20px); /* Two items per row */
+  }
+}
+
+@media (max-width: 600px) {
+  .b35-category-button {
+    flex: 1 1 100%; /* One item per row */
+  }
+}
