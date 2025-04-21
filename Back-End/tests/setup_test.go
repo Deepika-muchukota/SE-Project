@@ -12,15 +12,16 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	// Define all API routes
 	// Authentication Routes
 	r.POST("/api/users/signup", controllers.Signup)
 	r.POST("/api/users/signin", controllers.Signin)
 	r.GET("/api/users", controllers.GetUserByName)
 	r.PUT("/api/users/:id", controllers.EditUser)
-	r.POST("/api/users/delete/:id", controllers.DeleteUser)
+	r.DELETE("/api/users/:id", controllers.DeleteUserByID)
 	r.PUT("/api/users/:id/change-password", controllers.ChangePassword)
 	r.POST("/api/users/logout", controllers.LogoutUserByEmail)
+	r.POST("/api/users/forgot-password", controllers.ForgotPassword)
+	r.POST("/api/users/reset-password", controllers.ResetPassword)
 
 	// Food Stalls & Menu Routes
 	r.GET("/api/foodstalls", controllers.GetFoodStalls)
@@ -32,6 +33,7 @@ func SetupRouter() *gin.Engine {
 	r.POST("/api/cart/add", controllers.AddItemToCart)
 	r.GET("/api/cart/:userId", controllers.FetchCartItems)
 	r.DELETE("/api/cart/delete/:userId/:menuId", controllers.DeleteItemFromCart)
+	r.PUT("/api/cart/update/:userId/:menuId", controllers.UpdateCartItemQuantity)
 	r.DELETE("/api/cart/empty/:userId", controllers.EmptyCart)
 
 	// Order Routes
@@ -45,6 +47,7 @@ func SetupRouter() *gin.Engine {
 
 	// Payment Routes
 	r.POST("/api/payments", controllers.HandlePayment)
+	r.POST("/api/orders/place-with-payment", controllers.PlaceOrderWithPayment)
 
 	return r
 }
