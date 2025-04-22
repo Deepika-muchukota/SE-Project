@@ -223,6 +223,7 @@ describe("Logout Functionality", () => {
 - [**User Stories**](https://github.com/Deepika-muchukota/SE-Project/issues) can be viewed in Issues tab.
 - [**Github Repository**](https://github.com/Deepika-muchukota/SE-Project/tree/branch)
 - [**Readme.md**](https://github.com/Deepika-muchukota/SE-Project/blob/branch/README.md)
+- Our team has pushed the complete code to the **branch** branch on GitHub, not the main branch.
 
 ## Key Improvements (Sprint 4):
 - Added complete order processing flow from cart to confirmation.
