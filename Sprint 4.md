@@ -56,7 +56,8 @@ In Sprint 4, our primary focus was to:
   - tested Burger foodstall (similarly to other foodstalls) buttons navigation.
   - tested quantity indicators.
 -**Developed Unit Tests**:
-  -
+  -Verified that components render correctly for each food stall item.
+
 
 
 ## **Backend API Documentation**
