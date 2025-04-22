@@ -56,7 +56,17 @@ In Sprint 4, our primary focus was to:
   - tested Burger foodstall (similarly to other foodstalls) buttons navigation.
   - tested quantity indicators.
 -**Developed Unit Tests**:
-  -Verified that components render correctly for each food stall item.
+  -Verified that item quantity can be incremented and decremented properly across all food stalls.
+
+Verified that the 'Add to Cart' button appears when items are selected from any food stall.
+
+Verified that the cart state updates correctly upon confirming an order for any food stall item.
+
+Verified that all food stalls are displayed properly.
+
+Verified that clicking the Starbucks button navigates to the correct route.
+
+Verified that clicking the Burger 352 button navigates to the correct route.
 
 
 
