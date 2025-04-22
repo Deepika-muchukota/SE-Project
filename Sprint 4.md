@@ -142,34 +142,25 @@ The backend was tested using Go's built-in testing package (`testing` and `httpt
 | `order_test.go` | TestGetSingleOrderDetails, TestGetUserOrderStats, TestGetMostRecentOrder, TestGetMostOrderedItems |
 | `payment_test.go` | TestPlaceOrderWithPayment |
 
-**Example Backend Test (TestUpdateCartItemQuantity API) (Remaining test cases can be found [here](https://github.com/Deepika-muchukota/SE-Project/tree/branch/Back-End/tests))**
+**Example Backend Test (TestChangeUserPassword API) (Remaining test cases can be found [here](https://github.com/Deepika-muchukota/SE-Project/tree/branch/Back-End/tests))**
 ```go
-func TestUpdateCartItemQuantity(t *testing.T) {
+func TestChangeUserPassword(t *testing.T) {
 	router := SetupRouter()
 
-	addBody := `{"user_id": 55, "menu_id": 187, "quantity": 2}`
-	addReq, _ := http.NewRequest("POST", "/api/cart/add", bytes.NewBuffer([]byte(addBody)))
-	addReq.Header.Set("Content-Type", "application/json")
-	addResp := httptest.NewRecorder()
-	router.ServeHTTP(addResp, addReq)
-
-	if addResp.Code != http.StatusOK {
-		t.Fatalf("Setup failed: could not add item to cart. Status %d", addResp.Code)
-	}
-
-	// Now update the quantity
-	updateBody := `{"quantity": 5}`
-	req, _ := http.NewRequest("PUT", "/api/cart/update/55/187", bytes.NewBuffer([]byte(updateBody)))
+	body := `{
+		"currentPassword": "Password@123",
+		"newPassword": "NewPassword@123"
+	}`
+	req, _ := http.NewRequest("PUT", "/api/users/53/change-password", bytes.NewBuffer([]byte(body)))
 	req.Header.Set("Content-Type", "application/json")
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
-		t.Errorf("Expected status 200 but got %d", w.Code)
+		t.Errorf("Expected 200 but got %d", w.Code)
 	}
 }
-
 ```
 
 ## **Frontend Unit & Cypress Tests**
