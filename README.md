@@ -25,3 +25,23 @@ Users can explore restaurant listings, browse menus, manage carts, and place ord
 - **Secure Payments**: Users can proceed to checkout and securely pay for their orders.
 - **Order Confirmation**: Existing users can securely log into their account.
 - **User Sign-In**: After successful payment, users receive confirmation of their purchase along with order details.
+**Technologies Used:**
+-**Frontend:**
+  -React.js – Used for building dynamic and responsive user interfaces.
+  -React Router – Used for client-side routing between different pages.
+  -Axios – Used for making HTTP requests to the backend.
+  -CSS – Used for styling components and layout.
+-**Backend:**
+  -Golang (Go) – Used to develop backend APIs with high performance.
+  -Gin – Used as the web framework for routing and handling HTTP requests.
+  -Go Modules – Used for dependency management.
+-**Database:**
+  -PostgreSQL
+-**Testing:**
+  -Jest – Used for unit testing React components.
+  -Cypress – Used for end-to-end testing of the frontend.
+  -Postman – Used for testing and debugging backend APIs.
+
+
+  
+
