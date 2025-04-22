@@ -12,7 +12,16 @@ This project is a comprehensive online food ordering solution designed specifica
 Users can explore restaurant listings, browse menus, manage carts, and place orders securely. Restaurants can track incoming orders and manage their listings in future versions.
 
 **Key Features:**
-- **Unified Registration**: Users only need to sign up once to access all participating restaurants and stores at the Reitz Union.
-- **Restaurant & Menu Access**: View menus, special deals, and available food options from all eateries in one place.  
-- **Seamless Ordering**: Easily place orders from multiple vendors within the Reitz Union. 
-- **Secure Payments & Transactions**: Supports multiple payment methods, including credit/debit cards, UF meal plans, and digital wallets.  
+- **User Registration**: New users can create an account by providing their details.
+- **User Sign-In**: Existing users can securely log into their account. 
+- **View Profile**: Users can view their account information.
+- **Update Profile**: Users can edit their personal details like name, email, and phone number.
+- **Logout**: Users can safely log out of their session.
+- **Delete Account**: Users have the option to permanently delete their account and associated data.
+- **View Cart**: Users can view the items currently added to their shopping cart.
+- **Add to Cart**: Easily add menu items from food stalls to the cart.
+- **Remove from Cart**: Users can remove individual items from their cart before placing an order.
+- **View Past Orders**: Users can view a history of all previously placed orders for easy reordering and reference.
+- **Secure Payments**: Users can proceed to checkout and securely pay for their orders.
+- **Order Confirmation**: Existing users can securely log into their account.
+- **User Sign-In**: After successful payment, users receive confirmation of their purchase along with order details.
