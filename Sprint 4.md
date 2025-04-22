@@ -7,12 +7,14 @@
 ## **Tasks completed for Sprint 4**
 In Sprint 4, our primary focus was to:
 1. Implement advanced order and user management APIs.
-2. Finalize order placement and enable basic payment processing flow.
-3. Enhance frontend-backend integration for order summary and history.
-4. Strengthen user account management functionality.
-5. Extend both backend and frontend test coverage.
-6. Improve UI responsiveness and maintainability.
-7. Deliver comprehensive documentation and a visual walkthrough.
+2. Create a welcome dashboard to users.
+3. Create Order Summary Page that contains the items that were ordered along with their prices and quantity
+4. Finalize order placement and enable basic payment processing flow.
+5. Enhance frontend-backend integration for order summary and history.
+6. Strengthen user account management functionality by enabling user to reset password, delete account and view account.
+7. Extend both backend and frontend test coverage.
+8. Improve UI responsiveness and maintainability.
+9. Deliver comprehensive documentation and a visual walkthrough.
 
 ## **Work Completed in Sprint 4**
 ### **Backend Enhancements:**
@@ -40,11 +42,22 @@ In Sprint 4, our primary focus was to:
 - **Built new UI components** for:
   - Password Change
   - Delete Account
+  - User Profile
 - Finalized Logout functionality across the app.
-- Continued testing using Jest (unit tests) and Cypress (e2e).
-  - Improved test coverage for cart behavior and order flow.
-  - Added tests for new components and navigation routes.
----
+- Designed a webpage for order summary.
+- Designed view cart functionality in Nav Bar to allow user view items placed in the cart.
+- **Developed Cypress Tests**:
+  - Tested if user is properly navigated to signin page on starting the application
+  - Tested if user is navigated to signup page on clicking signup button.
+  - Tested the validation of various fields in signup page.
+  - Tested if user is navigated to signin after successful signup.
+  - tested if user is directed to foodstalls page on successful signin.
+  - tested logout functionality.
+  - tested Burger foodstall (similarly to other foodstalls) buttons navigation.
+  - tested quantity indicators.
+-**Developed Unit Tests**:
+  -
+
 
 ## **Backend API Documentation**
 
